@@ -1,0 +1,54 @@
+{
+  "name": "@microsoft/dynamicproto-js",
+  "description": "Microsoft Dynamic Proto Utility",
+  "version": "0.0.1",
+  "keywords": [
+    "javascript",
+    "dynamic prototype",
+    "microsoft",
+    "typescript",
+    "inheritence",
+    "minification",
+    "application insights"
+  ],
+  "main": "./lib/dist/dynamicproto-js.js",
+  "module": "./lib/dist/dynamicproto-js.js",
+  "types": "./lib/dist/dynamicproto-js.d.ts",
+  "directories": {
+    "doc": "lib/docs"
+  },
+  "scripts": {
+    "postinstall": "node common/scripts/install-run-rush.js update --recheck --full",
+    "build": "node common/scripts/install-run-rush.js rebuild",
+    "test": "grunt dynamicprototest",
+    "docs": "typedoc --out docs lib/src --excludePrivate --excludeProtected --tsconfig lib/tsconfig.json --theme minimal"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microsoft/DynamicProto-JS.git"
+  },
+  "author": "Microsoft Application Insights Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/microsoft/DynamicProto-JS/issues"
+  },
+  "homepage": "https://github.com/microsoft/DynamicProto-JS#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.3.2",
+    "grunt-contrib-qunit": "^2.0.0",
+    "grunt-contrib-uglify": "^3.1.0",
+    "grunt-run": "^0.8.1",
+    "grunt-ts": "^6.0.0-beta.22",
+    "grunt-tslint": "^5.0.2",
+    "tslint": "^5.19.0",
+    "tslint-microsoft-contrib": "^5.2.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "2.5.3",
+    "rollup": "^0.66.0",
+    "typedoc": "^0.15.0"
+  },
+  "dependencies": {
+    "tslib": "^1.9.3"
+  }
+}
