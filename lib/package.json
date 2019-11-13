@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "author": "Microsoft Application Insights Team",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Microsoft Dynamic Proto Utility",
   "keywords": [
     "javascript",
@@ -26,7 +26,7 @@
     "build:bundle": "rollup -c rollup.config.js",
     "test": "grunt dynamicprototest",
     "lint": "tslint -p tsconfig.json",
-    "docs": "typedoc --out ./docs src --excludePrivate --excludeProtected --tsconfig tsconfig.json --theme minimal"
+    "docs": "typedoc --out ./docs ./src --excludePrivate --excludeProtected --tsconfig tsconfig.json --theme minimal"
   },
   "repository": {
     "type": "git",
@@ -56,7 +56,7 @@
     "rollup-plugin-uglify": "^6.0.0",
     "rollup": "^0.66.0"
   },
-  "dependencies": {
+  "peerDependencies": {
     "tslib": "^1.9.3"
   }
 }
