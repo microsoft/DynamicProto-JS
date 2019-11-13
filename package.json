@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "description": "Microsoft Dynamic Proto Utility",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [
     "javascript",
     "dynamic prototype",
@@ -40,12 +40,12 @@
     "grunt-run": "^0.8.1",
     "grunt-ts": "^6.0.0-beta.22",
     "grunt-tslint": "^5.0.2",
-    "tslint": "^5.19.0",
-    "tslint-microsoft-contrib": "^5.2.1",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "3.7.2",
     "rollup": "^0.66.0",
-    "typedoc": "^0.15.0"
+    "tslint": "^5.19.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-microsoft-contrib": "^5.2.1",
+    "typedoc": "^0.15.1",
+    "typescript": "3.7.2"
   },
   "dependencies": {
     "tslib": "^1.9.3"
