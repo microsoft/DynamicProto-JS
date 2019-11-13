@@ -15,13 +15,6 @@ While this does require some additional CPU and memory at the point of creating 
 * Smaller code as the internal properties and methods when defined within the instance can be minified.
 * As the resulting generated code can be better minified this *should* result in a smaller minified result and therefore better load times for your users. 
 
-## When to use
-While this helper was originally created to support better minification for generated code via TypeScript, it is not limited to only being used from within TypeScript.
-
-And as with including any additional code into your project there is a trade off that you need to make before using this helper which is the size of the additional code of this utility vs the minification gains that *may* be obtained. As in most cases of creating JavaScript code for better minfication if your code doesn't expose or provide a lot of public methods or only uses un-minifiable "names" less than 2 times then the potential gains may not be worth the additional bytes.
-
-And yes at the end of the day, if you are creating JS classes directly in Javascript you *should* be able to create a simplier one-off solution that would result in smaller output as this project needs to be generic to be able to support all use-cases. 
-
 ## Basic Usage
 ```typescript
 import dynamicProto from "@microsoft/dynamicproto-js";
@@ -84,22 +77,93 @@ If you are changing package versions or adding/removing any package dependencies
 
 ## Performance
 
-The minified version of this adds a negligible amount of code and loadtime to your source code and by using this library your generated code can be better minified as it removes most references of Classname.prototype.XXX methods from the generated code.
+The minified version of this adds a negligible amount of code and loadtime to your source code and by using this library, your generated code can be better minified as it removes most references of Classname.prototype.XXX methods from the generated code.
 
 > Summary:
 >
 > - **~2 KB** minified (uncompressed)
 
+## Example usage and resulting minified code
+
+In this first example of code that is typically emitted by TypeScript it contains several references to the Classname.prototype and "this" references, both of which cannot be minfied.
+
+```Javascript
+var NormalClass = /** @class */ (function () {
+    function NormalClass() {
+        this.property1 = [];
+        this.property1.push("Hello");
+    }
+    InheritTest1.prototype.function1 = function () {
+        //...
+        doSomething();
+    };
+    InheritTest1.prototype.function2 = function () {
+        //...
+        doSomething();
+    };
+    InheritTest1.prototype.function3 = function () {
+        //...
+        doSomething();
+    };
+    return NormalClass;
+}());
+```
+
+So the result would look something like this which represents a ~45% compression, note that the Classname.prototype appears several times.
+
+```JavaScript
+var NormalClass=(InheritTest1.prototype.function1=function(){doSomething()},InheritTest1.prototype.function2=function(){doSomething()},InheritTest1.prototype.function3=function(){doSomething()},function(){this.property1=[],this.property1.push("Hello")});
+```
+
+While in this example when using the dynamicProto helper to create the same resulting class and objects there are no references to Classname.prototype and only 1 reference to this.
+
+```JavaScript
+var DynamicClass = /** @class */ (function () {
+    function DynamicClass() {
+        dynamicProto(DynamicClass, this, function (_self, base) {
+            _self.property1 = [];
+            _self.property1.push("Hello()");
+            _self.function1 = function () {
+                //...
+                doSomething();
+            };
+            _self.function1 = function () {
+                //...
+                doSomething();
+            };
+            _self.function1 = function () {
+                //...
+                doSomething();
+            };
+        });
+    }
+    return DynamicClass;
+}());
+```
+
+Which results in the following minified code which is much smaller and represents ~63% compression.
+
+```Javascript
+var DynamicClass=function n(){dynamicProto(n,this,function(n,o){n.property1=[],n.property1.push("Hello()"),n.function1=function(){doSomething()},n.function1=function(){doSomething()},n.function1=function(){doSomething()}})};
+```
+
+ So when looking at the code for NormalClass and DynamicClass, both end up with 1 instance property called ```property1``` and the 3 functions ```function1```, ```function2``` and ```function3```, in both cases the functions are defined ONLY on the "class" prototype and ```property1``` is defined on the instance. So anyone, whether using JavaScript or TypeScript will be able to "extend" either of class without any concerns about overloading instance functions and needing to save any previous method. And you are extending a 3rd party library you no longer have to worry about them changing the implementation as ```dynamicProto()``` handles converting overriden instance functions into prototype level ones. Yes, this means that if you don't override instance function it will continue to be an instance function.
+
+## When to use
+
+While this helper was created to support better minification for generated code via TypeScript code, it is not limited to only being used from within TypeScript, you can use the helper function directly in the same way as the examples above.
+
+As with including any additional code into your project there are trade offs that you need to make, including if you are looking at this helper, one of the primary items is the overall size of the additional code that you will be including vs the minification gains that you *may* obtained. This project endeavours to keep it's impact (bytes) as small as possible while supporting you to create readable and maintainable code that will create a smaller minified output.
+
+In most cases when creating JavaScript to support better minfication, when your code doesn't expose or provide a lot of public methods or only uses un-minifiable "names" less than 2 times, then you may not see enough potential gains to counteract the additional bytes required from the helper code. However, for any significant project you should.
+
+So at the end of the day, if you are creating JS classes directly you *should* be able to create a simplier one-off solution that would result in smaller output (total bytes). This is how this project started, but, once we had several of these one-off solutions it made more sense to build it once.
 
 ## Browser Support
 
 ![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![IE8](https://raw.githubusercontent.com/hotoo/browser-logos/master/ie9-10/ie9-10_48x48.png) | ![Edge](https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Opera](https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | 8+ Full ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
-
-## Contributing
-
-Read our [contributing guide](./CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to Application Insights.
 
 ## ES3/IE8 Compatibility
 
@@ -128,3 +192,7 @@ This table does not attempt to include ALL of the ES3 unsuported features, just 
 | ```Object.isSealed(obj)``` | Not provided by ES3 and not used | N/A |
 | ```Object.freeze(obj)``` | Not provided by ES3 and not used | N/A |
 | ```Object.isFrozen(obj)``` | Not provided by ES3 and not used | N/A |
+
+## Contributing
+
+Read our [contributing guide](./CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to Application Insights.
