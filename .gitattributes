@@ -8,7 +8,13 @@ shrinkwrap.yaml              merge=binary
 npm-shrinkwrap.json          merge=binary
 yarn.lock                    merge=binary
 
-.rb linguist-language=JavaScript
+*.ts linguist-detectable=true
+*.js linguist-detectable=false
+*.html linguist-detectable=false
+*.xml linguist-detectable=false
+*.md linguist-detectable=false
+*.json linguist-detectable=false
+lib/docs/* linguist-documentation
 
 ###############################################################################
 # Set default behavior for command prompt diff.
