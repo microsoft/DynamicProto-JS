@@ -11,7 +11,7 @@
       "noEmitHelpers": true,
       "alwaysStrict": true,
       "declaration": true,
-      //"declarationDir": "lib/types",
+      //"declarationDir": "./types",
       "outFile": "./dist-esm/dynamicproto-js.js",
       "rootDir": "lib/src",
       "suppressImplicitAnyIndexErrors": true,
