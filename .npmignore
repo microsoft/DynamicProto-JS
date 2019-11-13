@@ -15,3 +15,4 @@
 !/lib/dist/dynamicproto-js.js.map
 !/lib/dist/dynamicproto-js.min.js
 !/lib/dist/dynamicproto-js.min.js.map
+!/lib/docs/**/*
