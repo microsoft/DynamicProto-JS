@@ -2,8 +2,8 @@
     "compilerOptions": {
       "sourceMap": true,
       "inlineSources": true,
-      "noImplicitAny": false,
-      "module": "amd",
+      "noImplicitAny": true,
+      "module": "es6",
       "moduleResolution": "node",
       "target": "es3",
       "forceConsistentCasingInFileNames": true,
@@ -11,15 +11,13 @@
       "noEmitHelpers": true,
       "alwaysStrict": true,
       "declaration": true,
-      //"declarationDir": "./types",
-      "outFile": "./dist-esm/dynamicproto-js.js",
-      "rootDir": "lib/src",
+      "outDir": "./dist-esm",
+      "rootDir": "./",
       "suppressImplicitAnyIndexErrors": true,
-      "allowSyntheticDefaultImports": true,
-      "lib": [ "dom", "es2015" ]
+      "allowSyntheticDefaultImports": true
     },
     "include": [
-      "src/DynamicProto.ts"
+      "./src/**/*.ts"
     ],
     "exclude": [ "node_modules/" ]
   }
