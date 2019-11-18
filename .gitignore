@@ -25,13 +25,11 @@
 bundle/
 node_modules/
 out/
-dist-esm/
-dist/
+dist**/
 types/
 
 lib/bundle/
-lib/dist-esm/
-lib/dist/
+lib/dist**/
 lib/types/
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)

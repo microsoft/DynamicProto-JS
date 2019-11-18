@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "author": "Microsoft Application Insights Team",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Microsoft Dynamic Proto Utility",
   "keywords": [
     "javascript",
@@ -12,8 +12,8 @@
     "minification",
     "application insights"
   ],
-  "main": "./dist/dynamicproto-js.js",
-  "module": "./dist/dynamicproto-js.js",
+  "main": "./dist/node/dynamicproto-js.js",
+  "module": "./dist/esm/dynamicproto-js.js",
   "types": "./types/dynamicproto-js.d.ts",
   "directories": {
     "doc": "./docs"

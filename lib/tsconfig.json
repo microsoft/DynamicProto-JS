@@ -3,7 +3,7 @@
       "sourceMap": true,
       "inlineSources": true,
       "noImplicitAny": true,
-      "module": "es6",
+      "module": "amd",
       "moduleResolution": "node",
       "target": "es3",
       "forceConsistentCasingInFileNames": true,
@@ -11,7 +11,7 @@
       "noEmitHelpers": true,
       "alwaysStrict": true,
       "declaration": true,
-      "outDir": "./dist-esm",
+      "outDir": "./out",
       "rootDir": "./",
       "suppressImplicitAnyIndexErrors": true,
       "allowSyntheticDefaultImports": true

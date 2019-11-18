@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "description": "Microsoft Dynamic Proto Utility",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "keywords": [
     "javascript",
     "dynamic prototype",
@@ -11,8 +11,8 @@
     "minification",
     "application insights"
   ],
-  "main": "./lib/dist/dynamicproto-js.js",
-  "module": "./lib/dist/dynamicproto-js.js",
+  "main": "./lib/dist/node/dynamicproto-js.js",
+  "module": "./lib/dist/esm/dynamicproto-js.js",
   "types": "./lib/types/dynamicproto-js.d.ts",
   "directories": {
     "doc": "lib/docs"

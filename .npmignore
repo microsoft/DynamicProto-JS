@@ -10,10 +10,6 @@
 !/CODE_OF_CONDUCT.md
 !/LICENSE
 !/SECURITY
-!/lib/bundle/dynamicproto-js.*
-!/lib/dist/dynamicproto-js.js
-!/lib/dist/dynamicproto-js.js.map
-!/lib/dist/dynamicproto-js.min.js
-!/lib/dist/dynamicproto-js.min.js.map
+!/lib/dist/**/*
 !/lib/docs/**/*
 !/lib/types/**/*
