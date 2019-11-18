@@ -159,6 +159,21 @@ In most cases when creating JavaScript to support better minfication, when your 
 
 So at the end of the day, if you are creating JS classes directly you *should* be able to create a simplier one-off solution that would result in smaller output (total bytes). This is how this project started, but, once we had several of these one-off solutions it made more sense to build it once.
 
+## Included NPM distribution formats
+
+As part of the build / publish formats via NPM we include the following module formats:
+
+* dist/esm – Used as the "module" definition for npm, which keeps the bundle as an ES module file, suitable for other bundlers and inclusion as a &lt; amd – Asynchronous Module Definition, used with module loaders like RequireJS
+* dist/node - Used as the "main" npm entry point for the utility, using the umd format with any third party modules located and included using the [Node resolution algorithm](https://nodejs.org/api/modules.html#modules_all_together)
+
+### Other included formats
+
+* dist/cjs – CommonJS, suitable for Node and other bundlers
+script type=module&gt; tag in modern browsers
+* dist/iife – A self-executing function, suitable for inclusion as a &lt;script&gt; tag. (If you want to create a bundle for your application, you probably want to use this.)
+* dist/umd – Universal Module Definition, works as amd, cjs and iife all in one
+* dist/system – Native format of the SystemJS loader
+
 ## Browser Support
 
 ![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![IE8](https://raw.githubusercontent.com/hotoo/browser-logos/master/ie9-10/ie9-10_48x48.png) | ![Edge](https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Opera](https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
