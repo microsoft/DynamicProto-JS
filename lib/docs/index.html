@@ -2517,6 +2517,24 @@ img {
 			<p>As with including any additional code into your project there are trade offs that you need to make, including if you are looking at this helper, one of the primary items is the overall size of the additional code that you will be including vs the minification gains that you <em>may</em> obtained. This project endeavours to keep it&#39;s impact (bytes) as small as possible while supporting you to create readable and maintainable code that will create a smaller minified output.</p>
 			<p>In most cases when creating JavaScript to support better minfication, when your code doesn&#39;t expose or provide a lot of public methods or only uses un-minifiable &quot;names&quot; less than 2 times, then you may not see enough potential gains to counteract the additional bytes required from the helper code. However, for any significant project you should.</p>
 			<p>So at the end of the day, if you are creating JS classes directly you <em>should</em> be able to create a simplier one-off solution that would result in smaller output (total bytes). This is how this project started, but, once we had several of these one-off solutions it made more sense to build it once.</p>
+			<a href="#included-npm-distribution-formats" id="included-npm-distribution-formats" style="color: inherit; text-decoration: none;">
+				<h2>Included NPM distribution formats</h2>
+			</a>
+			<p>As part of the build / publish formats via NPM we include the following module formats:</p>
+			<ul>
+				<li>dist/esm – Used as the &quot;module&quot; definition for npm, which keeps the bundle as an ES module file, suitable for other bundlers and inclusion as a &lt; amd – Asynchronous Module Definition, used with module loaders like RequireJS</li>
+				<li>dist/node - Used as the &quot;main&quot; npm entry point for the utility, using the umd format with any third party modules located and included using the <a href="https://nodejs.org/api/modules.html#modules_all_together">Node resolution algorithm</a></li>
+			</ul>
+			<a href="#other-included-formats" id="other-included-formats" style="color: inherit; text-decoration: none;">
+				<h3>Other included formats</h3>
+			</a>
+			<ul>
+				<li>dist/cjs – CommonJS, suitable for Node and other bundlers
+				script type=module&gt; tag in modern browsers</li>
+				<li>dist/iife – A self-executing function, suitable for inclusion as a &lt;script&gt; tag. (If you want to create a bundle for your application, you probably want to use this.)</li>
+				<li>dist/umd – Universal Module Definition, works as amd, cjs and iife all in one</li>
+				<li>dist/system – Native format of the SystemJS loader</li>
+			</ul>
 			<a href="#browser-support" id="browser-support" style="color: inherit; text-decoration: none;">
 				<h2>Browser Support</h2>
 			</a>

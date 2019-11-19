@@ -3,7 +3,7 @@
       "sourceMap": true,
       "inlineSources": true,
       "noImplicitAny": true,
-      "module": "amd",
+      "module": "es6",
       "moduleResolution": "node",
       "target": "es3",
       "forceConsistentCasingInFileNames": true,

@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "author": "Microsoft Application Insights Team",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Microsoft Dynamic Proto Utility",
   "keywords": [
     "javascript",
@@ -51,10 +51,11 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "3.7.2",
     "rollup-plugin-copy": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-uglify": "^6.0.0",
-    "rollup": "^0.66.0"
+    "rollup-plugin-minify-es": "^1.1.1",
+    "rollup": "^1.27.2"
   },
   "peerDependencies": {
     "tslib": "^1.9.3"
