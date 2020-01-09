@@ -2469,22 +2469,22 @@ img {
         <span class="hljs-keyword">this</span>.property1 = [];
         <span class="hljs-keyword">this</span>.property1.push(<span class="hljs-string">"Hello"</span>);
     }
-    InheritTest1.prototype.function1 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    NormalClass.prototype.function1 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
         <span class="hljs-comment">//...</span>
         doSomething();
     };
-    InheritTest1.prototype.function2 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    NormalClass.prototype.function2 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
         <span class="hljs-comment">//...</span>
         doSomething();
     };
-    InheritTest1.prototype.function3 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    NormalClass.prototype.function3 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
         <span class="hljs-comment">//...</span>
         doSomething();
     };
     <span class="hljs-keyword">return</span> NormalClass;
 }());</code></pre>
 			<p>So the result would look something like this which represents a ~45% compression, note that the Classname.prototype appears several times.</p>
-			<pre><code class="language-JavaScript"><span class="hljs-keyword">var</span> NormalClass=(InheritTest1.prototype.function1=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},InheritTest1.prototype.function2=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},InheritTest1.prototype.function3=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{<span class="hljs-keyword">this</span>.property1=[],<span class="hljs-keyword">this</span>.property1.push(<span class="hljs-string">"Hello"</span>)});</code></pre>
+			<pre><code class="language-JavaScript"><span class="hljs-keyword">var</span> NormalClass=(NormalClass.prototype.function1=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},NormalClass.prototype.function2=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},NormalClass.prototype.function3=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{<span class="hljs-keyword">this</span>.property1=[],<span class="hljs-keyword">this</span>.property1.push(<span class="hljs-string">"Hello"</span>)});</code></pre>
 			<p>While in this example when using the dynamicProto helper to create the same resulting class and objects there are no references to Classname.prototype and only 1 reference to this.</p>
 			<pre><code class="language-JavaScript"><span class="hljs-keyword">var</span> DynamicClass = <span class="hljs-comment">/** @class */</span> (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DynamicClass</span>(<span class="hljs-params"></span>) </span>{
@@ -2534,6 +2534,252 @@ img {
 				<li>dist/iife – A self-executing function, suitable for inclusion as a &lt;script&gt; tag. (If you want to create a bundle for your application, you probably want to use this.)</li>
 				<li>dist/umd – Universal Module Definition, works as amd, cjs and iife all in one</li>
 				<li>dist/system – Native format of the SystemJS loader</li>
+			</ul>
+			<a href="#typescript-declaration-helper" id="typescript-declaration-helper" style="color: inherit; text-decoration: none;">
+				<h2>TypeScript Declaration Helper</h2>
+			</a>
+			<p>When using TypeScript to create classes and automatically generate the declaration (*.d.ts) files for your classes you will run into one or more of the following issues :-</p>
+			<p>1) When you attempt to extend a base class which defines an abstract member (class) function you will get
+				<code>error TS2424: Class &#39;ABC&#39; defines instance member function &#39;myFunction&#39;, but extended class &#39;XYZ&#39; defines it as instance member property.</code>
+			* The only solution for this is to define an empty &#39;Stub&#39; method which stops the error, but also generates an unused prototype method in your final code that just takes up space.</p>
+			<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> ABC {
+    <span class="hljs-keyword">public</span> myFunction(someArg:<span class="hljs-built_in">string</span>): <span class="hljs-built_in">void</span> {
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> myFunction2(theArg:<span class="hljs-built_in">string</span>, ...): <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> XYZ <span class="hljs-keyword">extends</span> ABC {
+    <span class="hljs-keyword">public</span> myFunction2(theArg:<span class="hljs-built_in">string</span>, ...): <span class="hljs-built_in">void</span> {
+        <span class="hljs-comment">// This stub is required otherwise it won't compile</span>
+        <span class="hljs-comment">// It's also extra unnecessary code in the final code</span>
+    }
+
+    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {
+        dynamicProto(XYZ, <span class="hljs-keyword">this</span>, <span class="hljs-function">(<span class="hljs-params">self, base</span>) =&gt;</span> {
+            self.myFunction = <span class="hljs-function">(<span class="hljs-params">someArg</span>) =&gt;</span> {
+                <span class="hljs-comment">// This implements a member function (on the prototype)</span>
+            };
+
+            self.myFunction2 = <span class="hljs-function">(<span class="hljs-params">theArg:<span class="hljs-built_in">string</span>, ...</span>) =&gt;</span> {
+            };
+        });
+    }
+}</code></pre>
+			<p>The above results in the following javascript output for XYZ class where the XYZ.prototype.myFunction2 is obsolete (as it gets replace), unnecessary (for the class to function) and uncompressable bloat for the code</p>
+			<pre><code class="language-javascript"><span class="hljs-keyword">var</span> XYZ = <span class="hljs-comment">/** @class */</span> (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">XYZ</span>(<span class="hljs-params"></span>) </span>{
+        dynamicProto(XYZ, <span class="hljs-keyword">this</span>, (self, base) =&gt; {
+            <span class="hljs-comment">// ... Removed for brevity ...</span>
+            self.myFunction2 = <span class="hljs-function">(<span class="hljs-params">theArg:string, ...</span>) =&gt;</span> {
+            };
+        });
+    }
+    XYZ.prototype.myFunction2 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+        <span class="hljs-comment">// This stub is required otherwise it won't compile</span>
+        <span class="hljs-comment">// It's also extra unnecessary code in the final code</span>
+    };
+    <span class="hljs-keyword">return</span> XYZ;
+}());</code></pre>
+			<p>2) When you are creating a class that you want users to be able to extend (using TypeScript), and you want all of the functions to be declared (in the *.d.ts) as member functions (not properties), so that the extendsion classes (using typescript) can just use the normal <code>super</code> keyword without forcing them to either use dynamicProto() or save / call the instance properties.
+			* As with above the only solution (for dynamically generated declaration files) would be to defined Stub methods as above.</p>
+			<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> BaseClass {
+    <span class="hljs-comment">// A Member function</span>
+    <span class="hljs-keyword">public</span> myFunction(someArg:<span class="hljs-built_in">string</span>):<span class="hljs-built_in">void</span> { 
+        <span class="hljs-comment">// Stub function</span>
+    }
+
+    <span class="hljs-comment">// A instance member property (which happens to be a function)</span>
+    <span class="hljs-keyword">public</span> propFunction: <span class="hljs-function">(<span class="hljs-params">theArgs:<span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+
+    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {
+        dynamicProto(BaseClass, <span class="hljs-keyword">this</span>) (self) =&gt; {
+            <span class="hljs-comment">// This will create (at runtime) a member functions</span>
+            self.myFunction = <span class="hljs-function">(<span class="hljs-params">someArg:<span class="hljs-built_in">string</span></span>) =&gt;</span> {
+            };
+            self.propFunction = <span class="hljs-function">(<span class="hljs-params">theArgs:<span class="hljs-built_in">string</span></span>) =&gt;</span> {
+            };
+        });
+    }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> NewClass <span class="hljs-keyword">extends</span> BaseClass {
+    <span class="hljs-comment">// This works as TS see's that the base class has a prototype</span>
+    <span class="hljs-comment">// function (not a property one)</span>
+    <span class="hljs-keyword">public</span> myFunction(someArg:<span class="hljs-built_in">string</span>:<span class="hljs-built_in">void</span>) {
+        <span class="hljs-keyword">super</span>.myFunction(someArg);
+    }
+
+    <span class="hljs-keyword">public</span> propFunction(theArgs:<span class="hljs-built_in">string</span>): <span class="hljs-built_in">void</span> {
+        <span class="hljs-comment">// This doesn't work as you can't call super on properties</span>
+        <span class="hljs-comment">// Even though, when the base class is using dynamicProto()</span>
+        <span class="hljs-comment">// this WILL work!</span>
+        <span class="hljs-keyword">super</span>.propFunction(theArgs);
+    }
+}</code></pre>
+			<p>So in both of these cases the only workable solutions are either :- </p>
+			<ul>
+				<li>Define Stub member functions and live with the code bloat</li>
+				<li>Just don&#39;t use dynamicProto() and again live with the larger file size.</li>
+			</ul>
+			<p>So assuming that you do want to continue using dynamicProto() and don&#39;t want to deal with the additional code bloat, this project includes a simple rollup plugin included in the <code>tools/rollup</code> folder that can be used to remove &quot;tagged&quot; stub code from the resulting output during packaging. </p>
+			<p>This is a Post processor that removes any code/comments (not just function) that are &quot;tagged&quot; from the resulting output, thus removing the Stub methods and the resulting code bloat from your final packaged code, but still leaving typescript declaration with the final (runtime) member function definition.</p>
+			<p>The plugin uses the following rules to identify and remove tagged code :-</p>
+			<ul>
+				<li><p>The function must be a instance member function (a prototype level function) where the generated JS looks like &quot;<code>MyClass.prototype.methodName = function () { };</code>&quot;</p>
+				</li>
+				<li><p>The <code>tagname</code> must appear either on the line before the function name (pre); on the closing line of the function (post) (NOTE: Not after as TypeScript can drop this from the final output) or within the stub function (enclosed).</p>
+					<pre><code>  // @<span class="hljs-type">DynamicProtoStub</span>
+  <span class="hljs-type">MyClass</span>.proto<span class="hljs-keyword">type</span>.methodName = function () {
+  };
+
+  <span class="hljs-type">MyClass</span>.proto<span class="hljs-keyword">type</span>.methodName = function () {
+  }; // @<span class="hljs-type">DymanicProtoStub</span>
+
+  <span class="hljs-type">MyClass</span>.proto<span class="hljs-keyword">type</span>.methodName = function () {
+      // @<span class="hljs-type">DynamicProtoStub</span>
+  };
+
+  <span class="hljs-type">MyClass</span>.proto<span class="hljs-keyword">type</span>.methodName = function () {
+      /* @<span class="hljs-type">DynamicProtoStub</span> 
+      * <span class="hljs-type">Some</span> other comments
+      */
+  };</code></pre></li>
+				<li><p>The pre and post tagging comments must be defined using a single line comment &quot;<code>// @DynamicProtoStub</code>&quot; only.</p>
+				</li>
+				<li><p>Enclosed tagging comments (within the function definition) may be defined using either single or multi-line comments. But the tagging comment MUST be the first comment within the function.</p>
+				</li>
+				<li><p>The function <em>may</em> be prefixed by a typedoc comment of &quot;<code>/** Description @param arg - arg details */</code>&quot; etc, which will be removed if the function is removed. However, it will not remove other prefixed single or multi-line comments.</p>
+				</li>
+				<li><p>The <code>tagname</code> must be the first &quot;element&quot;/&quot;word&quot; of any comment with optional leading spaces or tabs only. </p>
+					<ul>
+						<li>e.g. These would not match &quot;<code>// - @DynamicProtoStub</code>&quot;, &quot;<code>// This is the @DynamicProtoStub</code>&quot;</li>
+					</ul>
+				</li>
+				<li><p>Tagging comments may contains additional trailing content (after the tagName) and will also be removed</p>
+					<ul>
+						<li>&quot;<code>// @DynamicProtoStub - Will be removed!</code>&quot;</li>
+					</ul>
+				</li>
+				<li><p>If the stub function appears to contain any logic, specifically a closing bracket <code>}</code> (including with a comment) will cause the function to not be matched and removed.</p>
+				</li>
+				<li><p>A final check is performed after removing all tagged functions for any remaining tags within the result and if any tags are detected it will cause the removal process to throw and fail the conversion. This ensures that if you expected a function to be removed that it has been removed.</p>
+					<ul>
+						<li>If your build is failing please check that the tagging comments conform to the above rules, failures normally occur because of unexpected formatting changes.</li>
+					</ul>
+				</li>
+			</ul>
+			<p>Some possible examples</p>
+			<pre><code class="language-typescript"><span class="hljs-comment">/**
+ * The typedoc comments
+ */</span>
+<span class="hljs-comment">// @DynamicProtoStub</span>
+<span class="hljs-keyword">public</span> toBeRemoved():<span class="hljs-built_in">void</span> {
+}
+
+<span class="hljs-comment">// @DynamicProtoStub</span>
+<span class="hljs-keyword">public</span> toBeRemoved():<span class="hljs-built_in">void</span> {
+}
+
+<span class="hljs-comment">/**
+ * This function does stuff
+ * @param args - used in the function
+ */</span>
+<span class="hljs-keyword">public</span> myFunction(args:<span class="hljs-built_in">string</span>): <span class="hljs-built_in">void</span> {
+    ...
+} <span class="hljs-comment">// @DynamicProtoStub - Function will be removed</span>
+
+<span class="hljs-keyword">public</span> myFunction2(): <span class="hljs-built_in">void</span> {
+...
+}  <span class="hljs-comment">// @DynamicProtoStub - Function will be removed</span>
+
+<span class="hljs-comment">/**
+ * This function does stuff
+ * @param args - used in the function
+ */</span>
+<span class="hljs-keyword">public</span> myFunction(args:<span class="hljs-built_in">string</span>): <span class="hljs-built_in">void</span> {
+    <span class="hljs-comment">// @DynamicProtoStub - Function will be removed</span>
+}
+
+<span class="hljs-keyword">public</span> myFunction2(): <span class="hljs-built_in">void</span> {
+    <span class="hljs-comment">/* @DynamicProtoStub 
+     * Function will be removed
+     */</span>
+}  
+</code></pre>
+			<p>For clarification the following will NOT match or get removed</p>
+			<pre><code class="language-typescript">
+<span class="hljs-keyword">public</span> myFunction3(): <span class="hljs-built_in">void</span> {
+}
+<span class="hljs-comment">// @DynamicProtoStub - This method will not be removed</span>
+
+
+<span class="hljs-comment">// @DynamicProtoStub - This method will not be removed</span>
+
+<span class="hljs-keyword">public</span> myFunction4(): <span class="hljs-built_in">void</span> {
+}
+
+<span class="hljs-keyword">public</span> myFunction4(): <span class="hljs-built_in">void</span> {
+    <span class="hljs-comment">/* 
+     * @DynamicProtoStub 
+     * This will fail because the tag is not the first 
+     * "element"/"word" of any comment with optional 
+     * leading spaces or tabs only. 
+     */</span>
+}
+
+<span class="hljs-keyword">public</span> myFunction4(): <span class="hljs-built_in">void</span> {
+    <span class="hljs-comment">// This is a stub</span>
+    <span class="hljs-comment">/* @DynamicProtoStub 
+     * This will fail because the tagging comment is not
+     * the first comment within the function. 
+     */</span>
+}
+</code></pre>
+			<a href="#adding-to-you-own-rollupconfigjs" id="adding-to-you-own-rollupconfigjs" style="color: inherit; text-decoration: none;">
+				<h3>Adding to you own rollup.config.js</h3>
+			</a>
+			<pre><code class="language-javascript"><span class="hljs-keyword">import</span> dynamicRemove <span class="hljs-keyword">from</span> <span class="hljs-string">"@microsoft/dynamicproto-js/tools/rollup/node/removedynamic"</span>;
+
+  <span class="hljs-keyword">const</span> moduleRollupConfig = {
+    <span class="hljs-attr">input</span>: <span class="hljs-string">`<span class="hljs-subst">${inputName}</span>.js`</span>,
+    <span class="hljs-attr">output</span>: {
+      <span class="hljs-attr">file</span>: <span class="hljs-string">`./dist/<span class="hljs-subst">${format}</span>/<span class="hljs-subst">${outputName}</span>.js`</span>,
+      <span class="hljs-attr">banner</span>: banner,
+      <span class="hljs-attr">format</span>: format,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">"OutputName-JS"</span>,
+      <span class="hljs-attr">extend</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">sourcemap</span>: <span class="hljs-literal">true</span>
+    },
+    <span class="hljs-attr">plugins</span>: [
+      dynamicRemove(),
+      dynamicRemove({ <span class="hljs-attr">tagname</span>: <span class="hljs-string">"@MyTagName"</span> }),
+      nodeResolve(),
+      uglify({
+        <span class="hljs-attr">ie8</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">toplevel</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">compress</span>: {
+          <span class="hljs-attr">passes</span>:<span class="hljs-number">3</span>,
+          <span class="hljs-attr">unsafe</span>: <span class="hljs-literal">true</span>
+        },
+        <span class="hljs-attr">output</span>: {
+          <span class="hljs-attr">preamble</span>: banner,
+          <span class="hljs-attr">webkit</span>:<span class="hljs-literal">true</span>
+        }
+      })
+    ]
+  };
+</code></pre>
+			<a href="#not-using-rollup" id="not-using-rollup" style="color: inherit; text-decoration: none;">
+				<h3>Not using Rollup?</h3>
+			</a>
+			<p>Then let us know or simply take the embedded RegEx, and wrap it into your favorite tool and submit a PR. </p>
+			<p>It should be as simple as :-</p>
+			<ul>
+				<li>Load the TypeScript generated JS output source file</li>
+				<li>Apply the regex using replace to &quot;remove&quot; the tagged code, if the named group tags where detected.</li>
+				<li>Write the new resulting file to the output path (or stream)</li>
+				<li>Do the final check for any &quot;remaining&quot; tags, which represents a failed matching</li>
 			</ul>
 			<a href="#browser-support" id="browser-support" style="color: inherit; text-decoration: none;">
 				<h2>Browser Support</h2>

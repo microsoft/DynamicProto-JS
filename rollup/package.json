@@ -1,6 +1,6 @@
 {
-  "name": "@microsoft/dynamicproto-js",
-  "description": "Microsoft Dynamic Proto Utility",
+  "name": "@microsoft/dynamicproto-rollup",
+  "description": "Microsoft Dynamic Proto Utility Rollup",
   "version": "0.2.0",
   "keywords": [
     "javascript",
@@ -11,18 +11,16 @@
     "minification",
     "application insights"
   ],
-  "main": "./lib/dist/node/dynamicproto-js.js",
-  "module": "./lib/dist/esm/dynamicproto-js.js",
-  "types": "./lib/types/dynamicproto-js.d.ts",
+  "main": "./tools/rollup/node/removedynamic.js",
+  "module": "./tools/rollup/esm/removedynamic.js",
   "directories": {
-    "doc": "lib/docs"
   },
   "scripts": {
     "postinstall": "node common/scripts/install-run-rush.js update --recheck --full",
-    "build": "node common/scripts/install-run-rush.js rebuild",
-    "test": "grunt dynamicprototest",
-    "rollup": "grunt rollup",
-    "docs": "typedoc --out docs lib/src --excludePrivate --excludeProtected --tsconfig lib/tsconfig.json --theme minimal"
+    "clean": "grunt clean",
+    "build": "npm run build:esm && npm run build:bundle",
+    "build:esm": "grunt rollup",
+    "build:bundle": "rollup -c rollup.config.js"
   },
   "repository": {
     "type": "git",
@@ -42,12 +40,15 @@
     "grunt-run": "^0.8.1",
     "grunt-ts": "^6.0.0-beta.22",
     "grunt-tslint": "^5.0.2",
+    "rollup-plugin-copy": "^3.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.1.0",
     "rollup": "^1.27.2",
     "tslint": "^5.19.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-microsoft-contrib": "^5.2.1",
-    "typedoc": "^0.15.1",
-    "typescript": "3.7.2"
+    "typescript": "3.7.2",
+    "magic-string": "^0.25.5"
   },
   "peerDependencies": {
     "tslib": "^1.9.3"

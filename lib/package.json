@@ -10,7 +10,8 @@
     "typescript",
     "inheritence",
     "minification",
-    "application insights"
+    "application insights",
+    "rollup"
   ],
   "main": "./dist/node/dynamicproto-js.js",
   "module": "./dist/esm/dynamicproto-js.js",
@@ -39,6 +40,7 @@
   "license": "MIT",
   "sideEffects": false,
   "devDependencies": {
+    "@microsoft/dynamicproto-rollup": "0.2.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.3.2",
     "grunt-contrib-qunit": "^2.0.0",

@@ -93,15 +93,15 @@ var NormalClass = /** @class */ (function () {
         this.property1 = [];
         this.property1.push("Hello");
     }
-    InheritTest1.prototype.function1 = function () {
+    NormalClass.prototype.function1 = function () {
         //...
         doSomething();
     };
-    InheritTest1.prototype.function2 = function () {
+    NormalClass.prototype.function2 = function () {
         //...
         doSomething();
     };
-    InheritTest1.prototype.function3 = function () {
+    NormalClass.prototype.function3 = function () {
         //...
         doSomething();
     };
@@ -112,7 +112,7 @@ var NormalClass = /** @class */ (function () {
 So the result would look something like this which represents a ~45% compression, note that the Classname.prototype appears several times.
 
 ```JavaScript
-var NormalClass=(InheritTest1.prototype.function1=function(){doSomething()},InheritTest1.prototype.function2=function(){doSomething()},InheritTest1.prototype.function3=function(){doSomething()},function(){this.property1=[],this.property1.push("Hello")});
+var NormalClass=(NormalClass.prototype.function1=function(){doSomething()},NormalClass.prototype.function2=function(){doSomething()},NormalClass.prototype.function3=function(){doSomething()},function(){this.property1=[],this.property1.push("Hello")});
 ```
 
 While in this example when using the dynamicProto helper to create the same resulting class and objects there are no references to Classname.prototype and only 1 reference to this.
@@ -173,6 +173,262 @@ script type=module&gt; tag in modern browsers
 * dist/iife – A self-executing function, suitable for inclusion as a &lt;script&gt; tag. (If you want to create a bundle for your application, you probably want to use this.)
 * dist/umd – Universal Module Definition, works as amd, cjs and iife all in one
 * dist/system – Native format of the SystemJS loader
+
+## TypeScript Declaration Helper
+
+When using TypeScript to create classes and automatically generate the declaration (*.d.ts) files for your classes you will run into one or more of the following issues :-
+
+1) When you attempt to extend a base class which defines an abstract member (class) function you will get 
+```error TS2424: Class 'ABC' defines instance member function 'myFunction', but extended class 'XYZ' defines it as instance member property.``` 
+    * The only solution for this is to define an empty 'Stub' method which stops the error, but also generates an unused prototype method in your final code that just takes up space.
+
+```typescript
+export abstract class ABC {
+    public myFunction(someArg:string): void {
+    }
+
+    public abstract myFunction2(theArg:string, ...): void;
+}
+
+export class XYZ extends ABC {
+    public myFunction2(theArg:string, ...): void {
+        // This stub is required otherwise it won't compile
+        // It's also extra unnecessary code in the final code
+    }
+
+    constructor() {
+        dynamicProto(XYZ, this, (self, base) => {
+            self.myFunction = (someArg) => {
+                // This implements a member function (on the prototype)
+            };
+
+            self.myFunction2 = (theArg:string, ...) => {
+            };
+        });
+    }
+}
+```
+
+The above results in the following javascript output for XYZ class where the XYZ.prototype.myFunction2 is obsolete (as it gets replace), unnecessary (for the class to function) and uncompressable bloat for the code
+
+```javascript
+var XYZ = /** @class */ (function () {
+    function XYZ() {
+        dynamicProto(XYZ, this, (self, base) => {
+            // ... Removed for brevity ...
+            self.myFunction2 = (theArg:string, ...) => {
+            };
+        });
+    }
+    XYZ.prototype.myFunction2 = function () {
+        // This stub is required otherwise it won't compile
+        // It's also extra unnecessary code in the final code
+    };
+    return XYZ;
+}());
+```
+
+2) When you are creating a class that you want users to be able to extend (using TypeScript), and you want all of the functions to be declared (in the *.d.ts) as member functions (not properties), so that the extendsion classes (using typescript) can just use the normal ```super``` keyword without forcing them to either use dynamicProto() or save / call the instance properties.
+    * As with above the only solution (for dynamically generated declaration files) would be to defined Stub methods as above.
+
+```typescript
+export class BaseClass {
+    // A Member function
+    public myFunction(someArg:string):void { 
+        // Stub function
+    }
+
+    // A instance member property (which happens to be a function)
+    public propFunction: (theArgs:string) => void;
+
+    constructor() {
+        dynamicProto(BaseClass, this) (self) => {
+            // This will create (at runtime) a member functions
+            self.myFunction = (someArg:string) => {
+            };
+            self.propFunction = (theArgs:string) => {
+            };
+        });
+    }
+}
+
+export class NewClass extends BaseClass {
+    // This works as TS see's that the base class has a prototype
+    // function (not a property one)
+    public myFunction(someArg:string:void) {
+        super.myFunction(someArg);
+    }
+
+    public propFunction(theArgs:string): void {
+        // This doesn't work as you can't call super on properties
+        // Even though, when the base class is using dynamicProto()
+        // this WILL work!
+        super.propFunction(theArgs);
+    }
+}
+```
+
+So in both of these cases the only workable solutions are either :- 
+
+* Define Stub member functions and live with the code bloat
+* Just don't use dynamicProto() and again live with the larger file size.
+
+So assuming that you do want to continue using dynamicProto() and don't want to deal with the additional code bloat, this project includes a simple rollup plugin included in the ```tools/rollup``` folder that can be used to remove "tagged" stub code from the resulting output during packaging. 
+
+This is a Post processor that removes any code/comments (not just function) that are "tagged" from the resulting output, thus removing the Stub methods and the resulting code bloat from your final packaged code, but still leaving typescript declaration with the final (runtime) member function definition.
+
+The plugin uses the following rules to identify and remove tagged code :-
+
+* The function must be a instance member function (a prototype level function) where the generated JS looks like "```MyClass.prototype.methodName = function () { };```"
+* The ```tagname``` must appear either on the line before the function name (pre); on the closing line of the function (post) (NOTE: Not after as TypeScript can drop this from the final output) or within the stub function (enclosed).
+    ```
+    // @DynamicProtoStub
+    MyClass.prototype.methodName = function () {
+    };
+
+    MyClass.prototype.methodName = function () {
+    }; // @DymanicProtoStub
+
+    MyClass.prototype.methodName = function () {
+        // @DynamicProtoStub
+    };
+
+    MyClass.prototype.methodName = function () {
+        /* @DynamicProtoStub 
+        * Some other comments
+        */
+    };
+    ```
+* The pre and post tagging comments must be defined using a single line comment "```// @DynamicProtoStub```" only.
+* Enclosed tagging comments (within the function definition) may be defined using either single or multi-line comments. But the tagging comment MUST be the first comment within the function.
+* The function *may* be prefixed by a typedoc comment of "```/** Description @param arg - arg details */```" etc, which will be removed if the function is removed. However, it will not remove other prefixed single or multi-line comments.
+* The ```tagname``` must be the first "element"/"word" of any comment with optional leading spaces or tabs only. 
+    * e.g. These would not match "```// - @DynamicProtoStub```", "```// This is the @DynamicProtoStub```"
+* Tagging comments may contains additional trailing content (after the tagName) and will also be removed
+    * "```// @DynamicProtoStub - Will be removed!```"
+* If the stub function appears to contain any logic, specifically a closing bracket ```}``` (including with a comment) will cause the function to not be matched and removed.
+* A final check is performed after removing all tagged functions for any remaining tags within the result and if any tags are detected it will cause the removal process to throw and fail the conversion. This ensures that if you expected a function to be removed that it has been removed.
+    * If your build is failing please check that the tagging comments conform to the above rules, failures normally occur because of unexpected formatting changes.
+
+Some possible examples
+```typescript
+/**
+ * The typedoc comments
+ */
+// @DynamicProtoStub
+public toBeRemoved():void {
+}
+ 
+// @DynamicProtoStub
+public toBeRemoved():void {
+}
+
+/**
+ * This function does stuff
+ * @param args - used in the function
+ */
+public myFunction(args:string): void {
+    ...
+} // @DynamicProtoStub - Function will be removed
+
+public myFunction2(): void {
+...
+}  // @DynamicProtoStub - Function will be removed
+
+/**
+ * This function does stuff
+ * @param args - used in the function
+ */
+public myFunction(args:string): void {
+    // @DynamicProtoStub - Function will be removed
+}
+
+public myFunction2(): void {
+    /* @DynamicProtoStub 
+     * Function will be removed
+     */
+}  
+
+```
+
+For clarification the following will NOT match or get removed
+```typescript
+
+public myFunction3(): void {
+}
+// @DynamicProtoStub - This method will not be removed
+
+
+// @DynamicProtoStub - This method will not be removed
+
+public myFunction4(): void {
+}
+
+public myFunction4(): void {
+    /* 
+     * @DynamicProtoStub 
+     * This will fail because the tag is not the first 
+     * "element"/"word" of any comment with optional 
+     * leading spaces or tabs only. 
+     */
+}
+
+public myFunction4(): void {
+    // This is a stub
+    /* @DynamicProtoStub 
+     * This will fail because the tagging comment is not
+     * the first comment within the function. 
+     */
+}
+
+```
+
+### Adding to you own rollup.config.js
+
+```javascript
+import dynamicRemove from "@microsoft/dynamicproto-js/tools/rollup/node/removedynamic";
+
+  const moduleRollupConfig = {
+    input: `${inputName}.js`,
+    output: {
+      file: `./dist/${format}/${outputName}.js`,
+      banner: banner,
+      format: format,
+        name: "OutputName-JS",
+      extend: true,
+      sourcemap: true
+    },
+    plugins: [
+      dynamicRemove(),
+      dynamicRemove({ tagname: "@MyTagName" }),
+      nodeResolve(),
+      uglify({
+        ie8: true,
+        toplevel: true,
+        compress: {
+          passes:3,
+          unsafe: true
+        },
+        output: {
+          preamble: banner,
+          webkit:true
+        }
+      })
+    ]
+  };
+
+```
+
+### Not using Rollup? ###
+
+Then let us know or simply take the embedded RegEx, and wrap it into your favorite tool and submit a PR. 
+
+It should be as simple as :-
+
+* Load the TypeScript generated JS output source file
+* Apply the regex using replace to "remove" the tagged code, if the named group tags where detected.
+* Write the new resulting file to the output path (or stream)
+* Do the final check for any "remaining" tags, which represents a failed matching
 
 ## Browser Support
 
