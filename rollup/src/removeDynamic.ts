@@ -50,11 +50,11 @@ function isNullOrWhitespace(value:string) {
 export default function dynamicRemove(options:IDynamicProtoRollupOptions = {}) {
   var token = (options || {}).tagname || "@DynamicProtoStub";
   var replaceValue = (options || {}).comment || "// Removed Stub for %function%.";
-  let tokenGroups:Array<number> = [4, 7, 10];
+  let tokenGroups:Array<number> = [4, 9, 12];
   let funcNameGroup:number = 6;
 
   // Because of the test infrastructure (PhamtonJS) the RegEx can't use the "s" flag (gis vs gi) or named groups
-  const pattern = new RegExp("([\\t ]*\\/\\*\\*((?!\\*\\/)(.|\r|\n))*\\*\\/[\\s]*)*(\\/\\/[\\t ]*" + escape(token) + "[^\\r\\n]*(\\r\\n|\n\r|\r|\n))*[\\t ]*([\\w]*\\.prototype\\.[\\w]*)[\\t ]*=[\\t ]*function[\\t ]*\\([^\\{]*\\{[^\\/\\}]*(\\/[\\*\\/][\\t ]*" + escape(token) + "[^\\*\\r\\n]*(\\*\\/)?(\\r\\n|\n\r|\r|\n))*[^\\}]*\\};([\\t ]*\\/\\/[\\t ]*" + escape(token) + "[^\\r\\n]*)*", 'gi');
+  const pattern = new RegExp("([\\t ]*\\/\\*\\*((?!\\*\\/)(.|\r|\n))*\\*\\/[\\s]*)*(\\/\\/[\\t ]*" + escape(token) + "[^\\r\\n]*(\\r\\n|\n\r|\r|\n))*[\\t ]*([\\w]*\\.prototype(\\.|\\[\\\"|\\[\\')[\\w]*(\\\"\\]|\\'\\])?)[\\t ]*=[\\t ]*function[\\t ]*\\([^\\{]*\\{[^\\/\\}]*(\\/[\\*\\/][\\t ]*" + escape(token) + "[^\\*\\r\\n]*(\\*\\/)?(\\r\\n|\n\r|\r|\n))*[^\\}]*\\};([\\t ]*\\/\\/[\\t ]*" + escape(token) + "[^\\r\\n]*)*", 'gi');
 
   function formatError(token:string, code:string, pos:number, id:string) {
     let lines = code.split(/(?:\r\n|\n\r|\r|\n)/);

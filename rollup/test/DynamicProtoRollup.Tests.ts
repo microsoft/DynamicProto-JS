@@ -250,6 +250,232 @@ export class DynamicProtoRollupTests extends TestClass {
         });
 
         this.testCase({
+            name: "Stubs with return values",
+            test: () => {
+                this.doTest(null, 
+                    // Input, 
+                    "    /* ================================================================================================================\n" + 
+                    "     * DO NOT add any code to these empty implementations as any code defined here will be removed, as\n" + 
+                    "    /*\n" + 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype.func1 = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        return;\n" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * Process an event to add it to the local storage and then pass it to the next plugin.\n" + 
+                    "     * @param event - The event that needs to be stored.\n" + 
+                    "     * @param itemCtx - This is the context for the current request, ITelemetryPlugin instances\n" + 
+                    "     * can optionally use this to access the current core instance or define / pass additional information\n" + 
+                    "     * to later plugins (vs appending items to the telemetry item)\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype.func2 = function (evt, itemCtx) {\n" + 
+                    "        return;\n" +
+                    "    }; // @DynamicProtoStub  - Tag type 3\n" + 
+                    "    /**\n" + 
+                    "     * Hello World\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype.func3 = function () {\n" + 
+                    "        // Normal Function\n" + 
+                    "        return;\n" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * Process an event to add it to the local storage and then pass it to the next plugin.\n" + 
+                    "     * @param event - The event that needs to be stored.\n" + 
+                    "     * @param itemCtx - This is the context for the current request, ITelemetryPlugin instances\n" + 
+                    "     * can optionally use this to access the current core instance or define / pass additional information\n" + 
+                    "     * to later plugins (vs appending items to the telemetry item)\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype.func4 = function (evt, itemCtx) {\n" + 
+                    "        // @DynamicProtoStub  - Tag type 2.1\n" +
+                    "        return;\n" +
+                    "    };\n" + 
+                    "    TestClass.prototype.func5 = function () {\n" + 
+                    "        return;\n" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * Process an event to add it to the local storage and then pass it to the next plugin.\n" + 
+                    "     * @param event - The event that needs to be stored.\n" + 
+                    "     * @param itemCtx - This is the context for the current request, ITelemetryPlugin instances\n" + 
+                    "     * can optionally use this to access the current core instance or define / pass additional information\n" + 
+                    "     * to later plugins (vs appending items to the telemetry item)\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype.func6 = function (evt, itemCtx) {\n" + 
+                    "        /* @DynamicProtoStub  - Tag type 2.2 */\n" +
+                    "        return;\n" +
+                    "    };\n" + 
+                    "    return TestClass;",
+                    // Expected Value
+                    "    /* ================================================================================================================\n" + 
+                    "     * DO NOT add any code to these empty implementations as any code defined here will be removed, as\n" + 
+                    "    /*\n" + 
+                    "// Removed Stub for TestClass.prototype.func1.\n" + 
+                    "// Removed Stub for TestClass.prototype.func2.\n" + 
+                    "    /**\n" + 
+                    "     * Hello World\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype.func3 = function () {\n" + 
+                    "        // Normal Function\n" + 
+                    "        return;\n" +
+                    "    };\n" + 
+                    "// Removed Stub for TestClass.prototype.func4.\n" + 
+                    "    TestClass.prototype.func5 = function () {\n" + 
+                    "        return;\n" +
+                    "    };\n" + 
+                    "// Removed Stub for TestClass.prototype.func6.\n" + 
+                    "    return TestClass;"
+                    );
+
+                this.doTest(null, 
+                    // Input, 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype.func1 = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        throw \"Not Implemented\";\n" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype.func2 = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        throw \"Not Implemented\";\n" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype.func3 = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        throw \"Not Implemented\";\n" +
+                    "    };\n" + 
+                    "",
+                    // Expected Value
+                    "// Removed Stub for TestClass.prototype.func1.\n" +
+                    "// Removed Stub for TestClass.prototype.func2.\n" + 
+                    "// Removed Stub for TestClass.prototype.func3.\n"
+                    );
+            }
+        });
+
+        this.testCase({
+            name: "Test reserved (ES3) function names",
+            test: () => {
+                this.doTest(null, 
+                    // Input, 
+                    "    /* ================================================================================================================\n" + 
+                    "     * DO NOT add any code to these empty implementations as any code defined here will be removed, as\n" + 
+                    "    /*\n" + 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype[\"catch\"] = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * Process an event to add it to the local storage and then pass it to the next plugin.\n" + 
+                    "     * @param event - The event that needs to be stored.\n" + 
+                    "     * @param itemCtx - This is the context for the current request, ITelemetryPlugin instances\n" + 
+                    "     * can optionally use this to access the current core instance or define / pass additional information\n" + 
+                    "     * to later plugins (vs appending items to the telemetry item)\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype[\"catch2\"] = function (evt, itemCtx) {\n" + 
+                    "        return;\n" +
+                    "    }; // @DynamicProtoStub  - Tag type 3\n" + 
+                    "    /**\n" + 
+                    "     * Hello World\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype[\"func3\"] = function () {\n" + 
+                    "        // Normal Function\n" + 
+                    "        return;\n" +
+                    "    };\n" + 
+                    "    return TestClass;",
+                    // Expected Value
+                    "    /* ================================================================================================================\n" + 
+                    "     * DO NOT add any code to these empty implementations as any code defined here will be removed, as\n" + 
+                    "    /*\n" + 
+                    "// Removed Stub for TestClass.prototype[\"catch\"].\n" + 
+                    "// Removed Stub for TestClass.prototype[\"catch2\"].\n" + 
+                    "    /**\n" + 
+                    "     * Hello World\n" + 
+                    "     */\n" + 
+                    "    TestClass.prototype[\"func3\"] = function () {\n" + 
+                    "        // Normal Function\n" + 
+                    "        return;\n" +
+                    "    };\n" +
+                    "    return TestClass;",
+                    );
+
+                this.doTest(null, 
+                    // Input, 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype[\"catch\"] = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        throw \"Not Implemented\";" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype[\"delete\"] = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        throw \"Not Implemented\";\n" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype[\"throw\"] = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        throw \"Not Implemented\";\n" +
+                    "    };\n" + 
+                    "    /**\n" + 
+                    "     * The function does the initial set up. It adds a notification listener to determine which events to remove.\n" + 
+                    "     * @param coreConfig - The core configuration.\n" + 
+                    "     * @param core       - The AppInsights core.\n" + 
+                    "     * @param extensions - An array of all the plugins being used.\n" + 
+                    "     */\n" + 
+                    "    // @DynamicProtoStub \n" + 
+                    "    TestClass.prototype['if'] = function (coreConfig, core, extensions, pluginChain) {\n" + 
+                    "        throw \"Not Implemented\";\n" +
+                    "    };\n" + 
+                    "",
+                    // Expected Value
+                    "// Removed Stub for TestClass.prototype[\"catch\"].\n" +
+                    "// Removed Stub for TestClass.prototype[\"delete\"].\n" + 
+                    "// Removed Stub for TestClass.prototype[\"throw\"].\n" +
+                    "// Removed Stub for TestClass.prototype['if'].\n"
+                    );
+            }
+        });
+
+        this.testCase({
             name: "Test unconverted tags from partial conversion",
             test: () => {
                 this.testError(null, 
@@ -374,7 +600,5 @@ export class DynamicProtoRollupTests extends TestClass {
                     "6   :// Removed Stub for ClassName.prototype.methodName.\n");
             }
         });
-
-
     }
 }
