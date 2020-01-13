@@ -27,10 +27,15 @@ node_modules/
 out/
 dist**/
 types/
+tools/
 
 lib/bundle/
 lib/dist**/
 lib/types/
+
+rollup/node_modules/
+rollup/dist**/
+rollup/types/
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt

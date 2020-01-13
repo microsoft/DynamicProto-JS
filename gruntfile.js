@@ -30,6 +30,16 @@ module.exports = function (grunt) {
                     './lib/test/Selenium/DynamicProtoTests.ts'
                 ],
                 out: 'lib/test/Selenium/dynamicprototests.js'
+            },
+            rollup: {
+                tsconfig: './rollup/tsconfig.json'
+            },
+            rolluptest: {
+                tsconfig: './rollup/test/tsconfig.json',
+                src: [
+                    './rollup/test/Selenium/DynamicProtoRollupTests.ts'
+                ],
+                out: 'rollup/test/Selenium/dynamicprotorolluptests.js'
             }
         },
         qunit: {
@@ -41,6 +51,17 @@ module.exports = function (grunt) {
                     timeout: 300 * 1000, // 5 min
                     console: false,
                     summaryOnly: true,
+                    '--web-security': 'false' // we need this to allow CORS requests in PhantomJS
+                }
+            },
+            rollup: {
+                options: {
+                    urls: [
+                        './rollup/test/Selenium/Tests.html'
+                    ],
+                    timeout: 300 * 1000, // 5 min
+                    console: false,
+                    summaryOnly: false,
                     '--web-security': 'false' // we need this to allow CORS requests in PhantomJS
                 }
             }
@@ -56,7 +77,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-run');
-    grunt.registerTask("default", ["ts:dynamicproto", "ts:dynamicprototest", "qunit:dynamicproto"])
+    grunt.registerTask("default", ["ts:rollup", "ts:rolluptest", "qunit:rollup", "ts:dynamicproto", "ts:dynamicprototest", "qunit:dynamicproto"])
     grunt.registerTask("dynamicproto", ["ts:dynamicproto"]);
     grunt.registerTask("dynamicprototest", ["ts:dynamicproto", "ts:dynamicprototest", "qunit:dynamicproto"]);
+    grunt.registerTask("rollup", ["ts:rollup", "ts:rolluptest", "qunit:rollup"]);
 };

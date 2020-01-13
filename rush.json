@@ -7,6 +7,12 @@
   "projectFolderMaxDepth": 4,
   "projects": [
     {
+      "packageName": "@microsoft/dynamicproto-rollup",
+      "projectFolder": "rollup",
+      "shouldPublish": false,
+      "reviewCategory": "tools"
+    },
+    {
       "packageName": "@microsoft/dynamicproto-js",
       "projectFolder": "lib",
       "shouldPublish": true
