@@ -26,7 +26,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 3. Navigate to the root folder and update rush dependencies
 
     ```sh
-    rush update
+    rush update --recheck --full
     ```
 
 4. Build, lint, create docs and run tests
