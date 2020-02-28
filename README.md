@@ -40,7 +40,7 @@ class ExampleClass extends BaseClass {
             _self.initialize = () => {
                 ...
             }
-            // Warnings: While the following will work as _self is simply a ference to
+            // Warnings: While the following will work as _self is simply a reference to
             // this, if anyone overrides myFunction() the overridden will be called first
             // as the normal JavaScript method resolution will occur and the defined
             // _self.initialize() function is actually gets removed from the instance and
@@ -127,11 +127,11 @@ var DynamicClass = /** @class */ (function () {
                 //...
                 doSomething();
             };
-            _self.function1 = function () {
+            _self.function2 = function () {
                 //...
                 doSomething();
             };
-            _self.function1 = function () {
+            _self.function3 = function () {
                 //...
                 doSomething();
             };
@@ -144,7 +144,7 @@ var DynamicClass = /** @class */ (function () {
 Which results in the following minified code which is much smaller and represents ~63% compression.
 
 ```Javascript
-var DynamicClass=function n(){dynamicProto(n,this,function(n,o){n.property1=[],n.property1.push("Hello()"),n.function1=function(){doSomething()},n.function1=function(){doSomething()},n.function1=function(){doSomething()}})};
+var DynamicClass=function n(){dynamicProto(n,this,function(n,o){n.property1=[],n.property1.push("Hello()"),n.function1=function(){doSomething()},n.function2=function(){doSomething()},n.function3=function(){doSomething()}})};
 ```
 
  So when looking at the code for NormalClass and DynamicClass, both end up with 1 instance property called ```property1``` and the 3 functions ```function1```, ```function2``` and ```function3```, in both cases the functions are defined ONLY on the "class" prototype and ```property1``` is defined on the instance. So anyone, whether using JavaScript or TypeScript will be able to "extend" either of class without any concerns about overloading instance functions and needing to save any previous method. And you are extending a 3rd party library you no longer have to worry about them changing the implementation as ```dynamicProto()``` handles converting overriden instance functions into prototype level ones. Yes, this means that if you don't override instance function it will continue to be an instance function.
