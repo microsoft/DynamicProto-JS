@@ -2368,6 +2368,9 @@ img {
 		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_dynamicproto_.html#dynamicprotodelegate" class="tsd-kind-icon">Dynamic<wbr>Proto<wbr>Delegate</a>
 		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+			<a href="_dynamicproto_.html#_hasvisited" class="tsd-kind-icon">_has<wbr>Visited</a>
+		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_dynamicproto_.html#dynamicproto" class="tsd-kind-icon">dynamic<wbr>Proto</a>
 		</li>
@@ -2388,6 +2391,7 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Functions</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dynamicproto_.html#_hasvisited" class="tsd-kind-icon">_has<wbr>Visited</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_dynamicproto_.html#dynamicproto" class="tsd-kind-icon">dynamic<wbr>Proto</a></li>
 						</ul>
 					</section>
@@ -2402,7 +2406,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Dynamic<wbr>Proto<wbr>Delegate&lt;DPType&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>theTarget<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DPType</span>, baseFuncProxy<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">DPType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/microsoft/DynamicProto-JS/blob/5db2bb1/lib/src/DynamicProto.ts#L318">DynamicProto.ts:318</a></li>
+						<li>Defined in <a href="https://github.com/microsoft/DynamicProto-JS/blob/2fc3923/lib/src/DynamicProto.ts#L340">DynamicProto.ts:340</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2459,6 +2463,43 @@ img {
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Functions</h2>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+				<a name="_hasvisited" class="tsd-anchor"></a>
+				<h3>_has<wbr>Visited</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class="tsd-signature tsd-kind-icon">_has<wbr>Visited<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/microsoft/DynamicProto-JS/blob/2fc3923/lib/src/DynamicProto.ts#L174">DynamicProto.ts:174</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Returns whether the value is included in the array</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>values: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The array of values</p>
+								</div>
+							</li>
+							<li>
+								<h5>value: <span class="tsd-signature-type">any</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>The value</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 				<a name="dynamicproto" class="tsd-anchor"></a>
 				<h3>dynamic<wbr>Proto</h3>
@@ -2469,7 +2510,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/microsoft/DynamicProto-JS/blob/5db2bb1/lib/src/DynamicProto.ts#L371">DynamicProto.ts:371</a></li>
+								<li>Defined in <a href="https://github.com/microsoft/DynamicProto-JS/blob/2fc3923/lib/src/DynamicProto.ts#L393">DynamicProto.ts:393</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

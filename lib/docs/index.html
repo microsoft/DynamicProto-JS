@@ -2412,7 +2412,7 @@ img {
             _self.initialize = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
                 ...
             }
-            <span class="hljs-comment">// Warnings: While the following will work as _self is simply a ference to</span>
+            <span class="hljs-comment">// Warnings: While the following will work as _self is simply a reference to</span>
             <span class="hljs-comment">// this, if anyone overrides myFunction() the overridden will be called first</span>
             <span class="hljs-comment">// as the normal JavaScript method resolution will occur and the defined</span>
             <span class="hljs-comment">// _self.initialize() function is actually gets removed from the instance and</span>
@@ -2483,11 +2483,11 @@ img {
                 <span class="hljs-comment">//...</span>
                 doSomething();
             };
-            _self.function1 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            _self.function2 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
                 <span class="hljs-comment">//...</span>
                 doSomething();
             };
-            _self.function1 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            _self.function3 = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
                 <span class="hljs-comment">//...</span>
                 doSomething();
             };
@@ -2496,7 +2496,7 @@ img {
     <span class="hljs-keyword">return</span> DynamicClass;
 }());</code></pre>
 			<p>Which results in the following minified code which is much smaller and represents ~63% compression.</p>
-			<pre><code class="language-Javascript"><span class="hljs-keyword">var</span> DynamicClass=<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">n</span>(<span class="hljs-params"></span>)</span>{dynamicProto(n,<span class="hljs-keyword">this</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">n,o</span>)</span>{n.property1=[],n.property1.push(<span class="hljs-string">"Hello()"</span>),n.function1=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},n.function1=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},n.function1=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()}})};</code></pre>
+			<pre><code class="language-Javascript"><span class="hljs-keyword">var</span> DynamicClass=<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">n</span>(<span class="hljs-params"></span>)</span>{dynamicProto(n,<span class="hljs-keyword">this</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">n,o</span>)</span>{n.property1=[],n.property1.push(<span class="hljs-string">"Hello()"</span>),n.function1=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},n.function2=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()},n.function3=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{doSomething()}})};</code></pre>
 			<p> So when looking at the code for NormalClass and DynamicClass, both end up with 1 instance property called <code>property1</code> and the 3 functions <code>function1</code>, <code>function2</code> and <code>function3</code>, in both cases the functions are defined ONLY on the &quot;class&quot; prototype and <code>property1</code> is defined on the instance. So anyone, whether using JavaScript or TypeScript will be able to &quot;extend&quot; either of class without any concerns about overloading instance functions and needing to save any previous method. And you are extending a 3rd party library you no longer have to worry about them changing the implementation as <code>dynamicProto()</code> handles converting overriden instance functions into prototype level ones. Yes, this means that if you don&#39;t override instance function it will continue to be an instance function.</p>
 			<a href="#when-to-use" id="when-to-use" style="color: inherit; text-decoration: none;">
 				<h2>When to use</h2>

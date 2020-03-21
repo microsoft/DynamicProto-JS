@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-rollup",
   "description": "Microsoft Dynamic Proto Utility Rollup",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "keywords": [
     "javascript",
     "dynamic prototype",
