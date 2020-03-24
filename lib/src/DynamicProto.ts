@@ -20,12 +20,6 @@ const Prototype = 'prototype';
 const strFunction = 'function';
 
 /**
- * Constant string defined to support minimization
- * @ignore
- */ 
-const GetPrototypeOf = 'getPrototypeOf';
-
-/**
  * Used to define the name of the instance function lookup table
  * @ignore
  */ 
@@ -54,6 +48,18 @@ const DynClassNamePrefix = '_dynCls$';
  * @ignore
  */ 
 const UnknownValue = '_unknown_';
+
+/**
+ * Constant string defined to support minimization
+ * @ignore
+ */
+const str__Proto = "__proto__";
+
+/**
+ * Pre-lookup to check if we are running on a modern browser (i.e. not IE8)
+ * @ignore
+ */
+let _objGetPrototypeOf = Object["getPrototypeOf"];
 
 /**
  * Internal Global used to generate a unique dynamic class name, every new class will increase this value
@@ -103,19 +109,14 @@ function _isObjectArrayOrFunctionPrototype(target:any)
 function _getObjProto(target:any) {
     if (target) {
         // This method doesn't existing in older browsers (e.g. IE8)
-        if (Object[GetPrototypeOf]) {
-            return Object[GetPrototypeOf](target);
+        if (_objGetPrototypeOf) {
+            return _objGetPrototypeOf(target);
         }
 
-        var proto = "__proto__";    // using indexed lookup to assist with minification
-        if(_isObjectOrArrayPrototype(target[proto])) {
-            return target[proto];
-        }
-
-        var construct = target[Constructor];
-        if (construct) {
-            // May break if the constructor has been changed or removed
-            return construct[Prototype];
+        // target[Constructor] May break if the constructor has been changed or removed
+        let newProto = target[str__Proto] || target[Prototype] || target[Constructor];
+        if(newProto) {
+            return newProto;
         }
     }
 
@@ -127,10 +128,11 @@ function _getObjProto(target:any) {
  * callback and prototype generation.
  * @param target The target object, may be a prototpe or class object
  * @param funcName The function name
+ * @param skipOwn Skips the check for own property
  * @ignore
  */
-function _isDynamicCandidate(target:any, funcName:string) {
-    return (funcName !== Constructor && _isFunction(target[funcName]) && _hasOwnProperty(target, funcName));
+function _isDynamicCandidate(target:any, funcName:string, skipOwn:boolean) {
+    return (funcName !== Constructor && _isFunction(target[funcName]) && (skipOwn || _hasOwnProperty(target, funcName)));
 }
 
 /**
@@ -155,13 +157,28 @@ function _getInstanceFuncs(thisTarget:any): any {
     // Save any existing instance functions
     for (var name in thisTarget) {
         // Don't include any dynamic prototype instances - as we only want the real functions
-        if (!instFuncs[name] && _isDynamicCandidate(thisTarget, name)) {
+        if (!instFuncs[name] && _isDynamicCandidate(thisTarget, name, false)) {
             // Create an instance callback for pasing the base function to the caller
             instFuncs[name] = thisTarget[name];
         }
     }
 
     return instFuncs;
+}
+
+/**
+ * Returns whether the value is included in the array
+ * @param values The array of values
+ * @param value  The value
+ */
+function _hasVisited(values:any[], value:any) {
+    for (let lp = values.length - 1; lp >= 0; lp--) {
+        if (values[lp] === value) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**
@@ -186,13 +203,17 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any): any {
     
     // Get the base prototype functions
     var baseProto = _getObjProto(classProto);
+    let visited:any[] = [];
 
     // Don't include base object functions for Object, Array or Function
-    while (baseProto && !_isObjectArrayOrFunctionPrototype(baseProto)) {
+    while (baseProto && !_isObjectArrayOrFunctionPrototype(baseProto) && !_hasVisited(visited, baseProto)) {
         // look for prototype functions
         for (var name in baseProto) {
             // Don't include any dynamic prototype instances - as we only want the real functions
-            if (!baseFuncs[name] && _isDynamicCandidate(baseProto, name)) {
+            // For IE 7/8 the prototype lookup doesn't provide the full chain so we need to bypass the 
+            // hasOwnProperty check we get all of the methods, main difference is that IE7/8 doesn't return
+            // the Object prototype methods while bypassing the check
+            if (!baseFuncs[name] && _isDynamicCandidate(baseProto, name, !_objGetPrototypeOf)) {
                 // Create an instance callback for pasing the base function to the caller
                 baseFuncs[name] = _instFuncProxy(thisTarget, baseProto[name]);
             }
@@ -201,6 +222,7 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any): any {
         // We need to find all possible functions that might be overloaded by walking the entire prototype chain
         // This avoids the caller from needing to check whether it's direct base class implements the function or not
         // by walking the entire chain it simplifies the usage and issues from upgrading any of the base classes.
+        visited.push(baseProto);
         baseProto = _getObjProto(baseProto);
     }
 
@@ -258,7 +280,7 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
         let instFuncs = instFuncTable[className] = (instFuncTable[className] || {}); // fetch and assign if as it may not exist yet
         for (var name in target) {
             // Only add overriden functions
-            if (_isDynamicCandidate(target, name) && target[name] !== baseInstFuncs[name] ) {
+            if (_isDynamicCandidate(target, name, false) && target[name] !== baseInstFuncs[name] ) {
                 // Save the instance Function to the lookup table and remove it from the instance as it's not a dynamic proto function
                 instFuncs[name] = target[name];
                 delete target[name];

@@ -600,5 +600,67 @@ export class DynamicProtoRollupTests extends TestClass {
                     "6   :// Removed Stub for ClassName.prototype.methodName.\n");
             }
         });
+
+
+        this.testCase({
+            name: "Test prefixed comment with typescript boilerplate for spread and default arguments",
+            test: () => {
+                this.doTest(null, 
+                    "/**\n" +
+                    " * This method tells if given durations should be excluded from collection.\n" +
+                    " */\n" +
+                    "PageViewPerformanceManager.prototype.shouldCollectDuration = function () {\n" +
+                    "    var durations = [];\n" +
+                    "    for (var _i = 0; _i < arguments.length; _i++) {\n" +
+                    "        durations[_i] = arguments[_i];\n" +
+                    "    }\n" +
+                    "    // @DynamicProtoStub\n" +
+                    "    return true;\n" +
+                    "};\n",
+                    "// Removed Stub for PageViewPerformanceManager.prototype.shouldCollectDuration.\n");
+
+                this.doTest(null,
+                    "    /**\n" + 
+                    " * Manually trigger an immediate send of all telemetry still in the buffer using beacon Sender.\n" + 
+                    " * Fall back to xhr sender if beacon is not supported.\n" + 
+                    " * @param {boolean} [async=true]\n" + 
+                    " * @memberof Initialization\n" + 
+                    " */\n" + 
+                    "Initialization.prototype.onunloadFlush = function (async) {\n" + 
+                    "   if (async === void 0) { async = true; }\n" + 
+                    "    // @DynamicProtoStub\n" +
+                    "};\n",
+                    "// Removed Stub for Initialization.prototype.onunloadFlush.\n");
+
+                this.doTest(null, 
+                    "/**\n" +
+                    " * This method tells if given durations should be excluded from collection.\n" +
+                    " */\n" +
+                    "PageViewPerformanceManager.prototype.shouldCollectDuration = function () {\n" +
+                    "    var durations = [];\n" +
+                    "    for (var _i = 0; _i < arguments.length; _i++) {\n" +
+                    "        durations[_i] = arguments[_i];\n" +
+                    "    }\n" +
+                    "    /* @DynamicProtoStub\n" +
+                    "    */\n" +
+                    "    return true;\n" +
+                    "};\n",
+                    "// Removed Stub for PageViewPerformanceManager.prototype.shouldCollectDuration.\n");
+
+                this.doTest(null,
+                    "    /**\n" + 
+                    " * Manually trigger an immediate send of all telemetry still in the buffer using beacon Sender.\n" + 
+                    " * Fall back to xhr sender if beacon is not supported.\n" + 
+                    " * @param {boolean} [async=true]\n" + 
+                    " * @memberof Initialization\n" + 
+                    " */\n" + 
+                    "Initialization.prototype.onunloadFlush = function (async) {\n" + 
+                    "   if (async === void 0) { async = true; }\n" + 
+                    "    /* @DynamicProtoStub\n" +
+                    "    */\n" +
+                    "};\n",
+                    "// Removed Stub for Initialization.prototype.onunloadFlush.\n");
+                }
+        });
     }
 }
