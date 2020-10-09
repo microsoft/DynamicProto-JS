@@ -159,6 +159,25 @@ In most cases when creating JavaScript to support better minfication, when your 
 
 So at the end of the day, if you are creating JS classes directly you *should* be able to create a simplier one-off solution that would result in smaller output (total bytes). This is how this project started, but, once we had several of these one-off solutions it made more sense to build it once.
 
+## Performance optimizations (from v1.1)
+
+To aid with execution performance from v1.1.0 (by default) the dynamically generated prototype functions will attempt to directly assign a top-level instance function (on first execution) of each function. This means that subsequent calls to that function will directly call the target instance function and avoid the dynamic function lookup process, this provides a minor performance improvement assists with identifying the called functions during profiling.
+
+To ensure that this does not break inheritance there are 3 prerequisites that must be true before this happens
+- This check is only performed once per instance, per dynamic function
+- The instance cannot already have an existing instance level function (duh!)
+- The dynamic proto function MUST be the FIRST prototype level function in the inherited class hierarchy.
+  - This simply means if a new class extends a class which is using dynamicProto() and it provides it's own prototype (class level in TypeScript terms) function, then we can't set an instance level as this would cause the class level function to never get called.
+
+You can disable this default behavior by passing a new (optional) 4th argument to the dynamicProto(), the new 'options' argument is defined as an interface IDynamicProtoOpts to aid with any future options that may get exposed and has the following values
+| Name | Type | Description
+|------|------|-------------
+| setInstFuncs | Boolean | Should the dynamic prototype attempt to set an instance function for instances that do not already have an function of the same name or have been extended by a class with a (non-dynamic proto) prototype function.
+
+> Note:
+>
+> If ANY class in the hierarchy explicitly disables this behavior (passes options object with a value of ```setInstFuncs: false```) to it's dynamicProto() calls, then that will block ALL functions for all classes, even if a base class explicitly passes an options with it set to true. This enables any class to explicitly disable this behavior should some unknown and unexpected issue occur, if you encounter something that requires this usage then please raised an issue (or provide a PR) so we can resolve for everyone.
+
 ## Included NPM distribution formats
 
 As part of the build / publish formats via NPM we include the following module formats:

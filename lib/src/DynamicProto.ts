@@ -44,6 +44,23 @@ const DynClassName = '_dynClass';
 const DynClassNamePrefix = '_dynCls$';
 
 /**
+ * A tag which is used to check if we have already to attempted to set the instance function if one is not present
+ * @ignore
+ */
+const DynInstChkTag = '_dynInstChk';
+
+/**
+ * A tag which is used to check if we are allows to try and set an instance function is one is not present. Using the same 
+ * tag name as the function level but a different const name for readability only.
+ */
+const DynAllowInstChkTag = DynInstChkTag;
+
+/**
+ * The global (imported) instances where the global performance options are stored
+ */
+const DynProtoDefaultOptions = '_dfOpts';
+
+/**
  * Value used as the name of a class when it cannot be determined
  * @ignore
  */ 
@@ -54,6 +71,18 @@ const UnknownValue = '_unknown_';
  * @ignore
  */
 const str__Proto = "__proto__";
+
+/**
+ * Constant string defined to support minimization
+ * @ignore
+ */
+const strUseBaseInst = 'useBaseInst';
+
+/**
+ * Constant string defined to support minimization
+ * @ignore
+ */
+const strSetInstFuncs = 'setInstFuncs';
 
 /**
  * Pre-lookup to check if we are running on a modern browser (i.e. not IE8)
@@ -126,7 +155,7 @@ function _getObjProto(target:any) {
 /**
  * Helper function to check whether the provided function name is a potential candidate for dynamic
  * callback and prototype generation.
- * @param target The target object, may be a prototpe or class object
+ * @param target The target object, may be a prototype or class object
  * @param funcName The function name
  * @param skipOwn Skips the check for own property
  * @ignore
@@ -158,7 +187,7 @@ function _getInstanceFuncs(thisTarget:any): any {
     for (var name in thisTarget) {
         // Don't include any dynamic prototype instances - as we only want the real functions
         if (!instFuncs[name] && _isDynamicCandidate(thisTarget, name, false)) {
-            // Create an instance callback for pasing the base function to the caller
+            // Create an instance callback for passing the base function to the caller
             instFuncs[name] = thisTarget[name];
         }
     }
@@ -187,8 +216,17 @@ function _hasVisited(values:any[], value:any) {
  * @param target The current instance
  * @ignore
  */
-function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any): any {
-    function _instFuncProxy(target:any, theFunc:any) {
+function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any, useBaseInst:boolean): any {
+    function _instFuncProxy(target:any, funcHost: any,  funcName: string) {
+        let theFunc = funcHost[name];
+        if (theFunc[DynProxyTag] && useBaseInst) {
+            // grab and reuse the hosted looking function (if available) otherwise the original passed function
+            let instFuncTable = target[DynInstFuncTable] || {};
+            if (instFuncTable[DynAllowInstChkTag] !== false) {
+                theFunc = (instFuncTable[funcHost[DynClassName]] || {})[funcName] || theFunc;
+            }
+        }
+
         return function() {
             return theFunc.apply(target, arguments);
         };
@@ -197,8 +235,8 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any): any {
     // Start creating a new baseFuncs by creating proxies for the instance functions (as they may get replaced)
     var baseFuncs = {};
     for (var name in instFuncs) {
-        // Create an instance callback for pasing the base function to the caller
-        baseFuncs[name] = _instFuncProxy(thisTarget, instFuncs[name]);
+        // Create an instance callback for passing the base function to the caller
+        baseFuncs[name] = _instFuncProxy(thisTarget, instFuncs, name);
     }
     
     // Get the base prototype functions
@@ -214,8 +252,8 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any): any {
             // hasOwnProperty check we get all of the methods, main difference is that IE7/8 doesn't return
             // the Object prototype methods while bypassing the check
             if (!baseFuncs[name] && _isDynamicCandidate(baseProto, name, !_objGetPrototypeOf)) {
-                // Create an instance callback for pasing the base function to the caller
-                baseFuncs[name] = _instFuncProxy(thisTarget, baseProto[name]);
+                // Create an instance callback for passing the base function to the caller
+                baseFuncs[name] = _instFuncProxy(thisTarget, baseProto, name);
             }
         }
 
@@ -229,44 +267,96 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any): any {
     return baseFuncs;
 }
 
-/**
- * Add the required dynamic prototype methods to the the class prototype
- * @param proto The class prototype
- * @param className The instance classname 
- * @param target The target instance
- * @param baseInstFuncs The base instance functions
- * @ignore
- */
-function _populatePrototype(proto:any, className:string, target:any, baseInstFuncs:any) {
-    function _createDynamicPrototype(proto:any, funcName:string) {
-        var dynProtoProxy = function() {
-            let _this = this;
-            // We need to check whether the class name is defined directly on this prototype otherwise
-            // it will walk the proto chain and return any parent proto classname.
-            if (_this && _hasOwnProperty(proto, DynClassName)) {
-                let instFunc = ((_this[DynInstFuncTable] || {})[proto[DynClassName]] || {})[funcName];
-                if (instFunc) {
-                    // Used the instance function property
-                    return instFunc.apply(_this, arguments);
+function _getInstFunc(target: any, funcName: string, proto: any, currentDynProtoProxy: any) {
+    let instFunc = null;
+
+    // We need to check whether the class name is defined directly on this prototype otherwise
+    // it will walk the proto chain and return any parent proto classname.
+    if (target && _hasOwnProperty(proto, DynClassName)) {
+
+        let instFuncTable = target[DynInstFuncTable] || {};
+        instFunc = (instFuncTable[proto[DynClassName]] || {})[funcName];
+
+        if (!instFunc) {
+            // Avoid stack overflow from recursive calling the same function
+            _throwTypeError("Missing [" + funcName + "] " + strFunction);
+        }
+
+        // We have the instance function, lets check it we can speed up further calls
+        // by adding the instance function back directly on the instance (avoiding the dynamic func lookup)
+        if (!instFunc[DynInstChkTag] && instFuncTable[DynAllowInstChkTag] !== false) {
+            // If the instance already has an instance function we can't replace it
+            let canAddInst = !_hasOwnProperty(target, funcName);
+
+            // Get current prototype
+            let objProto = _getObjProto(target);
+            let visited:any[] = [];
+
+            // Lookup the function starting at the top (instance level prototype) and traverse down, if the first matching function
+            // if nothing is found or if the first hit is a dynamic proto instance then we can safely add an instance shortcut
+            while (canAddInst && objProto && !_isObjectArrayOrFunctionPrototype(objProto) && !_hasVisited(visited, objProto)) {
+                let protoFunc = objProto[funcName];
+                if (protoFunc) {
+                    canAddInst = (protoFunc === currentDynProtoProxy);
+                    break;
                 }
 
-                // Avoid stack overflow from recursive calling the same function
-                _throwTypeError("Missing [" + funcName + "] " + strFunction);
+                // We need to find all possible initial functions to ensure that we don't bypass a valid override function
+                visited.push(objProto);
+                objProto = _getObjProto(objProto);
             }
 
-            let protoFunc = proto[funcName];
+            try {
+                if (canAddInst) {
+                    // This instance doesn't have an instance func and the class hierarchy does have a higher level prototype version
+                    // so it's safe to directly assign for any subsequent calls (for better performance)
+                    target[funcName] = instFunc;
+                }
 
-            // Check that the prototype function is not a self reference -- try to avoid stack overflow!
-            if (protoFunc === dynProtoProxy) {
-                // It is so lookup the base prototype
-                protoFunc = _getObjProto(proto)[funcName];
+                // Block further attempts to set the instance function for any
+                instFunc[DynInstChkTag] = 1;
+            } catch (e) {
+                // Don't crash if the object is readonly or the runtime doesn't allow changing this
+                // And set a flag so we don't try again for any function
+                instFuncTable[DynAllowInstChkTag] = false;
             }
+        }
+    }
 
-            if (!_isFunction(protoFunc)) {
-                _throwTypeError("[" + funcName + "] is not a " + strFunction);
-            }
+    return instFunc;
+}
 
-            return protoFunc.apply(_this, arguments);
+function _getProtoFunc(funcName: string, proto: any, currentDynProtoProxy: any) {
+    let protoFunc = proto[funcName];
+
+    // Check that the prototype function is not a self reference -- try to avoid stack overflow!
+    if (protoFunc === currentDynProtoProxy) {
+        // It is so lookup the base prototype
+        protoFunc = _getObjProto(proto)[funcName];
+    }
+
+    if (!_isFunction(protoFunc)) {
+        _throwTypeError("[" + funcName + "] is not a " + strFunction);
+    }
+
+    return protoFunc;
+}
+
+/**
+ * Add the required dynamic prototype methods to the the class prototype
+ * @param proto - The class prototype
+ * @param className - The instance classname 
+ * @param target - The target instance
+ * @param baseInstFuncs - The base instance functions
+ * @param setInstanceFunc - Flag to allow prototype function to reset the instance function if one does not exist
+ * @ignore
+ */
+function _populatePrototype(proto:any, className:string, target:any, baseInstFuncs:any, setInstanceFunc:boolean) {
+    function _createDynamicPrototype(proto:any, funcName:string) {
+        var dynProtoProxy = function() {
+            // Use the instance or prototype function
+            let instFunc = _getInstFunc(this, funcName, proto, dynProtoProxy) || _getProtoFunc(funcName, proto, dynProtoProxy);
+            return instFunc.apply(this, arguments);
         };
         
         // Tag this function as a proxy to support replacing dynamic proxy elements (primary use case is for unit testing
@@ -278,8 +368,14 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
     if (!_isObjectOrArrayPrototype(proto)) {
         let instFuncTable = target[DynInstFuncTable] = target[DynInstFuncTable] || {};
         let instFuncs = instFuncTable[className] = (instFuncTable[className] || {}); // fetch and assign if as it may not exist yet
+
+        // Set whether we are allow to lookup instances, if someone has set to false then do not re-enable
+        if (instFuncTable[DynAllowInstChkTag] !== false) {
+            instFuncTable[DynAllowInstChkTag] = !!setInstanceFunc;
+        }
+
         for (var name in target) {
-            // Only add overriden functions
+            // Only add overridden functions
             if (_isDynamicCandidate(target, name, false) && target[name] !== baseInstFuncs[name] ) {
                 // Save the instance Function to the lookup table and remove it from the instance as it's not a dynamic proto function
                 instFuncs[name] = target[name];
@@ -295,9 +391,9 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
 }
 
 /**
- * Checks whether the passed prototype object appears to be correct by walking the prototype heirarchy of the instance
+ * Checks whether the passed prototype object appears to be correct by walking the prototype hierarchy of the instance
  * @param classProto The class prototype instance
- * @param thisTarget The current instance that will be checked whther the passed prototype instance is in the heirarchy
+ * @param thisTarget The current instance that will be checked whether the passed prototype instance is in the hierarchy
  * @ignore
  */
 function _checkPrototype(classProto:any, thisTarget:any) {
@@ -327,6 +423,24 @@ function _getObjName(target:any, unknownValue?:string) {
     }
 
     return (((target || {})[Constructor]) || {}).name || unknownValue || UnknownValue;
+}
+
+/**
+ * Interface to define additional configuration options to control how the dynamic prototype functions operate.
+ */
+export interface IDynamicProtoOpts {
+
+    /**
+     * Should the dynamic prototype attempt to set an instance function for instances that do not already have an
+     * function of the same name or have been extended by a class with a (non-dynamic proto) prototype function.
+     */
+    setInstFuncs: boolean,
+
+    /**
+     * When looking for base (super) functions if it finds a dynamic proto instances can it use the instance functions
+     * and bypass the prototype lookups. Defaults to true.
+     */
+    useBaseInst?: boolean
 }
 
 /**
@@ -386,11 +500,12 @@ export type DynamicProtoDelegate<DPType> = (theTarget:DPType, baseFuncProxy?:DPT
  * ```
  * @typeparam DPType This is the generic type of the class, used to keep intellisense valid
  * @typeparam DPCls The type that contains the prototype of the current class
- * @param theClass This is the current class instance which contains the prototype for the current class
- * @param target The current "this" (target) reference, when the class has been extended this.prototype will not be the 'theClass' value.
- * @param delegateFunc The callback function (closure) that will create the dynamic function
+ * @param theClass - This is the current class instance which contains the prototype for the current class
+ * @param target - The current "this" (target) reference, when the class has been extended this.prototype will not be the 'theClass' value.
+ * @param delegateFunc - The callback function (closure) that will create the dynamic function
+ * @param options - Additional options to configure how the dynamic prototype operates
  */
-export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPType, delegateFunc: DynamicProtoDelegate<DPType>) {
+export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPType, delegateFunc: DynamicProtoDelegate<DPType>, options?:IDynamicProtoOpts) {
     // Make sure that the passed theClass argument looks correct
     if (!_hasOwnProperty(theClass, Prototype)) {
         _throwTypeError("theClass is an invalid class definition.");
@@ -399,7 +514,7 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
     // Quick check to make sure that the passed theClass argument looks correct (this is a common copy/paste error)
     let classProto = theClass[Prototype];
     if (!_checkPrototype(classProto, target)) {
-        _throwTypeError("[" + _getObjName(theClass) + "] is not in class heirarchy of [" + _getObjName(target) + "]");
+        _throwTypeError("[" + _getObjName(theClass) + "] is not in class hierarchy of [" + _getObjName(target) + "]");
     }
 
     let className = null;
@@ -415,16 +530,41 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
         classProto[DynClassName] = className;
     }
 
+    let perfOptions = dynamicProto[DynProtoDefaultOptions];
+    let useBaseInst = !!perfOptions[strUseBaseInst];
+    if (useBaseInst && options && options[strUseBaseInst] !== undefined) {
+        useBaseInst = !!options[strUseBaseInst];
+    }
+
     // Get the current instance functions
     let instFuncs = _getInstanceFuncs(target);
 
-    // Get all of the functions for any base instance (before they are potentially overriden)
-    let baseFuncs = _getBaseFuncs(classProto, target, instFuncs);
+    // Get all of the functions for any base instance (before they are potentially overridden)
+    let baseFuncs = _getBaseFuncs(classProto, target, instFuncs, useBaseInst);
 
     // Execute the delegate passing in both the current target "this" and "base" function references
     // Note casting the same type as we don't actually have the base class here and this will provide some intellisense support
     delegateFunc(target, baseFuncs as DPType);
 
-    // Populate the Prototype for any overidden instance functions
-    _populatePrototype(classProto, className, target, instFuncs);
+    // Don't allow setting instance functions for older IE instances
+    let setInstanceFunc = !!_objGetPrototypeOf && !!perfOptions[strSetInstFuncs];
+    if (setInstanceFunc && options) {
+        setInstanceFunc = !!options[strSetInstFuncs];
+    }
+
+    // Populate the Prototype for any overridden instance functions
+    _populatePrototype(classProto, className, target, instFuncs, setInstanceFunc !== false);
 }
+
+/**
+ * Exposes the default global options to allow global configuration, if the global values are disabled these will override
+ * any passed values. This is primarily exposed to support unit-testing without the need for individual classes to expose
+ * their internal usage of dynamic proto.
+ */
+let perfDefaults: IDynamicProtoOpts = {
+    setInstFuncs: true,
+    useBaseInst: true
+};
+
+// And expose for testing
+dynamicProto[DynProtoDefaultOptions] = perfDefaults;
