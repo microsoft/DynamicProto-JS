@@ -9,7 +9,7 @@ interface IInheritTest {
     testFunction?(): void;
 }
 
-class InheritTest1 implements IInheritTest {
+class InheritNoInstTest1 implements IInheritTest {
     public executionOrder:string[] = [];
 
     constructor() {
@@ -21,7 +21,7 @@ class InheritTest1 implements IInheritTest {
     }
 }
 
-class InheritTest2 extends InheritTest1 {
+class InheritNoInstTest2 extends InheritNoInstTest1 {
     constructor() {
         super();
         this.executionOrder.push("InheritTest2()");
@@ -33,7 +33,7 @@ class InheritTest2 extends InheritTest1 {
     }
 }
 
-class InheritTest3 extends InheritTest2 {
+class InheritNoInstTest3 extends InheritNoInstTest2 {
     constructor() {
         super();
         this.executionOrder.push("InheritTest3()");
@@ -45,22 +45,22 @@ class InheritTest3 extends InheritTest2 {
     }
 }
 
-class DynInheritTest1 implements IInheritTest {
+class DynInheritNoInstTest1 implements IInheritTest {
     public executionOrder:string[] = [];
 
     public testFunction?(): void;
 
     constructor() {
         this.executionOrder.push("DynInheritTest1()");
-        dynamicProto(DynInheritTest1, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest1, this, (_self, base) => {
             _self.testFunction = () => {
                 this.executionOrder.push("DynInheritTest1.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class InheritTest4 extends DynInheritTest1 {
+class InheritNoInstTest4 extends DynInheritNoInstTest1 {
     constructor() {
         super();
         this.executionOrder.push("InheritTest4()");
@@ -72,7 +72,7 @@ class InheritTest4 extends DynInheritTest1 {
     }
 }
 
-class InheritTest5 extends InheritTest4 {
+class InheritNoInstTest5 extends InheritNoInstTest4 {
     constructor() {
         super();
         this.executionOrder.push("InheritTest5()");
@@ -84,33 +84,33 @@ class InheritTest5 extends InheritTest4 {
     }
 }
 
-class DynInheritTest2 extends InheritTest1 {
+class DynInheritNoInstTest2 extends InheritNoInstTest1 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest2()");
-        dynamicProto(DynInheritTest2, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest2, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest2.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class DynInheritTest3 extends DynInheritTest2 {
+class DynInheritNoInstTest3 extends DynInheritNoInstTest2 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest3()");
-        dynamicProto(DynInheritTest3, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest3, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest3.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class InheritTest6 extends DynInheritTest2 {
+class InheritNoInstTest6 extends DynInheritNoInstTest2 {
     constructor() {
         super();
         this.executionOrder.push("InheritTest6()");
@@ -122,46 +122,46 @@ class InheritTest6 extends DynInheritTest2 {
     }
 }
 
-class DynInheritTest4 extends InheritTest6 {
+class DynInheritNoInstTest4 extends InheritNoInstTest6 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest4()");
-        dynamicProto(DynInheritTest4, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest4, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest4.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class DynInheritTest5 extends DynInheritTest1 {
+class DynInheritNoInstTest5 extends DynInheritNoInstTest1 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest5()");
-        dynamicProto(DynInheritTest5, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest5, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest5.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class DynInheritTest6 extends DynInheritTest5 {
+class DynInheritNoInstTest6 extends DynInheritNoInstTest5 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest6()");
-        dynamicProto(DynInheritTest6, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest6, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest6.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class InstInherit1 implements IInheritTest {
+class InstInheritNoInst1 implements IInheritTest {
     public executionOrder:string[] = [];
 
     public testFunction?():void;
@@ -175,7 +175,7 @@ class InstInherit1 implements IInheritTest {
     }
 }
 
-class InstInherit2 extends InheritTest2 {
+class InstInheritNoInst2 extends InheritNoInstTest2 {
     constructor() {
         super();
         this.executionOrder.push("InstInherit2()");
@@ -187,7 +187,7 @@ class InstInherit2 extends InheritTest2 {
     }
 }
 
-class InheritTest7 extends InstInherit1 {
+class InheritNoInstTest7 extends InstInheritNoInst1 {
     constructor() {
         super();
         this.executionOrder.push("InheritTest7()");
@@ -199,11 +199,11 @@ class InheritTest7 extends InstInherit1 {
     }
 }
 
-class DynInheritTest7 extends InstInherit1 {
+class DynInheritNoInstTest7 extends InstInheritNoInst1 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest7()");
-        dynamicProto(DynInheritTest7, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest7, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest7.test()");
@@ -212,7 +212,7 @@ class DynInheritTest7 extends InstInherit1 {
     }
 }
 
-class InstInherit3 extends DynInheritTest7 {
+class InstInheritNoInst3 extends DynInheritNoInstTest7 {
     constructor() {
         super();
         this.executionOrder.push("InstInherit3()");
@@ -224,20 +224,20 @@ class InstInherit3 extends DynInheritTest7 {
     }
 }
 
-class DynInheritTest8 extends InstInherit3 {
+class DynInheritNoInstTest8 extends InstInheritNoInst3 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest8()");
-        dynamicProto(DynInheritTest8, this, (_self, base) => {
+        dynamicProto(DynInheritNoInstTest8, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest8.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class BadInstInherit1 extends InstInherit1 {
+class BadInstInheritNoInst1 extends InstInheritNoInst1 {
     constructor() {
         super();
         this.executionOrder.push("BadInstInherit1()");
@@ -253,20 +253,20 @@ class BadInstInherit1 extends InstInherit1 {
     }
 }
 
-class DynInheritTest9 extends BadInstInherit1 {
+class DynInheritTestNoInst9 extends BadInstInheritNoInst1 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest9()");
-        dynamicProto(DynInheritTest9, this, (_self, base) => {
+        dynamicProto(DynInheritTestNoInst9, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest9.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class GoodInstInherit1 extends InstInherit1 {
+class GoodInstInheritNoInst1 extends InstInheritNoInst1 {
     constructor() {
         super();
         this.executionOrder.push("GoodInstInherit1()");
@@ -279,20 +279,20 @@ class GoodInstInherit1 extends InstInherit1 {
     }
 }
 
-class DynInheritTest10 extends GoodInstInherit1 {
+class DynInheritTestNoInst10 extends GoodInstInheritNoInst1 {
     constructor() {
         super();
         this.executionOrder.push("DynInheritTest10()");
-        dynamicProto(DynInheritTest10, this, (_self, base) => {
+        dynamicProto(DynInheritTestNoInst10, this, (_self, base) => {
             _self.testFunction = () => {
                 base.testFunction();
                 this.executionOrder.push("DynInheritTest10.test()");
             }
-        });
+        }, { setInstFuncs: false });
     }
 }
 
-class GoodInstInherit2 extends DynInheritTest10 {
+class GoodInstInheritNoInst2 extends DynInheritTestNoInst10 {
     constructor() {
         super();
         this.executionOrder.push("GoodInstInherit2()");
@@ -305,7 +305,7 @@ class GoodInstInherit2 extends DynInheritTest10 {
     }
 }
 
-export class DynamicProtoDefaultTests extends TestClass {
+export class DynamicProtoMultipleNoInstTests extends TestClass {
 
     public testInitialize() {
     }
@@ -341,81 +341,102 @@ export class DynamicProtoDefaultTests extends TestClass {
     private doTest(message:string, theTest:IInheritTest, expectedOrder:string[])
     {
         theTest.testFunction();
+        theTest.testFunction();
         this._validateOrder(message, theTest.executionOrder, expectedOrder);
     }
 
     public registerTests() {
         this.testCase({
-            name: "Default: Inheritance tests",
+            name: "NoInst: Inheritance tests",
             test: () => {
-                this.doTest("InheritTest1", new InheritTest1(), [
+                this.doTest("InheritTest1", new InheritNoInstTest1(), [
                     "InheritTest1()", 
+                    "InheritTest1.test()",
                     "InheritTest1.test()"
                 ]);
 
-                this.doTest("InheritTest2", new InheritTest2(), [
+                this.doTest("InheritTest2", new InheritNoInstTest2(), [
                     "InheritTest1()", 
                     "InheritTest2()", 
+                    "InheritTest1.test()",
+                    "InheritTest2.test()",
                     "InheritTest1.test()",
                     "InheritTest2.test()"
                 ]);
 
-                this.doTest("InheritTest3", new InheritTest3(), [
+                this.doTest("InheritTest3", new InheritNoInstTest3(), [
                     "InheritTest1()", 
                     "InheritTest2()", 
                     "InheritTest3()", 
                     "InheritTest1.test()",
                     "InheritTest2.test()",
+                    "InheritTest3.test()",
+                    "InheritTest1.test()",
+                    "InheritTest2.test()",
                     "InheritTest3.test()"
                 ]);
 
-                this.doTest("InheritTest4", new InheritTest4(), [
+                this.doTest("InheritTest4", new InheritNoInstTest4(), [
                     "DynInheritTest1()", 
                     "InheritTest4()", 
+                    "DynInheritTest1.test()",
+                    "InheritTest4.test()",
                     "DynInheritTest1.test()",
                     "InheritTest4.test()"
                 ]);
 
-                this.doTest("InheritTest5", new InheritTest5(), [
+                this.doTest("InheritTest5", new InheritNoInstTest5(), [
                     "DynInheritTest1()", 
                     "InheritTest4()", 
                     "InheritTest5()", 
                     "DynInheritTest1.test()",
                     "InheritTest4.test()",
+                    "InheritTest5.test()",
+                    "DynInheritTest1.test()",
+                    "InheritTest4.test()",
                     "InheritTest5.test()"
                 ]);
 
-                this.doTest("DynInheritTest1", new DynInheritTest1(), [
+                this.doTest("DynInheritTest1", new DynInheritNoInstTest1(), [
                     "DynInheritTest1()", 
+                    "DynInheritTest1.test()",
                     "DynInheritTest1.test()"
                 ]);
 
-                this.doTest("DynInheritTest2", new DynInheritTest2(), [
+                this.doTest("DynInheritTest2", new DynInheritNoInstTest2(), [
                     "InheritTest1()", 
                     "DynInheritTest2()", 
+                    "InheritTest1.test()",
+                    "DynInheritTest2.test()",
                     "InheritTest1.test()",
                     "DynInheritTest2.test()"
                 ]);
 
-                this.doTest("DynInheritTest3", new DynInheritTest3(), [
+                this.doTest("DynInheritTest3", new DynInheritNoInstTest3(), [
                     "InheritTest1()", 
                     "DynInheritTest2()", 
                     "DynInheritTest3()", 
                     "InheritTest1.test()",
                     "DynInheritTest2.test()",
+                    "DynInheritTest3.test()",
+                    "InheritTest1.test()",
+                    "DynInheritTest2.test()",
                     "DynInheritTest3.test()"
                 ]);
 
-                this.doTest("InheritTest6", new InheritTest6(), [
+                this.doTest("InheritTest6", new InheritNoInstTest6(), [
                     "InheritTest1()", 
                     "DynInheritTest2()", 
                     "InheritTest6()", 
                     "InheritTest1.test()",
                     "DynInheritTest2.test()",
+                    "InheritTest6.test()",
+                    "InheritTest1.test()",
+                    "DynInheritTest2.test()",
                     "InheritTest6.test()"
                 ]);
 
-                this.doTest("DynInheritTest4", new DynInheritTest4(), [
+                this.doTest("DynInheritTest4", new DynInheritNoInstTest4(), [
                     "InheritTest1()", 
                     "DynInheritTest2()", 
                     "InheritTest6()", 
@@ -423,65 +444,84 @@ export class DynamicProtoDefaultTests extends TestClass {
                     "InheritTest1.test()",
                     "DynInheritTest2.test()",
                     "InheritTest6.test()",
+                    "DynInheritTest4.test()",
+                    "InheritTest1.test()",
+                    "DynInheritTest2.test()",
+                    "InheritTest6.test()",
                     "DynInheritTest4.test()"
                 ]);
 
-                this.doTest("DynInheritTest5", new DynInheritTest5(), [
+                this.doTest("DynInheritTest5", new DynInheritNoInstTest5(), [
                     "DynInheritTest1()", 
                     "DynInheritTest5()", 
+                    "DynInheritTest1.test()",
+                    "DynInheritTest5.test()",
                     "DynInheritTest1.test()",
                     "DynInheritTest5.test()"
                 ]);
 
-                this.doTest("DynInheritTest6", new DynInheritTest6(), [
+                this.doTest("DynInheritTest6", new DynInheritNoInstTest6(), [
                     "DynInheritTest1()", 
                     "DynInheritTest5()", 
                     "DynInheritTest6()", 
+                    "DynInheritTest1.test()",
+                    "DynInheritTest5.test()",
+                    "DynInheritTest6.test()",
                     "DynInheritTest1.test()",
                     "DynInheritTest5.test()",
                     "DynInheritTest6.test()"
                 ]);
 
 
-                this.doTest("InstInherit1", new InstInherit1(), [
+                this.doTest("InstInherit1", new InstInheritNoInst1(), [
                     "InstInherit1()", 
+                    "InstInherit1.test()",
                     "InstInherit1.test()"
                 ]);
 
-                this.doTest("InstInherit2", new InstInherit2(), [
+                this.doTest("InstInherit2", new InstInheritNoInst2(), [
                     "InheritTest1()",
                     "InheritTest2()", 
                     "InstInherit2()",
+                    "InheritTest1.test()",
+                    "InheritTest2.test()",
+                    "InstInherit2.test()",
                     "InheritTest1.test()",
                     "InheritTest2.test()",
                     "InstInherit2.test()"
                 ]);
 
                 // NOTE: Notice that InheritTest7.test() was not called -- this is because TS doesn't handle this
-                this.doTest("InheritTest7", new InheritTest7(), [
+                this.doTest("InheritTest7", new InheritNoInstTest7(), [
                     "InstInherit1()",
                     "InheritTest7()", 
+                    "InstInherit1.test()",
                     "InstInherit1.test()"
                 ]);
 
                 // NOTE: Notice that DynInheritTest7.test() IS called -- this is because dynamicProto handles this scenario
-                this.doTest("DynInheritTest7", new DynInheritTest7(), [
+                this.doTest("DynInheritTest7", new DynInheritNoInstTest7(), [
                     "InstInherit1()", 
                     "DynInheritTest7()", 
+                    "InstInherit1.test()",
+                    "DynInheritTest7.test()",
                     "InstInherit1.test()",
                     "DynInheritTest7.test()"
                 ]);
 
-                this.doTest("InstInherit3", new InstInherit3(), [
+                this.doTest("InstInherit3", new InstInheritNoInst3(), [
                     "InstInherit1()", 
                     "DynInheritTest7()", 
                     "InstInherit3()", 
                     "InstInherit1.test()",
                     "DynInheritTest7.test()",
+                    "InstInherit3.test()",
+                    "InstInherit1.test()",
+                    "DynInheritTest7.test()",
                     "InstInherit3.test()"
                 ]);
                 
-                this.doTest("DynInheritTest8", new DynInheritTest8(), [
+                this.doTest("DynInheritTest8", new DynInheritNoInstTest8(), [
                     "InstInherit1()", 
                     "DynInheritTest7()", 
                     "InstInherit3()", 
@@ -489,44 +529,58 @@ export class DynamicProtoDefaultTests extends TestClass {
                     "InstInherit1.test()",
                     "DynInheritTest7.test()",
                     "InstInherit3.test()",
+                    "DynInheritTest8.test()",
+                    "InstInherit1.test()",
+                    "DynInheritTest7.test()",
+                    "InstInherit3.test()",
                     "DynInheritTest8.test()"
                 ]);
                 
                 // Note: Bad inherit as with InheritTest7 fails to call base instance and actually throws in this case
-                this.doTest("BadInstInherit1", new BadInstInherit1(), [
+                this.doTest("BadInstInherit1", new BadInstInheritNoInst1(), [
                     "InstInherit1()", 
                     "BadInstInherit1()",
+                    "BadInstInherit1.throw()",
+                    "BadInstInherit1.test()",
                     "BadInstInherit1.throw()",
                     "BadInstInherit1.test()"
                 ]);
 
                 // Note: dynamicProto doesn't fix broken base classes, but it still calls them in the correct order
-                this.doTest("DynInheritTest9", new DynInheritTest9(), [
+                this.doTest("DynInheritTest9", new DynInheritTestNoInst9(), [
                     "InstInherit1()", 
                     "BadInstInherit1()",
                     "DynInheritTest9()",
                     "BadInstInherit1.throw()",
                     "BadInstInherit1.test()",
+                    "DynInheritTest9.test()",
+                    "BadInstInherit1.throw()",
+                    "BadInstInherit1.test()",
                     "DynInheritTest9.test()"
                 ]);
 
-                this.doTest("GoodInstInherit1", new GoodInstInherit1(), [
+                this.doTest("GoodInstInherit1", new GoodInstInheritNoInst1(), [
                     "InstInherit1()", 
                     "GoodInstInherit1()", 
+                    "InstInherit1.test()",
+                    "GoodInstInherit1.test()",
                     "InstInherit1.test()",
                     "GoodInstInherit1.test()"
                 ]);
 
-                this.doTest("DynInheritTest10", new DynInheritTest10(), [
+                this.doTest("DynInheritTest10", new DynInheritTestNoInst10(), [
                     "InstInherit1()", 
                     "GoodInstInherit1()",
                     "DynInheritTest10()",
                     "InstInherit1.test()",
                     "GoodInstInherit1.test()",
+                    "DynInheritTest10.test()",
+                    "InstInherit1.test()",
+                    "GoodInstInherit1.test()",
                     "DynInheritTest10.test()"
                 ]);
 
-                this.doTest("GoodInstInherit2", new GoodInstInherit2(), [
+                this.doTest("GoodInstInherit2", new GoodInstInheritNoInst2(), [
                     "InstInherit1()", 
                     "GoodInstInherit1()",
                     "DynInheritTest10()",
@@ -535,6 +589,10 @@ export class DynamicProtoDefaultTests extends TestClass {
                     "GoodInstInherit1.test()",
                     "DynInheritTest10.test()",
                     "GoodInstInherit2.test()",
+                    "InstInherit1.test()",
+                    "GoodInstInherit1.test()",
+                    "DynInheritTest10.test()",
+                    "GoodInstInherit2.test()"
                 ]);
             }
         });
