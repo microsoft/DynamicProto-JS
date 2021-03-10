@@ -16,7 +16,6 @@
   "directories": {
   },
   "scripts": {
-    "postinstall": "node common/scripts/install-run-rush.js update --recheck --full",
     "clean": "grunt clean",
     "build": "npm run build:esm && npm run build:bundle",
     "build:esm": "grunt rollup",
