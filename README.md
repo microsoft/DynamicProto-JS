@@ -457,15 +457,15 @@ Latest ✔ | Latest ✔ | 8+ Full ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## ES3/IE8 Compatibility
 
-As an library there are numerous users which cannot control the browsers that their customers use. As such we need to ensure that this library continues to "work" and does not break the JS execution when loaded by an older browser. While it would be ideal to just not support IE8 and older generation (ES3) browsers there are numerous large customers/users that continue to require pages to "work" and as noted they may or cannot control which browser that their end users choose to use.
+As a library there are numerous users which cannot control the browsers that their customers use. As such we need to ensure that this library continues to "work" and does not break the JS execution when loaded by an older browser. While it would be ideal to just not support IE8 and older generation (ES3) browsers there are numerous large customers/users that continue to require pages to "work" and as noted they may or cannot control which browser that their end users choose to use.
 
 As part of enabling ES3/IE8 support we have set the ```tsconfig.json``` to ES3 and ```uglify``` settings in ```rollup.config.js``` transformations to support ie8. This provides a first level of support which blocks anyone from adding unsupported ES3 features to the code and enables the generated javascript to be validily parsed in an ES3+ environment.
 
 Ensuring that the generated code is compatible with ES3 is only the first step, JS parsers will still parse the code when an unsupport core function is used, it will just fail or throw an exception at runtime. Therefore, we also need to require/use polyfil implementations or helper functions to handle those scenarios.
 
-### ES3/IE8 Features, Solutions, Workarounds and Polyfil style helper functions
+### ES3/IE8 Features, Solutions, Workarounds and Polyfill style helper functions
 
-This table does not attempt to include ALL of the ES3 unsuported features, just the currently known functions that where being used at the time or writing. You are welcome to contribute to provide additional helpers, workarounds or documentation of values that should not be used.
+This table does not attempt to include ALL of the ES3 unsupported features, just the currently known functions that where being used at the time or writing. You are welcome to contribute to provide additional helpers, workarounds or documentation of values that should not be used.
 
 |  Feature  |  Description  |  Usage |
 |-----------|-----------------|------|
@@ -473,7 +473,7 @@ This table does not attempt to include ALL of the ES3 unsuported features, just 
 | ES5+ getters/setters<br>```Object.defineProperty(...)``` | Not provided by ES3 and not used | N/A |
 | ```Object.create(protoObj, [descriptorSet]?)``` | Not provided by ES3 and not used | N/A |
 | ```Object.defineProperties()``` | Not provided by ES3 and not used | N/A |
-| ```Object.getOwnPropertyNames(obj)``` | Not provided by ES3 and not used | N/A |
+| ```Object.getOwnPropertyNames(obj)``` | Not provided by ES3 and not used | ```_forEachProp(target:any, callback: (name: string) => void)``` |
 | ```Object.getPrototypeOf(obj)``` | Not provided by ES3 and not used | ```_getObjProto(target:any)``` |
 | ```Object.getOwnPropertyDescriptor(obj)``` | Not provided by ES3 and not used | N/A |
 | ```Object.preventExtensions(obj)``` | Not provided by ES3 and not used | N/A |

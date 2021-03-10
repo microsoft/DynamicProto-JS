@@ -20,7 +20,6 @@
     "doc": "./docs"
   },
   "scripts": {
-    "postinstall": "node common/scripts/install-run-rush.js update --recheck --full",
     "clean": "grunt clean",
     "build": "npm run build:esm && npm run build:bundle && npm run lint && npm run docs",
     "build:esm": "grunt dynamicproto",
