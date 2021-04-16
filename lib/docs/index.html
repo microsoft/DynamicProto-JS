@@ -2816,13 +2816,13 @@ img {
 			<a href="#es3ie8-compatibility" id="es3ie8-compatibility" style="color: inherit; text-decoration: none;">
 				<h2>ES3/IE8 Compatibility</h2>
 			</a>
-			<p>As an library there are numerous users which cannot control the browsers that their customers use. As such we need to ensure that this library continues to &quot;work&quot; and does not break the JS execution when loaded by an older browser. While it would be ideal to just not support IE8 and older generation (ES3) browsers there are numerous large customers/users that continue to require pages to &quot;work&quot; and as noted they may or cannot control which browser that their end users choose to use.</p>
+			<p>As a library there are numerous users which cannot control the browsers that their customers use. As such we need to ensure that this library continues to &quot;work&quot; and does not break the JS execution when loaded by an older browser. While it would be ideal to just not support IE8 and older generation (ES3) browsers there are numerous large customers/users that continue to require pages to &quot;work&quot; and as noted they may or cannot control which browser that their end users choose to use.</p>
 			<p>As part of enabling ES3/IE8 support we have set the <code>tsconfig.json</code> to ES3 and <code>uglify</code> settings in <code>rollup.config.js</code> transformations to support ie8. This provides a first level of support which blocks anyone from adding unsupported ES3 features to the code and enables the generated javascript to be validily parsed in an ES3+ environment.</p>
 			<p>Ensuring that the generated code is compatible with ES3 is only the first step, JS parsers will still parse the code when an unsupport core function is used, it will just fail or throw an exception at runtime. Therefore, we also need to require/use polyfil implementations or helper functions to handle those scenarios.</p>
-			<a href="#es3ie8-features-solutions-workarounds-and-polyfil-style-helper-functions" id="es3ie8-features-solutions-workarounds-and-polyfil-style-helper-functions" style="color: inherit; text-decoration: none;">
-				<h3>ES3/IE8 Features, Solutions, Workarounds and Polyfil style helper functions</h3>
+			<a href="#es3ie8-features-solutions-workarounds-and-polyfill-style-helper-functions" id="es3ie8-features-solutions-workarounds-and-polyfill-style-helper-functions" style="color: inherit; text-decoration: none;">
+				<h3>ES3/IE8 Features, Solutions, Workarounds and Polyfill style helper functions</h3>
 			</a>
-			<p>This table does not attempt to include ALL of the ES3 unsuported features, just the currently known functions that where being used at the time or writing. You are welcome to contribute to provide additional helpers, workarounds or documentation of values that should not be used.</p>
+			<p>This table does not attempt to include ALL of the ES3 unsupported features, just the currently known functions that where being used at the time or writing. You are welcome to contribute to provide additional helpers, workarounds or documentation of values that should not be used.</p>
 			<table>
 				<thead>
 					<tr>
@@ -2854,7 +2854,7 @@ img {
 					<tr>
 						<td><code>Object.getOwnPropertyNames(obj)</code></td>
 						<td>Not provided by ES3 and not used</td>
-						<td>N/A</td>
+						<td><code>_forEachProp(target:any, callback: (name: string) =&gt; void)</code></td>
 					</tr>
 					<tr>
 						<td><code>Object.getPrototypeOf(obj)</code></td>

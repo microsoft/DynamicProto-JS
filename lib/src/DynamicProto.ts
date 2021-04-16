@@ -135,7 +135,7 @@ function _getObjProto(target:any) {
         }
 
         // target[Constructor] May break if the constructor has been changed or removed
-        let newProto = target[str__Proto] || target[Prototype] || target[Constructor];
+        let newProto = target[str__Proto] || target[Prototype] || (target[Constructor] ? target[Constructor][Prototype] : null);
         if(newProto) {
             return newProto;
         }
@@ -414,13 +414,21 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
  * @ignore
  */
 function _checkPrototype(classProto:any, thisTarget:any) {
-    let thisProto = _getObjProto(thisTarget);
-    while (thisProto && !_isObjectArrayOrFunctionPrototype(thisProto)) {
-        if (thisProto === classProto) {
-            return true;
-        }
+    // This method doesn't existing in older browsers (e.g. IE8)
+    if (_objGetPrototypeOf) {
+        // As this is primarily a coding time check, don't bother checking if running in IE8 or lower
+        let visited:any[] = [];
+        let thisProto = _getObjProto(thisTarget);
+        while (thisProto && !_isObjectArrayOrFunctionPrototype(thisProto) && !_hasVisited(visited, thisProto)) {
+            if (thisProto === classProto) {
+                return true;
+            }
 
-        thisProto = _getObjProto(thisProto);
+            // This avoids the caller from needing to check whether it's direct base class implements the function or not
+            // by walking the entire chain it simplifies the usage and issues from upgrading any of the base classes.
+            visited.push(thisProto);
+            thisProto = _getObjProto(thisProto);
+        }
     }
 
     return false;
