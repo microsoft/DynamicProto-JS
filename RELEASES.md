@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.2 (Apr 16th, 2021)
+
+- #31 [BUG] _checkPrototype function loops indefinitely when calling Invoke-WebRequest cmdlet against a docs.microsoft.com webpage
+
 ## 1.1.1 (Mar 10th, 2021)
 
 ### Changelog
