@@ -1,6 +1,6 @@
-import nodeResolve from "rollup-plugin-node-resolve";
+import nodeResolve from "@rollup/plugin-node-resolve";
 import copy from "rollup-plugin-copy";
-import replace from "rollup-plugin-replace";
+import replace from "@rollup/plugin-replace";
 
 const version = require("./package.json").version;
 const inputName = "./out/rollup/src/removeDynamic";
@@ -30,7 +30,8 @@ const nodeUmdRollupConfigFactory = (isProduction) => {
         values: {
           "// Copyright (c) Microsoft Corporation. All rights reserved.": "",
           "// Licensed under the MIT License.": ""
-        }
+        },
+        preventAssignment: true
       }),
       nodeResolve()
     ]
@@ -66,7 +67,8 @@ const moduleRollupConfigFactory = (format, isProduction) => {
         values: {
           "// Copyright (c) Microsoft Corporation. All rights reserved.": "",
           "// Licensed under the MIT License.": ""
-        }
+        },
+        preventAssignment: true
       }),
       nodeResolve()
     ]
