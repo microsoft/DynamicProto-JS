@@ -1,0 +1,18 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
+  
+    "commands": [
+        {
+            "commandKind": "bulk",
+            "name": "build",
+            "allowWarningsInSuccessfulBuild": true
+        },
+        {
+            "commandKind": "bulk",
+            "name": "rebuild",
+            "allowWarningsInSuccessfulBuild": true
+        }        
+    ],
+    "parameters": [
+    ]
+}
