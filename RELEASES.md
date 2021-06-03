@@ -1,5 +1,12 @@
 # Releases
 
+## 1.1.3 (Jun 3rd, 2021)
+
+There are no functional (code) differences between v1.1.2 and v1.1.3, both issues below are related to the build and packaging pipelines only.
+
+- #33 Version 1.1.2 has extraneous dependencies such as findup-sync (Build Only)
+- #34 Task 9901543: Remediate security vulnerabilities (Build only)
+
 ## 1.1.2 (Apr 16th, 2021)
 
 - #31 [BUG] _checkPrototype function loops indefinitely when calling Invoke-WebRequest cmdlet against a docs.microsoft.com webpage
