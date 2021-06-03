@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "description": "Microsoft Dynamic Proto Utility",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "keywords": [
     "javascript",
     "dynamic prototype",
@@ -18,7 +18,7 @@
     "doc": "lib/docs"
   },
   "scripts": {
-    "postinstall": "node common/scripts/install-run-rush.js update",
+    "ci-install": "node common/scripts/install-run-rush.js update",
     "build": "node common/scripts/install-run-rush.js rebuild",
     "test": "grunt dynamicprototest",
     "rollup": "grunt rollup",
