@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.4 (Jun 3rd, 2021)
+
+- #36 v1.1.3 postinstall requires rush to be installed
+
 ## 1.1.3 (Jun 3rd, 2021)
 
 There are no functional (code) differences between v1.1.2 and v1.1.3, both issues below are related to the build and packaging pipelines only.

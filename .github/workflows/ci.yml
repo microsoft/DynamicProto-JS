@@ -25,6 +25,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+    - run: npm run ci-install
     - run: npm run build --verbose
       timeout-minutes: 10
     - run: npm run test --verbose
