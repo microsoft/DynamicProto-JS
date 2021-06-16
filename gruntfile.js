@@ -73,7 +73,7 @@ module.exports = function (grunt) {
         grunt.log.ok('Running test: ' + name);
     });
 
-    grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks("@nevware21/grunt-ts-plugin");
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-qunit');
