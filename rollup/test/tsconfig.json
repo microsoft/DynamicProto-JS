@@ -10,5 +10,6 @@
         "declaration": true,
         "lib": [ "dom", "es2015" ]
     },
-    "files": []
+    "files": [
+    ]
 }

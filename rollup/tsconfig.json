@@ -11,8 +11,7 @@
     "noEmitHelpers": false,
     "alwaysStrict": true,
     "declaration": true,
-    "outDir": "./out",
-    "rootDir": "./",
+    "outDir": "./out/rollup/src",
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true
   },
