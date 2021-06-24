@@ -78,7 +78,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-run');
-    grunt.registerTask("default", ["ts:rollup", "ts:rolluptest", "ts:dynamicproto", "ts:dynamicprototest", "qunit:rollup", "qunit:dynamicproto"])
+    grunt.registerTask("default", ["ts:rollup", "ts:rolluptest", "ts:dynamicproto", "ts:dynamicprototest", "qunit:rollup", "qunit:dynamicproto"]);
     grunt.registerTask("dynamicproto", ["ts:dynamicproto"]);
     grunt.registerTask("dynamicprototest", ["ts:dynamicproto", "ts:dynamicprototest", "qunit:dynamicproto"]);
     grunt.registerTask("rollup", ["ts:rollup", "ts:rolluptest", "qunit:rollup"]);
