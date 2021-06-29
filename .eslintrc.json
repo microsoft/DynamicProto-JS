@@ -1,0 +1,20 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "plugins": [
+        "security"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:security/recommended"
+    ],
+    "rules": {
+        "quotes": ["off", "double"],                                // Re-enable for auto fixing
+        "prefer-const": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "security/detect-object-injection": "off"
+    }
+}

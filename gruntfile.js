@@ -1,17 +1,21 @@
 module.exports = function (grunt) {
     grunt.initConfig({
-        tslint: {
-            options: {
-                rulesDirectory: 'node_modules/tslint-microsoft-contrib',
+        "eslint-ts": {
+            default: {
+                options: {
+                    tsconfig: './lib/tsconfig.json'
+                }
             },
-            files: {
-                src: [
-                    './lib/src/**/*.ts',
-                    '!./**/node_modules/**',
-                    '!./**/Tests/**',
-                    '!./**/dist-esm/**',
-                    '!./**/Generated/**'
-                ],
+            dynamicproto: {
+                options: {
+                    tsconfig: './lib/tsconfig.json'
+                }
+            },
+            "dynamicproto-fix": {
+                options: {
+                    tsconfig: './lib/tsconfig.json',
+                    fix: true
+                }
             }
         },
         ts: {
@@ -74,12 +78,14 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks("@nevware21/grunt-ts-plugin");
-    grunt.loadNpmTasks('grunt-tslint');
+    grunt.loadNpmTasks("@nevware21/grunt-eslint-ts");
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-run');
     grunt.registerTask("default", ["ts:rollup", "ts:rolluptest", "ts:dynamicproto", "ts:dynamicprototest", "qunit:rollup", "qunit:dynamicproto"]);
-    grunt.registerTask("dynamicproto", ["ts:dynamicproto"]);
+    grunt.registerTask("dynamicproto", ["eslint-ts:dynamicproto-fix", "ts:dynamicproto"]);
     grunt.registerTask("dynamicprototest", ["ts:dynamicproto", "ts:dynamicprototest", "qunit:dynamicproto"]);
     grunt.registerTask("rollup", ["ts:rollup", "ts:rolluptest", "qunit:rollup"]);
+    grunt.registerTask("lint", ["eslint-ts:dynamicproto"]);
+    grunt.registerTask("lint-fix", ["eslint-ts:dynamicproto-fix"]);
 };

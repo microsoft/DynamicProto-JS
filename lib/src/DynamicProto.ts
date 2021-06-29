@@ -245,6 +245,7 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any, useBaseIns
         }
 
         return function() {
+            // eslint-disable-next-line prefer-rest-params
             return theFunc.apply(target, arguments);
         };
     }
@@ -370,9 +371,10 @@ function _getProtoFunc(funcName: string, proto: any, currentDynProtoProxy: any) 
  */
 function _populatePrototype(proto:any, className:string, target:any, baseInstFuncs:any, setInstanceFunc:boolean) {
     function _createDynamicPrototype(proto:any, funcName:string) {
-        var dynProtoProxy = function() {
+        let dynProtoProxy = function() {
             // Use the instance or prototype function
             let instFunc = _getInstFunc(this, funcName, proto, dynProtoProxy) || _getProtoFunc(funcName, proto, dynProtoProxy);
+            // eslint-disable-next-line prefer-rest-params
             return instFunc.apply(this, arguments);
         };
         
@@ -530,7 +532,7 @@ export type DynamicProtoDelegate<DPType> = (theTarget:DPType, baseFuncProxy?:DPT
  * @param delegateFunc - The callback function (closure) that will create the dynamic function
  * @param options - Additional options to configure how the dynamic prototype operates
  */
-export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPType, delegateFunc: DynamicProtoDelegate<DPType>, options?:IDynamicProtoOpts) {
+export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPType, delegateFunc: DynamicProtoDelegate<DPType>, options?:IDynamicProtoOpts): void {
     // Make sure that the passed theClass argument looks correct
     if (!_hasOwnProperty(theClass, Prototype)) {
         _throwTypeError("theClass is an invalid class definition.");
