@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.5 (Apr 28th, 2022)
+
+- #47 [IE8] The _checkPrototype always fails on IE in IE8 mode
+
 ## 1.1.4 (Jun 3rd, 2021)
 
 - #36 v1.1.3 postinstall requires rush to be installed

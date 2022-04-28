@@ -33,8 +33,8 @@
   },
   "homepage": "https://github.com/microsoft/DynamicProto-JS#readme",
   "devDependencies": {
-    "grunt": "^1.4.1",
-    "grunt-cli": "^1.3.2",
+    "grunt": "^1.5.2",
+    "grunt-cli": "^1.4.3",
     "grunt-contrib-qunit": "^4.0.0",
     "grunt-contrib-uglify": "^5.0.1",
     "grunt-run": "^0.8.1",

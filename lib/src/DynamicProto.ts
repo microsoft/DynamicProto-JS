@@ -61,6 +61,11 @@ const DynAllowInstChkTag = DynInstChkTag;
 const DynProtoDefaultOptions = '_dfOpts';
 
 /**
+ * The polyfill version of __proto__ so that it doesn't cause issues for anyone not expecting it to exist
+ */
+const DynProtoPolyProto = "_dynProto";
+
+/**
  * Value used as the name of a class when it cannot be determined
  * @ignore
  */ 
@@ -135,8 +140,13 @@ function _getObjProto(target:any) {
         }
 
         // target[Constructor] May break if the constructor has been changed or removed
-        let newProto = target[str__Proto] || target[Prototype] || (target[Constructor] ? target[Constructor][Prototype] : null);
+        let newProto = target[DynProtoPolyProto] || target[str__Proto] || target[Prototype] || (target[Constructor] ? target[Constructor][Prototype] : null);
         if(newProto) {
+            // Set the _dynProto so the hierarchy can lookup base classes correctly on IE8
+            if (!target[DynProtoPolyProto]) {
+                target[DynProtoPolyProto] = newProto;
+            }
+
             return newProto;
         }
     }
@@ -431,9 +441,12 @@ function _checkPrototype(classProto:any, thisTarget:any) {
             visited.push(thisProto);
             thisProto = _getObjProto(thisProto);
         }
+
+        return false;
     }
 
-    return false;
+    // If objGetPrototypeOf doesn't exist then just assume everything is ok.
+    return true;
 }
 
 /**
