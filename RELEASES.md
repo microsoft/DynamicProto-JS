@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.6 (May 4th, 2022)
+
+- #50 [IE8] Fix in 1.1.5 only handles 2 levels of dynamically nested classes
+
 ## 1.1.5 (Apr 28th, 2022)
 
 - #47 [IE8] The _checkPrototype always fails on IE in IE8 mode
