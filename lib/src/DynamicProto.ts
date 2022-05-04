@@ -61,11 +61,6 @@ const DynAllowInstChkTag = DynInstChkTag;
 const DynProtoDefaultOptions = '_dfOpts';
 
 /**
- * The polyfill version of __proto__ so that it doesn't cause issues for anyone not expecting it to exist
- */
-const DynProtoPolyProto = "_dynProto";
-
-/**
  * Value used as the name of a class when it cannot be determined
  * @ignore
  */ 
@@ -77,6 +72,16 @@ const UnknownValue = '_unknown_';
  */
 const str__Proto = "__proto__";
 
+/**
+ * The polyfill version of __proto__ so that it doesn't cause issues for anyone not expecting it to exist
+ */
+const DynProtoBaseProto = "_dyn" + str__Proto;
+
+/**
+ * Track the current prototype for IE8 as you can't look back to get the prototype
+ */
+const DynProtoCurrent = "_dynInstProto";
+ 
 /**
  * Constant string defined to support minimization
  * @ignore
@@ -96,6 +101,11 @@ const Obj = Object;
  * @ignore
  */
 let _objGetPrototypeOf = Obj["getPrototypeOf"];
+
+/**
+ * Pre-lookup to check for the existence of this function
+ */
+let _objGetOwnProps = Obj["getOwnPropertyNames"];
 
 /**
  * Internal Global used to generate a unique dynamic class name, every new class will increase this value
@@ -133,25 +143,28 @@ function _isObjectArrayOrFunctionPrototype(target:any)
  * @ignore
  */ 
 function _getObjProto(target:any) {
+    let newProto;
+
     if (target) {
         // This method doesn't existing in older browsers (e.g. IE8)
         if (_objGetPrototypeOf) {
             return _objGetPrototypeOf(target);
         }
 
-        // target[Constructor] May break if the constructor has been changed or removed
-        let newProto = target[DynProtoPolyProto] || target[str__Proto] || target[Prototype] || (target[Constructor] ? target[Constructor][Prototype] : null);
-        if(newProto) {
-            // Set the _dynProto so the hierarchy can lookup base classes correctly on IE8
-            if (!target[DynProtoPolyProto]) {
-                target[DynProtoPolyProto] = newProto;
-            }
+        let curProto = target[str__Proto] || target[Prototype] || (target[Constructor] ? target[Constructor][Prototype] : null);
 
-            return newProto;
+        // Using the pre-calculated value as IE8 doesn't support looking up the prototype of a prototype and thus fails for more than 1 base class
+        newProto = target[DynProtoBaseProto] || curProto;
+        if (!_hasOwnProperty(target, DynProtoBaseProto)) {
+            // As this prototype doesn't have this property then this is from an inherited class so newProto is the base to return so save it
+            // so we can look it up value (which for a multiple hierarchy dynamicProto will be the base class)
+            delete target[DynProtoCurrent];     // Delete any current value allocated to this instance so we pick up the value from prototype hierarchy
+            newProto = target[DynProtoBaseProto] = target[DynProtoCurrent] || target[DynProtoBaseProto];
+            target[DynProtoCurrent] = curProto;
         }
     }
 
-    return null;
+    return newProto;
 }
 
 /**
@@ -161,9 +174,8 @@ function _getObjProto(target:any) {
  */
 function _forEachProp(target: any, func: (name: string) => void) {
     let props: string[] = [];
-    let getOwnProps = Obj["getOwnPropertyNames"];
-    if (getOwnProps) {
-        props = getOwnProps(target);
+    if (_objGetOwnProps) {
+        props = _objGetOwnProps(target);
     } else {
         for (let name in target) {
             if (typeof name === "string" && _hasOwnProperty(target, name)) {
