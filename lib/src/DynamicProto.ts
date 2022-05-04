@@ -146,7 +146,7 @@ function _getObjProto(target:any) {
     let newProto;
 
     if (target) {
-        // This method doesn't existing in older browsers (e.g. IE8)
+        // This method doesn't exist in older browsers (e.g. IE8)
         if (_objGetPrototypeOf) {
             return _objGetPrototypeOf(target);
         }
