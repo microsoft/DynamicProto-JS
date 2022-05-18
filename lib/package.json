@@ -44,7 +44,7 @@
   "devDependencies": {
     "@microsoft/applicationinsights-rollup-es3" : "^1.0.1",
     "@microsoft/dynamicproto-rollup": "1.0.0",
-    "grunt": "^1.5.2",
+    "grunt": "^1.5.3",
     "grunt-cli": "^1.4.3",
     "grunt-contrib-qunit": "^4.0.0",
     "grunt-contrib-uglify": "^5.0.1",

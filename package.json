@@ -40,7 +40,7 @@
   "homepage": "https://github.com/microsoft/DynamicProto-JS#readme",
   "dependencies": {},
   "devDependencies": {
-    "@microsoft/rush": "^5.67.0",
+    "@microsoft/rush": "^5.70.0",
     "@nevware21/grunt-ts-plugin": "^0.3.0",
     "@nevware21/grunt-eslint-ts": "^0.1.0",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
@@ -51,7 +51,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-security": "^1.4.0",
-    "grunt": "^1.5.2",
+    "grunt": "^1.5.3",
     "grunt-cli": "^1.4.3",
     "grunt-contrib-qunit": "^4.0.0",
     "grunt-contrib-uglify": "^5.0.1",
