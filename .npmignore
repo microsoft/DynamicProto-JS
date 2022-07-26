@@ -5,12 +5,17 @@
 
 # ... but these files
 !/package.json
-!/README.md
-!/CONTRIBUTING.md
 !/CODE_OF_CONDUCT.md
+!/CONTRIBUTING.md
+!/README.md
+!/SECURITY
+!/SECURITY.md
+!/SUPPORT.md
+!/NOTICE
+!/PRIVACY
 !/RELEASES.md
 !/LICENSE
-!/SECURITY
+!/LICENSE.TXT
 !/lib/dist/**/*
 !/lib/docs/**/*
 !/lib/types/**/*
