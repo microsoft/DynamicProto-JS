@@ -1,6 +1,21 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+interface DynamicGlobalSettings {
+    /**
+     * Stores the global options which will also be exposed on the runtime global
+     */
+    o: IDynamicProtoOpts,
+
+    /**
+     * Internal Global used to generate a unique dynamic class name, every new class will increase this value
+     * @ignore
+     */ 
+    n: number
+};
+
+const UNDEFINED = "undefined";
+
 /**
  * Constant string defined to support minimization
  * @ignore
@@ -12,7 +27,7 @@ const Constructor = 'constructor';
  * @ignore
  */ 
 const Prototype = 'prototype';
-
+ 
 /**
  * Constant string defined to support minimization
  * @ignore
@@ -24,76 +39,81 @@ const strFunction = 'function';
  * @ignore
  */ 
 const DynInstFuncTable = '_dynInstFuncs';
-
+ 
 /**
  * Name used to tag the dynamic prototype function
  * @ignore
  */ 
 const DynProxyTag = '_isDynProxy';
-
+ 
 /**
  * Name added to a prototype to define the dynamic prototype "class" name used to lookup the function table
  * @ignore
  */ 
 const DynClassName = '_dynClass';
-
+ 
 /**
  * Prefix added to the classname to avoid any name clashes with other instance level properties
  * @ignore
  */ 
 const DynClassNamePrefix = '_dynCls$';
-
+ 
 /**
  * A tag which is used to check if we have already to attempted to set the instance function if one is not present
  * @ignore
  */
 const DynInstChkTag = '_dynInstChk';
-
+ 
 /**
  * A tag which is used to check if we are allows to try and set an instance function is one is not present. Using the same 
  * tag name as the function level but a different const name for readability only.
  */
 const DynAllowInstChkTag = DynInstChkTag;
-
+ 
 /**
  * The global (imported) instances where the global performance options are stored
  */
 const DynProtoDefaultOptions = '_dfOpts';
-
+ 
 /**
  * Value used as the name of a class when it cannot be determined
  * @ignore
  */ 
 const UnknownValue = '_unknown_';
-
+ 
 /**
  * Constant string defined to support minimization
  * @ignore
  */
 const str__Proto = "__proto__";
-
+ 
 /**
  * The polyfill version of __proto__ so that it doesn't cause issues for anyone not expecting it to exist
  */
 const DynProtoBaseProto = "_dyn" + str__Proto;
 
 /**
+ * Runtime Global holder for dynamicProto settings
+ */
+const DynProtoGlobalSettings = "__dynProto$Gbl";
+
+/**
  * Track the current prototype for IE8 as you can't look back to get the prototype
  */
 const DynProtoCurrent = "_dynInstProto";
- 
+  
 /**
  * Constant string defined to support minimization
  * @ignore
  */
 const strUseBaseInst = 'useBaseInst';
-
+ 
 /**
  * Constant string defined to support minimization
  * @ignore
  */
 const strSetInstFuncs = 'setInstFuncs';
-
+ 
 const Obj = Object;
 
 /**
@@ -108,10 +128,41 @@ let _objGetPrototypeOf = Obj["getPrototypeOf"];
 let _objGetOwnProps = Obj["getOwnPropertyNames"];
 
 /**
- * Internal Global used to generate a unique dynamic class name, every new class will increase this value
- * @ignore
- */ 
-let _dynamicNames = 0;
+ * Gets the runtime global reference
+ * @returns 
+ */
+function _getGlobal(): Window {
+    let result: any;
+
+    if (typeof globalThis !== UNDEFINED) {
+        result = globalThis;
+    }
+
+    if (!result && typeof self !== UNDEFINED) {
+        result = self;
+    }
+
+    if (!result && typeof window !== UNDEFINED) {
+        result = window;
+    }
+
+    if (!result && typeof global !== UNDEFINED) {
+        result = global;
+    }
+
+    return result || {};
+}
+
+// Since 1.1.7 moving these to the runtime global to work around mixed version and module issues
+// See Issue https://github.com/microsoft/DynamicProto-JS/issues/57 for details
+let _gbl = _getGlobal();
+let _gblInst: DynamicGlobalSettings = _gbl[DynProtoGlobalSettings] || (_gbl[DynProtoGlobalSettings] = {
+    o: {
+        [strSetInstFuncs]: true,
+        [strUseBaseInst]: true
+    },
+    n: 1000                // Start new global index @ 1000 so we "fix" some cases when mixed with 1.1.6 or earlier
+});
 
 /**
  * Helper to check if the object contains a property of the name
@@ -566,7 +617,7 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
     // Quick check to make sure that the passed theClass argument looks correct (this is a common copy/paste error)
     let classProto = theClass[Prototype];
     if (!_checkPrototype(classProto, target)) {
-        _throwTypeError("[" + _getObjName(theClass) + "] is not in class hierarchy of [" + _getObjName(target) + "]");
+        _throwTypeError("[" + _getObjName(theClass) + "] not in hierarchy of [" + _getObjName(target) + "]");
     }
 
     let className = null;
@@ -577,8 +628,8 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
         // As not all browser support name on the prototype creating a unique dynamic one if we have not already
         // assigned one, so we can use a simple string as the lookup rather than an object for the dynamic instance
         // function table lookup.
-        className = DynClassNamePrefix + _getObjName(theClass, "_") + "$" + _dynamicNames ;
-        _dynamicNames++;
+        className = DynClassNamePrefix + _getObjName(theClass, "_") + "$" + _gblInst.n ;
+        _gblInst.n++;
         classProto[DynClassName] = className;
     }
 
@@ -613,10 +664,4 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
  * any passed values. This is primarily exposed to support unit-testing without the need for individual classes to expose
  * their internal usage of dynamic proto.
  */
-let perfDefaults: IDynamicProtoOpts = {
-    setInstFuncs: true,
-    useBaseInst: true
-};
-
-// And expose for testing
-dynamicProto[DynProtoDefaultOptions] = perfDefaults;
+dynamicProto[DynProtoDefaultOptions] = _gblInst.o;
