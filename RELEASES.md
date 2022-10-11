@@ -1,5 +1,11 @@
 # Releases
 
+## 1.1.7 (Oct 11th, 2022)
+
+- #55 Update and add legal compliance notices and license terms
+- #56 Semmle warning help
+- #57 [Bug] Corner case issue when extending the same "Class" name from different components
+
 ## 1.1.6 (May 4th, 2022)
 
 - #50 [IE8] Fix in 1.1.5 only handles 2 levels of dynamically nested classes
