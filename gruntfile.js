@@ -53,9 +53,19 @@ module.exports = function (grunt) {
                         './lib/test/Selenium/Tests.html'
                     ],
                     timeout: 300 * 1000, // 5 min
-                    console: false,
-                    summaryOnly: true,
-                    '--web-security': 'false' // we need this to allow CORS requests in PhantomJS
+                    console: true,
+                    summaryOnly: false,
+                    httpBase: ".",
+                    puppeteer: {
+                        headless: true,
+                        timeout: 30000,
+                        ignoreHTTPErrors: true,
+                        args: [
+                            "--enable-precise-memory-info",
+                            "--expose-internals-for-testing",
+                            "--no-sandbox"
+                        ]
+                    }
                 }
             },
             rollup: {
@@ -64,10 +74,19 @@ module.exports = function (grunt) {
                         './rollup/test/Selenium/Tests.html'
                     ],
                     timeout: 300 * 1000, // 5 min
-                    console: false,
+                    console: true,
                     summaryOnly: false,
-                    '--force': '',
-                    '--web-security': 'false' // we need this to allow CORS requests in PhantomJS
+                    httpBase: ".",
+                    puppeteer: {
+                        headless: true,
+                        timeout: 30000,
+                        ignoreHTTPErrors: true,
+                        args: [
+                            "--enable-precise-memory-info",
+                            "--expose-internals-for-testing",
+                            "--no-sandbox"
+                        ]
+                    }
                 }
             }
         }
