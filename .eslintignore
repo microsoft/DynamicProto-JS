@@ -1,0 +1,2 @@
+# Ignore external packages from automated scanning
+./**/lib/test/External/*.js
