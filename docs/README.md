@@ -2,13 +2,13 @@
 
 Generates dynamic prototype methods for JavaScript objects (classes) by supporting method definition within their "class" constructor (like an instance version), this removes the need to expose internal properties on the instance (this) and the usage of ```ClassName.prototype.funcName()``` both of which result in better code minfication (smaller output) and therefore improved load times for your users.
 
-The dynamically generated prototype methods support class inheritance of any type, which means you can extend from base classes that use instance or prototype defined methods, you also don't need to add the normal boiler plate code to handle detecting, saving and calling any previous instance methods that you are overriding as support for this is provided automatically. 
+The dynamically generated prototype methods support class inheritance of any type, which means you can extend from base classes that use instance or prototype defined methods, you also don't need to add the normal boiler plate code to handle detecting, saving and calling any previous instance methods that you are overriding as support for this is provided automatically.
 
 So whether creating a new class or extending some other class/code, your resulting code, can be successfully extended via TypeScript or JavaScript.
 
 ## Documentation
 
-Documentation is [Generated from source code](https://microsoft.github.io/DynamicProto-JS/typedoc/index.html) via typedoc
+[Typedoc API references](https://microsoft.github.io/DynamicProto-JS/typedoc/index.html).
 
 ## Included NPM distribution formats
 

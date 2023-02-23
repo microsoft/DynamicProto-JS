@@ -1,0 +1,25 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [ "./lib/src/DynamicProto.ts" ],
+    "exclude": [ "node_modules/**" ],
+    "externalPattern": [
+        "**/node_modules/**",
+        "node_modules/**"
+    ],
+    "sort": [
+        "alphabetical",
+        "kind",
+        "instance-first"
+    ],
+    "basePath": "./",
+    "excludeExternals": true,
+    "excludeInternal": true,
+    "excludePrivate": true,
+    "tsconfig": "./lib/tsconfig.json",
+    "out": "./docs/typedoc",
+    "githubPages": true,
+    "gitRevision": "master",
+    "compilerOptions": {
+        "stripInternal": true
+    }
+}
