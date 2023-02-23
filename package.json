@@ -23,7 +23,7 @@
     "test": "grunt dynamicprototest",
     "rollup": "grunt rollup",
     "rupdate": "node common/scripts/install-run-rush.js update --recheck --purge --full",
-    "docs": "typedoc --out docs lib/src --excludePrivate --excludeProtected --tsconfig lib/tsconfig.json --theme minimal",
+    "docs": "typedoc --out ../docs/typedoc lib/src --excludePrivate --excludeProtected --tsconfig lib/tsconfig.json --theme minimal",
     "fullClean": "git clean -xdf && npm install && rush update --recheck --purge --full",
     "fullCleanBuild": "npm run fullClean && npm run build"
   },
