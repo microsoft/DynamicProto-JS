@@ -1,8 +1,6 @@
 /// <reference path="./TestFramework/Common.ts" />
 
 import dynamicProto from "../src/DynamicProto";
-//import dynamicProto from '../src/DynamicProto';
-//import * as sinon from 'sinon';
 
 interface IInheritTest {
     executionOrder:string[];
