@@ -1,5 +1,12 @@
 # Releases
 
+## 1.1.8 (Feb 27th, 2023)
+
+- #61 Exclude files from published package
+- #65 Bump external library Sinon.JS to newer version which does not use eval
+- #64 Internal Task 17133116: Add Policheck exclusion file
+- #62 Add --no-sandbox to test runs
+
 ## 1.1.7 (Oct 11th, 2022)
 
 - #55 Update and add legal compliance notices and license terms
