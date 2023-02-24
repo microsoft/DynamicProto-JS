@@ -17,6 +17,5 @@
 !/LICENSE
 !/LICENSE.TXT
 !/lib/dist/**/*
-!/lib/docs/**/*
 !/lib/types/**/*
 !/tools/rollup/**/*

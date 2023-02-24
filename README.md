@@ -6,6 +6,10 @@ The dynamically generated prototype methods support class inheritance of any typ
 
 So whether creating a new class or extending some other class/code, your resulting code, can be successfully extended via TypeScript or JavaScript.
 
+## Documentation
+
+[Github Documentation](https://microsoft.github.io/DynamicProto-JS/) includes [typedoc API references](https://microsoft.github.io/DynamicProto-JS/typedoc/index.html).
+
 ## Removing / Hiding internal properties from instance
 By defining the properties / methods within the constructors closure, each instance can contain or define internal state in the form of properties which it does not have to expose publically as each defined "public" instance method has direct access to this define state within the context/scope of the closure method. 
 
