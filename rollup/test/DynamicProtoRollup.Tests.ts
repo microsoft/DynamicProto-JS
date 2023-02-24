@@ -1,7 +1,6 @@
 /// <reference path="./TestFramework/Common.ts" />
 
 import dynamicRemove from '../src/removeDynamic';
-//import * as sinon from 'sinon';
 
 export class DynamicProtoRollupTests extends TestClass {
 
