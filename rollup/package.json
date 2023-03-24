@@ -11,8 +11,9 @@
     "minification",
     "application insights"
   ],
-  "main": "./tools/rollup/node/removedynamic.js",
-  "module": "./tools/rollup/esm/removedynamic.js",
+  "main": "dist-es5/removedynamic.js",
+  "module": "dist-es5/removedynamic.js",
+  "types": "types/removeDynamic.d.ts",
   "directories": {
   },
   "scripts": {
@@ -32,6 +33,9 @@
     "url": "https://github.com/microsoft/DynamicProto-JS/issues"
   },
   "homepage": "https://github.com/microsoft/DynamicProto-JS#readme",
+  "dependencies": {
+    "@nevware21/ts-utils": ">= 0.9.4 < 2.x"
+  },
   "devDependencies": {
     "grunt": "^1.5.3",
     "grunt-cli": "^1.4.3",

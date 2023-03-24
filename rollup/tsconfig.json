@@ -5,15 +5,18 @@
     "noImplicitAny": true,
     "module": "es6",
     "moduleResolution": "node",
-    "target": "es3",
+    "target": "es5",
     "forceConsistentCasingInFileNames": true,
     "importHelpers": false,
     "noEmitHelpers": false,
     "alwaysStrict": true,
     "declaration": true,
-    "outDir": "./out/rollup/src",
+    "declarationDir": "./types",
+    "rootDir": "./src",
+    "outDir": "./dist-es5",
     "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "removeComments": false
   },
   "include": [
     "./src/**/*.ts"

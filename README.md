@@ -462,7 +462,7 @@ It should be as simple as :-
 
 ## Version 2.x
 
-The version 2.x is maintained on the default [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main)
+Version 2.x is maintained on the default [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main)
 
 > Breaking Changes from Version 1.x
 >
@@ -482,7 +482,7 @@ Latest ✔ | Latest ✔ | 9+ Full ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 <summary>Version 1.x</summary>
 
-The version 1.x is maintained on the [master branch](https://github.com/microsoft/DynamicProto-JS/tree/master)
+Version 1.x is maintained on the [master branch](https://github.com/microsoft/DynamicProto-JS/tree/master)
 
 ### Browser Support (1.x)
 

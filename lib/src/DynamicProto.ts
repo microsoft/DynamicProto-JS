@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+import { getGlobal, objHasOwnProperty, throwTypeError } from "@nevware21/ts-utils";
+
 interface DynamicGlobalSettings {
     /**
      * Stores the global options which will also be exposed on the runtime global
@@ -127,35 +129,9 @@ let _objGetPrototypeOf = Obj["getPrototypeOf"];
  */
 let _objGetOwnProps = Obj["getOwnPropertyNames"];
 
-/**
- * Gets the runtime global reference
- * @returns 
- */
-function _getGlobal(): Window {
-    let result: any;
-
-    if (typeof globalThis !== UNDEFINED) {
-        result = globalThis;
-    }
-
-    if (!result && typeof self !== UNDEFINED) {
-        result = self;
-    }
-
-    if (!result && typeof window !== UNDEFINED) {
-        result = window;
-    }
-
-    if (!result && typeof global !== UNDEFINED) {
-        result = global;
-    }
-
-    return result || {};
-}
-
 // Since 1.1.7 moving these to the runtime global to work around mixed version and module issues
 // See Issue https://github.com/microsoft/DynamicProto-JS/issues/57 for details
-let _gbl = _getGlobal();
+let _gbl = getGlobal();
 let _gblInst: DynamicGlobalSettings = _gbl[DynProtoGlobalSettings] || (_gbl[DynProtoGlobalSettings] = {
     o: {
         [strSetInstFuncs]: true,
@@ -163,14 +139,6 @@ let _gblInst: DynamicGlobalSettings = _gbl[DynProtoGlobalSettings] || (_gbl[DynP
     },
     n: 1000                // Start new global index @ 1000 so we "fix" some cases when mixed with 1.1.6 or earlier
 });
-
-/**
- * Helper to check if the object contains a property of the name
- * @ignore
- */ 
-function _hasOwnProperty(obj:any, prop:string) {
-    return obj && Obj[Prototype].hasOwnProperty.call(obj, prop);
-}
 
 /**
  * Helper used to check whether the target is an Object prototype or Array prototype
@@ -206,7 +174,7 @@ function _getObjProto(target:any) {
 
         // Using the pre-calculated value as IE8 doesn't support looking up the prototype of a prototype and thus fails for more than 1 base class
         newProto = target[DynProtoBaseProto] || curProto;
-        if (!_hasOwnProperty(target, DynProtoBaseProto)) {
+        if (!objHasOwnProperty(target, DynProtoBaseProto)) {
             // As this prototype doesn't have this property then this is from an inherited class so newProto is the base to return so save it
             // so we can look it up value (which for a multiple hierarchy dynamicProto will be the base class)
             delete target[DynProtoCurrent];     // Delete any current value allocated to this instance so we pick up the value from prototype hierarchy
@@ -229,7 +197,7 @@ function _forEachProp(target: any, func: (name: string) => void) {
         props = _objGetOwnProps(target);
     } else {
         for (let name in target) {
-            if (typeof name === "string" && _hasOwnProperty(target, name)) {
+            if (typeof name === "string" && objHasOwnProperty(target, name)) {
                 props.push(name);
             }
         }
@@ -251,7 +219,7 @@ function _forEachProp(target: any, func: (name: string) => void) {
  * @ignore
  */
 function _isDynamicCandidate(target:any, funcName:string, skipOwn:boolean) {
-    return (funcName !== Constructor && typeof target[funcName] === strFunction && (skipOwn || _hasOwnProperty(target, funcName)));
+    return (funcName !== Constructor && typeof target[funcName] === strFunction && (skipOwn || objHasOwnProperty(target, funcName)));
 }
 
 /**
@@ -260,7 +228,7 @@ function _isDynamicCandidate(target:any, funcName:string, skipOwn:boolean) {
  * @ignore
  */
 function _throwTypeError(message:string) {
-    throw new TypeError("DynamicProto: " + message);
+    throwTypeError("DynamicProto: " + message);
 }
 
 /**
@@ -363,7 +331,7 @@ function _getInstFunc(target: any, funcName: string, proto: any, currentDynProto
 
     // We need to check whether the class name is defined directly on this prototype otherwise
     // it will walk the proto chain and return any parent proto classname.
-    if (target && _hasOwnProperty(proto, DynClassName)) {
+    if (target && objHasOwnProperty(proto, DynClassName)) {
 
         let instFuncTable = target[DynInstFuncTable] || {};
         instFunc = (instFuncTable[proto[DynClassName]] || {})[funcName];
@@ -377,7 +345,7 @@ function _getInstFunc(target: any, funcName: string, proto: any, currentDynProto
         // by adding the instance function back directly on the instance (avoiding the dynamic func lookup)
         if (!instFunc[DynInstChkTag] && instFuncTable[DynAllowInstChkTag] !== false) {
             // If the instance already has an instance function we can't replace it
-            let canAddInst = !_hasOwnProperty(target, funcName);
+            let canAddInst = !objHasOwnProperty(target, funcName);
 
             // Get current prototype
             let objProto = _getObjProto(target);
@@ -474,7 +442,7 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
                 delete target[name];
                 
                 // Add a dynamic proto if one doesn't exist or if a prototype function exists and it's not a dynamic one
-                if (!_hasOwnProperty(proto, name) || (proto[name] && !proto[name][DynProxyTag])) {
+                if (!objHasOwnProperty(proto, name) || (proto[name] && !proto[name][DynProxyTag])) {
                     proto[name] = _createDynamicPrototype(proto, name);
                 }
             }
@@ -520,7 +488,7 @@ function _checkPrototype(classProto:any, thisTarget:any) {
  * @ignore
  */
 function _getObjName(target:any, unknownValue?:string) {
-    if (_hasOwnProperty(target, Prototype)) {
+    if (objHasOwnProperty(target, Prototype)) {
         // Look like a prototype
         return target.name || unknownValue || UnknownValue
     }
@@ -610,7 +578,7 @@ export type DynamicProtoDelegate<DPType> = (theTarget:DPType, baseFuncProxy?:DPT
  */
 export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPType, delegateFunc: DynamicProtoDelegate<DPType>, options?:IDynamicProtoOpts): void {
     // Make sure that the passed theClass argument looks correct
-    if (!_hasOwnProperty(theClass, Prototype)) {
+    if (!objHasOwnProperty(theClass, Prototype)) {
         _throwTypeError("theClass is an invalid class definition.");
     }
 
@@ -621,7 +589,7 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
     }
 
     let className = null;
-    if (_hasOwnProperty(classProto, DynClassName)) {
+    if (objHasOwnProperty(classProto, DynClassName)) {
         // Only grab the class name if it's defined on this prototype (i.e. don't walk the prototype chain)
         className = classProto[DynClassName];
     } else {
