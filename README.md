@@ -6,6 +6,12 @@ The dynamically generated prototype methods support class inheritance of any typ
 
 So whether creating a new class or extending some other class/code, your resulting code, can be successfully extended via TypeScript or JavaScript.
 
+> ES3 / IE8 support has been removed from Version 2.x.
+>
+> if you need to retain ES3 / IE8 support then you will need to use one of the 1.x versions which is now maintained on the old [master branch](https://github.com/microsoft/DynamicProto-JS/tree/master)
+
+The version 2.x is maintained on the default [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main)
+
 ## Documentation
 
 [Github Documentation](https://microsoft.github.io/DynamicProto-JS/) includes [typedoc API references](https://microsoft.github.io/DynamicProto-JS/typedoc/index.html).
@@ -453,13 +459,42 @@ It should be as simple as :-
 * Write the new resulting file to the output path (or stream)
 * Do the final check for any "remaining" tags, which represents a failed matching
 
-## Browser Support
+
+## Version 2.x
+
+The version 2.x is maintained on the default [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main)
+
+> Breaking Changes from Version 1.x
+>
+> - Removed ES3 / IE8 support
+
+### Browser Support
+
+- ES5 Compliant browsers
+
+![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![IE9](https://raw.githubusercontent.com/hotoo/browser-logos/master/ie9-10/ie9-10_48x48.png) | ![Edge](https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Opera](https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
+--- | --- | --- | --- | --- | --- |
+Latest ✔ | Latest ✔ | 9+ Full ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
+
+### Previous Versions
+
+<details>
+
+<summary>Version 1.x</summary>
+
+The version 1.x is maintained on the [master branch](https://github.com/microsoft/DynamicProto-JS/tree/master)
+
+### Browser Support (1.x)
+
+- ES3 Compliant browsers
 
 ![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![IE8](https://raw.githubusercontent.com/hotoo/browser-logos/master/ie9-10/ie9-10_48x48.png) | ![Edge](https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Opera](https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | 8+ Full ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## ES3/IE8 Compatibility
+
+Version 1.x ONLY, 2.x DOES NOT support ES3/IE8
 
 As a library there are numerous users which cannot control the browsers that their customers use. As such we need to ensure that this library continues to "work" and does not break the JS execution when loaded by an older browser. While it would be ideal to just not support IE8 and older generation (ES3) browsers there are numerous large customers/users that continue to require pages to "work" and as noted they may or cannot control which browser that their end users choose to use.
 
@@ -486,6 +521,8 @@ This table does not attempt to include ALL of the ES3 unsupported features, just
 | ```Object.isSealed(obj)``` | Not provided by ES3 and not used | N/A |
 | ```Object.freeze(obj)``` | Not provided by ES3 and not used | N/A |
 | ```Object.isFrozen(obj)``` | Not provided by ES3 and not used | N/A |
+
+</details>
 
 ## Contributing
 
