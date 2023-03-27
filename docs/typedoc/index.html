@@ -19,6 +19,11 @@
 <p>Generates dynamic prototype methods for JavaScript objects (classes) by supporting method definition within their &quot;class&quot; constructor (like an instance version), this removes the need to expose internal properties on the instance (this) and the usage of <code>ClassName.prototype.funcName()</code> both of which result in better code minfication (smaller output) and therefore improved load times for your users.</p>
 <p>The dynamically generated prototype methods support class inheritance of any type, which means you can extend from base classes that use instance or prototype defined methods, you also don&#39;t need to add the normal boiler plate code to handle detecting, saving and calling any previous instance methods that you are overriding as support for this is provided automatically. </p>
 <p>So whether creating a new class or extending some other class/code, your resulting code, can be successfully extended via TypeScript or JavaScript.</p>
+<blockquote>
+<p>ES3 / IE8 support has been removed from Version 2.x.</p>
+<p>if you need to retain ES3 / IE8 support then you will need to use one of the 1.x versions which is now maintained on the old <a href="https://github.com/microsoft/DynamicProto-JS/tree/master">master branch</a></p>
+</blockquote>
+<p>The version 2.x is maintained on the default <a href="https://github.com/microsoft/DynamicProto-JS/tree/main">main branch</a></p>
 
 <a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
   <h2>Documentation</h2>
@@ -227,9 +232,59 @@ script type=module&gt; tag in modern browsers</li>
 <li>Do the final check for any &quot;remaining&quot; tags, which represents a failed matching</li>
 </ul>
 
-<a href="#browser-support" id="browser-support" style="color: inherit; text-decoration: none;">
-  <h2>Browser Support</h2>
+<a href="#version-2x" id="version-2x" style="color: inherit; text-decoration: none;">
+  <h2>Version 2.x</h2>
 </a>
+<p>Version 2.x is maintained on the default <a href="https://github.com/microsoft/DynamicProto-JS/tree/main">main branch</a></p>
+<blockquote>
+<p>Breaking Changes from Version 1.x</p>
+<ul>
+<li>Removed ES3 / IE8 support</li>
+</ul>
+</blockquote>
+
+<a href="#browser-support" id="browser-support" style="color: inherit; text-decoration: none;">
+  <h3>Browser Support</h3>
+</a>
+<ul>
+<li>ES5 Compliant browsers</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome"></th>
+<th><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox"></th>
+<th><img src="https://raw.githubusercontent.com/hotoo/browser-logos/master/ie9-10/ie9-10_48x48.png" alt="IE9"></th>
+<th><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge"></th>
+<th><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera"></th>
+<th><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Latest ✔</td>
+<td>Latest ✔</td>
+<td>9+ Full ✔</td>
+<td>Latest ✔</td>
+<td>Latest ✔</td>
+<td>Latest ✔</td>
+</tr>
+</tbody></table>
+
+<a href="#previous-versions" id="previous-versions" style="color: inherit; text-decoration: none;">
+  <h3>Previous Versions</h3>
+</a>
+<details>
+
+<summary>Version 1.x</summary>
+
+<p>Version 1.x is maintained on the <a href="https://github.com/microsoft/DynamicProto-JS/tree/master">master branch</a></p>
+
+<a href="#browser-support-1x" id="browser-support-1x" style="color: inherit; text-decoration: none;">
+  <h3>Browser Support (1.x)</h3>
+</a>
+<ul>
+<li>ES3 Compliant browsers</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -254,6 +309,7 @@ script type=module&gt; tag in modern browsers</li>
 <a href="#es3ie8-compatibility" id="es3ie8-compatibility" style="color: inherit; text-decoration: none;">
   <h2>ES3/IE8 Compatibility</h2>
 </a>
+<p>Version 1.x ONLY, 2.x DOES NOT support ES3/IE8</p>
 <p>As a library there are numerous users which cannot control the browsers that their customers use. As such we need to ensure that this library continues to &quot;work&quot; and does not break the JS execution when loaded by an older browser. While it would be ideal to just not support IE8 and older generation (ES3) browsers there are numerous large customers/users that continue to require pages to &quot;work&quot; and as noted they may or cannot control which browser that their end users choose to use.</p>
 <p>As part of enabling ES3/IE8 support we have set the <code>tsconfig.json</code> to ES3 and <code>uglify</code> settings in <code>rollup.config.js</code> transformations to support ie8. This provides a first level of support which blocks anyone from adding unsupported ES3 features to the code and enables the generated javascript to be validily parsed in an ES3+ environment.</p>
 <p>Ensuring that the generated code is compatible with ES3 is only the first step, JS parsers will still parse the code when an unsupport core function is used, it will just fail or throw an exception at runtime. Therefore, we also need to require/use polyfil implementations or helper functions to handle those scenarios.</p>
@@ -336,6 +392,8 @@ script type=module&gt; tag in modern browsers</li>
 <td>N/A</td>
 </tr>
 </tbody></table>
+</details>
+
 
 <a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
   <h2>Contributing</h2>

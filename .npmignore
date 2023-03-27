@@ -17,5 +17,7 @@
 !/LICENSE
 !/LICENSE.TXT
 !/lib/dist/**/*
+!/lib/dist-es5/**/*
 !/lib/types/**/*
-!/tools/rollup/**/*
+!/tools/rollup/dist-es5/**/*
+!/tools/rollup/package.json

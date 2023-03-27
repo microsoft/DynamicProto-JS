@@ -14,14 +14,16 @@
         require.config({
             baseUrl: '../',
             paths: {
-                qunit: "./External/qunit-1.23.1"
+                qunit: "./External/qunit-1.23.1",
+                "@nevware21/ts-utils": "../node_modules/@nevware21/ts-utils/dist/es5/umd/ts-utils"
             }
         });
 
         // Load core & common before channel tests
         require([
-            'qunit' // Load qunit here instead of with tests, otherwise will not work
-        ], function (QUnit, aicore) {
+            "qunit", // Load qunit here instead of with tests, otherwise will not work
+            "@nevware21/ts-utils"
+        ], function (QUnit, tsUtils, aicore) {
             require.config({
                 baseUrl: './'
             });

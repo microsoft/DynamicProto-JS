@@ -1,9 +1,10 @@
 import nodeResolve from "@rollup/plugin-node-resolve";
 import copy from "rollup-plugin-copy";
 import replace from "@rollup/plugin-replace";
+import cleanup from "rollup-plugin-cleanup";
 
 const version = require("./package.json").version;
-const inputName = "./out/rollup/src/removeDynamic";
+const inputName = "./dist-es5/removeDynamic";
 const outputName = "removedynamic";
 const distPath = "../tools/rollup/";
 const banner = [
@@ -22,7 +23,8 @@ const nodeUmdRollupConfigFactory = (isProduction) => {
       format: "umd",
         name: "Microsoft.DynamicProto-Rollup",
       extend: true,
-      sourcemap: false
+      sourcemap: false,
+      exports: "auto"
     },
     plugins: [
       replace({
@@ -33,7 +35,8 @@ const nodeUmdRollupConfigFactory = (isProduction) => {
         },
         preventAssignment: true
       }),
-      nodeResolve()
+      nodeResolve(),
+      cleanup()
     ]
   };
 
@@ -59,7 +62,8 @@ const moduleRollupConfigFactory = (format, isProduction) => {
       format: format,
         name: "Microsoft.DynamicProto-JS",
       extend: true,
-      sourcemap: false
+      sourcemap: false,
+      exports: "auto"
     },
     plugins: [
       replace({
@@ -70,7 +74,8 @@ const moduleRollupConfigFactory = (format, isProduction) => {
         },
         preventAssignment: true
       }),
-      nodeResolve()
+      nodeResolve(),
+      cleanup()
     ]
   };
 
