@@ -1,5 +1,17 @@
 # Releases
 
+## 2.0.0 (Mar 27th, 2023)
+
+### Breaking Changes from Version 1.x ###
+
+- Removed ES3 / IE8 support
+- ES5 `Object.defineProperty()` is required during runtime.
+
+### Changes
+
+- Version 2.x development moved to [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main) which is now the default branch, Version 1.x is still maintained from the [master branch](https://github.com/microsoft/DynamicProto-JS/tree/master)
+- Removed private internal getGlobal() and hasOwnProperty() functions to provide better minification when bundled with other packages that also implement these functions by using [@nevware21/ts-utils](https://github.com/nevware21/ts-utils) as the dependency.
+ 
 ## 1.1.8 (Feb 27th, 2023)
 
 - #61 Exclude files from published package
