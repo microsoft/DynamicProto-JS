@@ -1,0 +1,24 @@
+# NPM Ignore
+
+# ignore everything
+*
+
+# ... but these files
+!package.json
+!CODE_OF_CONDUCT.md
+!CONTRIBUTING.md
+!README.md
+!SECURITY
+!SECURITY.md
+!SUPPORT.md
+!NOTICE
+!PRIVACY
+!RELEASES.md
+!LICENSE
+!LICENSE.TXT
+!dist/**/*
+!dist-es5/**/*
+!types/**/*
+!tools/rollup/dist-es5/**/*
+!tools/rollup/types/**/*
+!tools/rollup/package.json
