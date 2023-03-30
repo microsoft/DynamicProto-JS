@@ -1,5 +1,10 @@
 # Releases
 
+## 1.1.9 (Mar 30th, 2023)
+
+- #75 [Master] Fix npm pack and publish issues
+  - Additional fixes for #61 Exclude files from published package
+
 ## 1.1.8 (Feb 27th, 2023)
 
 - #61 Exclude files from published package

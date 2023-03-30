@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "author": "Microsoft Application Insights Team",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Microsoft Dynamic Proto Utility",
   "keywords": [
     "javascript",
