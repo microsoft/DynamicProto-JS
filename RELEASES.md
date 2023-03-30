@@ -1,5 +1,11 @@
 # Releases
 
+## 2.0.1 (Mar 30th, 2023)
+
+### Changes
+
+- #73 [Main] Fix npm pack and publish issues
+
 ## 2.0.0 (Mar 27th, 2023)
 
 ### Breaking Changes from Version 1.x ###
