@@ -27,11 +27,14 @@ node_modules/
 out/
 dist**/
 types/
-tools/
+tools/rollup
 
 lib/bundle/
 lib/dist**/
 lib/types/
+lib/tools/
+lib/README*
+lib/LICENSE
 
 rollup/node_modules/
 rollup/dist**/
