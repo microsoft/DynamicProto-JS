@@ -11,9 +11,9 @@
     "noEmitHelpers": false,
     "alwaysStrict": true,
     "declaration": true,
-    "declarationDir": "./types",
+    "declarationDir": "../lib/tools/rollup/types",
     "rootDir": "./src",
-    "outDir": "./dist-es5",
+    "outDir": "../lib/tools/rollup/dist-es5",
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "removeComments": false
