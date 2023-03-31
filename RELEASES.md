@@ -1,5 +1,11 @@
 # Releases
 
+## 2.0.2 (Mar 31st, 2023)
+
+### Changes
+
+- #78 [Packaging] 2.0.1 does not include the removeDynamic.ts script
+
 ## 2.0.1 (Mar 30th, 2023)
 
 ### Changes

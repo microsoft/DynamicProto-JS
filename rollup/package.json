@@ -11,8 +11,8 @@
     "minification",
     "application insights"
   ],
-  "main": "dist-es5/removedynamic.js",
-  "module": "dist-es5/removedynamic.js",
+  "main": "dist/node/removedynamic.js",
+  "module": "dist-es5/removeDynamic.js",
   "types": "types/removeDynamic.d.ts",
   "directories": {
   },
@@ -21,7 +21,7 @@
     "build": "npm run build:esm && npm run build:bundle",
     "build:esm": "grunt rollup",
     "build:bundle": "rollup -c rollup.config.js",
-    "rebuild": "npm run build"
+    "rebuild": "npm run build && copyfiles package.json ../lib/tools/rollup"
   },
   "repository": {
     "type": "git",
@@ -51,6 +51,7 @@
     "rollup-plugin-cleanup": "3.2.1",
     "rollup-plugin-minify-es": "^1.1.1",
     "rollup": "^2.32.0",
-    "magic-string": "^0.25.5"
+    "magic-string": "^0.25.5",
+    "copyfiles": "^2.4.1"
   }
 }

@@ -6,7 +6,7 @@ import cleanup from "rollup-plugin-cleanup";
 const version = require("./package.json").version;
 const inputName = "../lib/tools/rollup/dist-es5/removeDynamic";
 const outputName = "removedynamic";
-const distPath = "../lib/tools/rollup/";
+const distPath = "../lib/tools/rollup/dist/";
 const banner = [
   "/*!",
   ` * Microsoft Dynamic Proto Rollup Utility, ${version}`,
