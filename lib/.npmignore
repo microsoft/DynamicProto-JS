@@ -20,5 +20,6 @@
 !dist-es5/**/*
 !types/**/*
 !tools/rollup/dist-es5/**/*
+!tools/rollup/dist/**/*
 !tools/rollup/types/**/*
 !tools/rollup/package.json
