@@ -26,8 +26,9 @@
     "docs": "typedoc",
     "fullClean": "git clean -xdf && npm install && rush update --recheck --purge --full",
     "fullCleanBuild": "npm run fullClean && npm run build",
-    "npm_pack": "npm pack",
-    "npm_publish": "node ./tools/release-tools/npm_publish.js ."
+    "npm_pack": "copyfiles README.md LICENSE lib && cd lib && npm pack",
+    "npm_publish": "cd lib && node ../tools/release-tools/npm_publish.js .",
+    "serve": "grunt serve"
   },
   "repository": {
     "type": "git",
@@ -55,6 +56,7 @@
     "eslint-plugin-security": "^1.4.0",
     "grunt": "^1.5.3",
     "grunt-cli": "^1.4.3",
+    "grunt-contrib-connect": "^3.0.0",
     "grunt-contrib-qunit": "^4.0.0",
     "grunt-contrib-uglify": "^5.0.1",
     "grunt-run": "^0.8.1",
@@ -65,5 +67,8 @@
     "typedoc": "^0.23.25",
     "typescript": "^4.9.5",
     "copyfiles": "^2.4.1"
+  },
+  "publishConfig": {
+    "tag": "release1"
   }
 }

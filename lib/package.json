@@ -67,5 +67,8 @@
     "rollup-plugin-minify-es": "^1.1.1",
     "rollup": "^2.32.0",
     "uglify-js": "^3.13.7"
+  },
+  "publishConfig": {
+    "tag": "release1"
   }
 }

@@ -48,5 +48,8 @@
     "rollup-plugin-minify-es": "^1.1.1",
     "rollup": "^2.32.0",
     "magic-string": "^0.25.5"
+  },
+  "publishConfig": {
+    "tag": "release1"
   }
 }

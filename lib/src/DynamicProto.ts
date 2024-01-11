@@ -184,8 +184,7 @@ function _isObjectOrArrayPrototype(target:any) {
  * Helper used to check whether the target is an Object prototype, Array prototype or Function prototype
  * @ignore
  */ 
-function _isObjectArrayOrFunctionPrototype(target:any)
-{
+function _isObjectArrayOrFunctionPrototype(target:any) {
     return _isObjectOrArrayPrototype(target) || target === Function[Prototype];
 }
 
@@ -251,7 +250,7 @@ function _forEachProp(target: any, func: (name: string) => void) {
  * @ignore
  */
 function _isDynamicCandidate(target:any, funcName:string, skipOwn:boolean) {
-    return (funcName !== Constructor && typeof target[funcName] === strFunction && (skipOwn || _hasOwnProperty(target, funcName)));
+    return (funcName !== Constructor && typeof target[funcName] === strFunction && (skipOwn || _hasOwnProperty(target, funcName)) && funcName !== str__Proto && funcName !== Prototype);
 }
 
 /**
@@ -263,6 +262,10 @@ function _throwTypeError(message:string) {
     throw new TypeError("DynamicProto: " + message);
 }
 
+function _newObject() {
+    return Object.create ? Object.create(null) : {};
+}
+
 /**
  * Returns a collection of the instance functions that are defined directly on the thisTarget object, it does 
  * not return any inherited functions
@@ -271,7 +274,7 @@ function _throwTypeError(message:string) {
  */
 function _getInstanceFuncs(thisTarget:any): any {
     // Get the base proto
-    var instFuncs = {};
+    var instFuncs = _newObject();
 
     // Save any existing instance functions
     _forEachProp(thisTarget, (name) => {
@@ -324,7 +327,7 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any, useBaseIns
     }
 
     // Start creating a new baseFuncs by creating proxies for the instance functions (as they may get replaced)
-    var baseFuncs = {};
+    var baseFuncs = _newObject();
     _forEachProp(instFuncs, (name) => {
         // Create an instance callback for passing the base function to the caller
         baseFuncs[name] = _instFuncProxy(thisTarget, instFuncs, name);
@@ -365,8 +368,8 @@ function _getInstFunc(target: any, funcName: string, proto: any, currentDynProto
     // it will walk the proto chain and return any parent proto classname.
     if (target && _hasOwnProperty(proto, DynClassName)) {
 
-        let instFuncTable = target[DynInstFuncTable] || {};
-        instFunc = (instFuncTable[proto[DynClassName]] || {})[funcName];
+        let instFuncTable = target[DynInstFuncTable] || _newObject();
+        instFunc = (instFuncTable[proto[DynClassName]] || _newObject())[funcName];
 
         if (!instFunc) {
             // Avoid stack overflow from recursive calling the same function
@@ -458,27 +461,31 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
     }
     
     if (!_isObjectOrArrayPrototype(proto)) {
-        let instFuncTable = target[DynInstFuncTable] = target[DynInstFuncTable] || {};
-        let instFuncs = instFuncTable[className] = (instFuncTable[className] || {}); // fetch and assign if as it may not exist yet
+        let instFuncTable = target[DynInstFuncTable] = target[DynInstFuncTable] || _newObject();
+        if (!_isObjectOrArrayPrototype(instFuncTable)) {
+            let instFuncs = instFuncTable[className] = (instFuncTable[className] || _newObject()); // fetch and assign if as it may not exist yet
 
-        // Set whether we are allow to lookup instances, if someone has set to false then do not re-enable
-        if (instFuncTable[DynAllowInstChkTag] !== false) {
-            instFuncTable[DynAllowInstChkTag] = !!setInstanceFunc;
-        }
-
-        _forEachProp(target, (name) => {
-            // Only add overridden functions
-            if (_isDynamicCandidate(target, name, false) && target[name] !== baseInstFuncs[name] ) {
-                // Save the instance Function to the lookup table and remove it from the instance as it's not a dynamic proto function
-                instFuncs[name] = target[name];
-                delete target[name];
-                
-                // Add a dynamic proto if one doesn't exist or if a prototype function exists and it's not a dynamic one
-                if (!_hasOwnProperty(proto, name) || (proto[name] && !proto[name][DynProxyTag])) {
-                    proto[name] = _createDynamicPrototype(proto, name);
-                }
+            // Set whether we are allow to lookup instances, if someone has set to false then do not re-enable
+            if (instFuncTable[DynAllowInstChkTag] !== false) {
+                instFuncTable[DynAllowInstChkTag] = !!setInstanceFunc;
             }
-        });
+
+            if (!_isObjectOrArrayPrototype(instFuncs)) {
+                _forEachProp(target, (name) => {
+                    // Only add overridden functions
+                    if (_isDynamicCandidate(target, name, false) && target[name] !== baseInstFuncs[name]) {
+                        // Save the instance Function to the lookup table and remove it from the instance as it's not a dynamic proto function
+                        instFuncs[name] = target[name];
+                        delete target[name];
+
+                        // Add a dynamic proto if one doesn't exist or if a prototype function exists and it's not a dynamic one
+                        if (!_hasOwnProperty(proto, name) || (proto[name] && !proto[name][DynProxyTag])) {
+                            proto[name] = _createDynamicPrototype(proto, name);
+                        }
+                    }
+                });
+            }
+        }
     }
 }
 
