@@ -89,6 +89,15 @@ module.exports = function (grunt) {
                     }
                 }
             }
+        },
+        connect: {
+            server: {
+                options: {
+                    port: 9005,
+                     base: '.',
+                     debug: true
+                }
+            }        
         }
     });
 
@@ -100,6 +109,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("@nevware21/grunt-eslint-ts");
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-run');
     grunt.registerTask("default", ["ts:rollup", "ts:rolluptest", "ts:dynamicproto", "ts:dynamicprototest", "qunit:rollup", "qunit:dynamicproto"]);
     grunt.registerTask("dynamicproto", ["eslint-ts:dynamicproto-fix", "ts:dynamicproto"]);
@@ -107,4 +117,5 @@ module.exports = function (grunt) {
     grunt.registerTask("rollup", ["ts:rollup", "ts:rolluptest", "qunit:rollup"]);
     grunt.registerTask("lint", ["eslint-ts:dynamicproto"]);
     grunt.registerTask("lint-fix", ["eslint-ts:dynamicproto-fix"]);
+    grunt.registerTask("serve", ["connect:server:keepalive"]);
 };
