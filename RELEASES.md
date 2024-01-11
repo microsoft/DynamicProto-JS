@@ -1,5 +1,16 @@
 # Releases
 
+## 1.1.10 (Jan 11th, 2024)
+
+Blocks a medium level prototype pollution vulnerability.
+
+### Changes
+
+- #82 [Main] Task 26377610: [DynamicProto] Investigate possible security issue with prototype pollution
+  - This removes the identified methods for polluting the prototype chain by
+    - adding additional checks to the _isDynamicCandidate() and _populateProtype() functions.
+    - Using Object.create(null) for internal objects to avoid prototype pollution.
+
 ## 1.1.9 (Mar 30th, 2023)
 
 - #75 [Master] Fix npm pack and publish issues
