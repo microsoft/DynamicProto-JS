@@ -398,9 +398,9 @@
       "integrity": "sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA=="
     },
     "node_modules/@types/node": {
-      "version": "20.10.8",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-20.10.8.tgz",
-      "integrity": "sha512-f8nQs3cLxbAFc00vEU59yf9UyGUftkPaLGfvbVOIDdx2i1b8epBqj2aNGyP19fiyXWvlmZ7qC1XLjAzw/OKIeA==",
+      "version": "20.11.0",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-20.11.0.tgz",
+      "integrity": "sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==",
       "dependencies": {
         "undici-types": "~5.26.4"
       }
@@ -3920,9 +3920,9 @@
       }
     },
     "node_modules/safe-regex-test": {
-      "version": "1.0.1",
-      "resolved": "https://registry.npmjs.org/safe-regex-test/-/safe-regex-test-1.0.1.tgz",
-      "integrity": "sha512-Y5NejJTTliTyY4H7sipGqY+RX5P87i3F7c4Rcepy72nq+mNLhIsD0W4c7kEmduMDQCSqtPsXPlSTsFhh2LQv+g==",
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/safe-regex-test/-/safe-regex-test-1.0.2.tgz",
+      "integrity": "sha512-83S9w6eFq12BBIJYvjMux6/dkirb8+4zJRA9cxNBVb7Wq5fJBW+Xze48WqR8pxua7bDuAaaAxtVVd4Idjp1dBQ==",
       "dependencies": {
         "call-bind": "^1.0.5",
         "get-intrinsic": "^1.2.2",
@@ -5073,9 +5073,9 @@
       "integrity": "sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA=="
     },
     "@types/node": {
-      "version": "20.10.8",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-20.10.8.tgz",
-      "integrity": "sha512-f8nQs3cLxbAFc00vEU59yf9UyGUftkPaLGfvbVOIDdx2i1b8epBqj2aNGyP19fiyXWvlmZ7qC1XLjAzw/OKIeA==",
+      "version": "20.11.0",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-20.11.0.tgz",
+      "integrity": "sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==",
       "requires": {
         "undici-types": "~5.26.4"
       }
@@ -7564,9 +7564,9 @@
       }
     },
     "safe-regex-test": {
-      "version": "1.0.1",
-      "resolved": "https://registry.npmjs.org/safe-regex-test/-/safe-regex-test-1.0.1.tgz",
-      "integrity": "sha512-Y5NejJTTliTyY4H7sipGqY+RX5P87i3F7c4Rcepy72nq+mNLhIsD0W4c7kEmduMDQCSqtPsXPlSTsFhh2LQv+g==",
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/safe-regex-test/-/safe-regex-test-1.0.2.tgz",
+      "integrity": "sha512-83S9w6eFq12BBIJYvjMux6/dkirb8+4zJRA9cxNBVb7Wq5fJBW+Xze48WqR8pxua7bDuAaaAxtVVd4Idjp1dBQ==",
       "requires": {
         "call-bind": "^1.0.5",
         "get-intrinsic": "^1.2.2",
