@@ -1,5 +1,15 @@
 # Releases
 
+## 1.1.11 (Jan 19th, 2024)
+
+Packaging update only, no functional changes.
+
+## Changes
+
+- #85 [BUG] v1.1.10 packaging is incorrect
+  - The v1.1.10 packaging was incorrect, this release fixes the packaging issue.
+  - The v1.1.10 release was missing the tools/rollup folder, which is required for the rollup packaging process.
+
 ## 1.1.10 (Jan 11th, 2024)
 
 Blocks a medium level prototype pollution vulnerability.
