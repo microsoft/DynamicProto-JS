@@ -1,0 +1,9 @@
+// ------------------------------
+// NPM Publish group definitions
+// ------------------------------
+{
+    // DynamicProto packages
+    "dp": [
+        "./lib"
+    ]
+}

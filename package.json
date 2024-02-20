@@ -28,6 +28,7 @@
     "fullCleanBuild": "npm run fullClean && npm run build",
     "npm_pack": "copyfiles README.md LICENSE lib && cd lib && npm pack",
     "npm_publish": "cd lib && node ../tools/release-tools/npm_publish.js .",
+    "npm-package": "node ./tools/release-tools/npm_package.js",
     "serve": "grunt serve"
   },
   "repository": {
