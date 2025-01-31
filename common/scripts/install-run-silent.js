@@ -721,6 +721,17 @@ function installAndRun(logger, packageName, packageVersion, packageBinName, pack
         process.env.PATH = originalEnvPath;
     }
     if (result.status !== null) {
+        // ------------------------------------------
+        // Manual edit of the original install-run.js
+        // ------------------------------------------
+        
+        if (result.status == 1) {
+            return 0;
+        }
+        
+        // -------------------------------------------------
+        // End of Manual edit of the original install-run.js
+        // -------------------------------------------------
         return result.status;
     }
     else {
