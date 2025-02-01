@@ -120,7 +120,16 @@ __webpack_require__.r(__webpack_exports__);
 /* eslint-disable no-console */
 
 
-const { installAndRun, findRushJsonFolder, RUSH_JSON_FILENAME, runWithErrorAndStatusCode } = require('./install-run');
+// ------------------------------------------
+// Manual edit of the original install-run-rush.js
+// ------------------------------------------
+
+const { installAndRun, findRushJsonFolder, RUSH_JSON_FILENAME, runWithErrorAndStatusCode } = require('./install-run-silent');
+
+// ------------------------------------------
+// End of Manual edit of the original install-run-rush.js
+// ------------------------------------------
+
 const PACKAGE_NAME = '@microsoft/rush';
 const RUSH_PREVIEW_VERSION = 'RUSH_PREVIEW_VERSION';
 const INSTALL_RUN_RUSH_LOCKFILE_PATH_VARIABLE = 'INSTALL_RUN_RUSH_LOCKFILE_PATH';
