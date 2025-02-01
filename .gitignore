@@ -58,3 +58,4 @@ package-deps.json
 package-lock.json
 
 # test output
+**/.rush/temp/**
