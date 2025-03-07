@@ -16,7 +16,7 @@ interface DynamicGlobalSettings {
     n: number
 };
 
-const UNDEFINED = "undefined";
+
 
 /**
  * Constant string defined to support minimization
