@@ -19,6 +19,23 @@ interface DynamicGlobalSettings {
 const UNDEFINED = "undefined";
 
 /**
+ * Helper to check if we're running in a server-side rendering environment
+ * like Node.js or Cloudflare Workers
+ * @ignore
+ */
+function _isServerSideRender(): boolean {
+    const gbl = getGlobal();
+    // Check for common server-side environments
+    // 1. Missing window or document (Node.js, some SSR frameworks)
+    // 2. Cloudflare Worker specific environment
+    return (typeof gbl.window === UNDEFINED || 
+        typeof gbl.document === UNDEFINED ||
+        (typeof gbl.navigator !== UNDEFINED && 
+         typeof gbl.navigator.userAgent !== UNDEFINED && 
+         gbl.navigator.userAgent.indexOf('Cloudflare-Workers') >= 0));
+}
+
+/**
  * Constant string defined to support minimization
  * @ignore
  */ 
@@ -580,6 +597,15 @@ export type DynamicProtoDelegate<DPType> = (theTarget:DPType, baseFuncProxy?:DPT
  * @param options - Additional options to configure how the dynamic prototype operates
  */
 export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPType, delegateFunc: DynamicProtoDelegate<DPType>, options?:IDynamicProtoOpts): void {
+    // Check if we're in a server-side rendering environment like Cloudflare Workers
+    // where some operations like manipulating function name properties may be restricted
+    if (_isServerSideRender()) {
+        // In SSR, we still want to run the delegate function to set up instance methods,
+        // but we'll skip the prototype modifications that cause issues in environments like Cloudflare Workers
+        delegateFunc(target, target as DPType);
+        return;
+    }
+
     // Make sure that the passed theClass argument looks correct
     if (!objHasOwnProperty(theClass, Prototype)) {
         _throwTypeError("theClass is an invalid class definition.");
