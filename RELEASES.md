@@ -1,5 +1,14 @@
 # Releases
 
+## 2.0.4 (May 2024)
+
+### Changes
+
+- #95 [BUG] AppInsights breaks Angular SSR in Cloudflare Worker
+  - Added support for Server-Side Rendering environments, including Cloudflare Workers
+  - Modified the `dynamicProto` function to detect SSR environments and avoid operations that cause issues with property redefinition
+  - This ensures compatibility with Angular SSR and other server-side frameworks
+
 ## 2.0.3 (Jan 11th, 2024)
 
 Blocks a medium level prototype pollution vulnerability.

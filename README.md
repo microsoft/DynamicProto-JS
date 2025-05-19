@@ -12,6 +12,12 @@ So whether creating a new class or extending some other class/code, your resulti
 
 The version 2.x is maintained on the default [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main)
 
+## Server-Side Rendering Support
+
+As of version 2.0.4, DynamicProto-JS includes support for Server-Side Rendering (SSR) environments, including Cloudflare Workers. In SSR contexts, the library automatically detects the environment and provides simplified functionality that avoids operations that might cause issues in restricted environments.
+
+This ensures compatibility with Angular SSR and other server-side frameworks without requiring additional configuration.
+
 ## Documentation
 
 [Github Documentation](https://microsoft.github.io/DynamicProto-JS/) includes [typedoc API references](https://microsoft.github.io/DynamicProto-JS/typedoc/index.html).
