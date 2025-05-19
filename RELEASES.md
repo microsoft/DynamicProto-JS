@@ -1,6 +1,6 @@
 # Releases
 
-## 2.0.4 (May 2024)
+## 2.0.4 (Unreleased)
 
 ### Changes
 
