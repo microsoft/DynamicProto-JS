@@ -597,15 +597,6 @@ export type DynamicProtoDelegate<DPType> = (theTarget:DPType, baseFuncProxy?:DPT
  * @param options - Additional options to configure how the dynamic prototype operates
  */
 export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPType, delegateFunc: DynamicProtoDelegate<DPType>, options?:IDynamicProtoOpts): void {
-    // Check if we're in a server-side rendering environment like Cloudflare Workers
-    // where some operations like manipulating function name properties may be restricted
-    if (_isServerSideRender()) {
-        // In SSR, we still want to run the delegate function to set up instance methods,
-        // but we'll skip the prototype modifications that cause issues in environments like Cloudflare Workers
-        delegateFunc(target, target as DPType);
-        return;
-    }
-
     // Make sure that the passed theClass argument looks correct
     if (!objHasOwnProperty(theClass, Prototype)) {
         _throwTypeError("theClass is an invalid class definition.");
@@ -646,8 +637,8 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
     // Note casting the same type as we don't actually have the base class here and this will provide some intellisense support
     delegateFunc(target, baseFuncs as DPType);
 
-    // Don't allow setting instance functions for older IE instances
-    let setInstanceFunc = !!_objGetPrototypeOf && !!perfOptions[strSetInstFuncs];
+    // Don't allow setting instance functions for older IE instances or in SSR environments
+    let setInstanceFunc = !!_objGetPrototypeOf && !!perfOptions[strSetInstFuncs] && !_isServerSideRender();
     if (setInstanceFunc && options) {
         setInstanceFunc = !!options[strSetInstFuncs];
     }
