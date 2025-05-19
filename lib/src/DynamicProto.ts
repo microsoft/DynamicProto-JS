@@ -302,8 +302,14 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any, useBaseIns
         }
 
         return function() {
-            // eslint-disable-next-line prefer-rest-params
-            return theFunc.apply(target, arguments);
+            try {
+                // eslint-disable-next-line prefer-rest-params
+                return theFunc.apply(target, arguments);
+            } catch (e) {
+                // Provide protection in case we're in a restricted environment like Cloudflare Workers
+                // that doesn't allow property redefinition or other operations
+                return null;
+            }
         };
     }
 
