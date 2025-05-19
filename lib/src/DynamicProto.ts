@@ -443,7 +443,11 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
         
         // Tag this function as a proxy to support replacing dynamic proxy elements (primary use case is for unit testing
         // via which can dynamically replace the prototype function reference)
-        (dynProtoProxy as any)[DynProxyTag] = 1;
+        try {
+            (dynProtoProxy as any)[DynProxyTag] = 1;
+        } catch (e) {
+            // Ignore errors in restricted environments like Cloudflare Workers
+        }
         return dynProtoProxy;
     }
     
@@ -463,7 +467,11 @@ function _populatePrototype(proto:any, className:string, target:any, baseInstFun
                     if (_isDynamicCandidate(target, name, false) && target[name] !== baseInstFuncs[name] ) {
                         // Save the instance Function to the lookup table and remove it from the instance as it's not a dynamic proto function
                         instFuncs[name] = target[name];
-                        delete target[name];
+                        try {
+                            delete target[name];
+                        } catch (e) {
+                            // Ignore errors in restricted environments like Cloudflare Workers
+                        }
                         
                         // Add a dynamic proto if one doesn't exist or if a prototype function exists and it's not a dynamic one
                         if (!objHasOwnProperty(proto, name) || (proto[name] && !proto[name][DynProxyTag])) {
@@ -624,7 +632,11 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
         // function table lookup.
         className = DynClassNamePrefix + _getObjName(theClass, "_") + "$" + _gblInst.n ;
         _gblInst.n++;
-        classProto[DynClassName] = className;
+        try {
+            classProto[DynClassName] = className;
+        } catch (e) {
+            // Ignore errors in restricted environments like Cloudflare Workers
+        }
     }
 
     let perfOptions = dynamicProto[DynProtoDefaultOptions];
