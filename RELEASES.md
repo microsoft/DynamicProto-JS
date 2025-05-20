@@ -5,9 +5,9 @@
 ### Changes
 
 - #95 [BUG] AppInsights breaks Angular SSR in Cloudflare Worker
-  - Added support for Server-Side Rendering environments, including Cloudflare Workers
-  - Modified the `dynamicProto` function to detect SSR environments and avoid operations that cause issues with property redefinition
-  - This ensures compatibility with Angular SSR and other server-side frameworks
+  - Added support for restricted JavaScript environments, including Cloudflare Workers
+  - Modified the `dynamicProto` function to detect environments where property redefinition is restricted
+  - This ensures compatibility with Angular SSR, Cloudflare Workers, and other restricted environments
 
 ## 2.0.3 (Jan 11th, 2024)
 

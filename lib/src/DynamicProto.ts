@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { getGlobal, objCreate, objHasOwnProperty, throwTypeError, getWindow, getDocument, getNavigator } from "@nevware21/ts-utils";
+import { getGlobal, objCreate, objHasOwnProperty, throwTypeError } from "@nevware21/ts-utils";
 
 interface DynamicGlobalSettings {
     /**
@@ -19,19 +19,33 @@ interface DynamicGlobalSettings {
 
 
 /**
- * Helper to check if we're running in a server-side rendering environment
- * like Node.js or Cloudflare Workers
+ * Helper to check if we're running in a restricted environment that doesn't support
+ * property redefinition, like Cloudflare Workers. This is primarily used to avoid
+ * operations that would cause issues in these environments.
  * @ignore
  */
-function _isServerSideRender(): boolean {
-    // Check for common server-side environments
-    // 1. Missing window or document (Node.js, some SSR frameworks)
-    // 2. Cloudflare Worker specific environment
-    return (!getWindow() || 
-        !getDocument() || 
-        (!!getNavigator() && 
-         getNavigator().userAgent && 
-         getNavigator().userAgent.indexOf('Cloudflare-Workers') >= 0));
+function _isRestrictedEnvironment(): boolean {
+    try {
+        // Test if we can perform property definition/redefinition
+        // This specifically targets restricted environments like Cloudflare Workers
+        // where property redefinition causes errors
+        let testObj = {};
+        let testProp = "testProperty";
+        Object.defineProperty(testObj, testProp, { 
+            configurable: true,
+            value: 1
+        });
+        Object.defineProperty(testObj, testProp, {
+            configurable: true,
+            value: 2
+        });
+        
+        // If we can redefine properties, not a restricted environment
+        return false;
+    } catch (e) {
+        // If property redefinition fails, we're in a restricted environment
+        return true;
+    }
 }
 
 /**
@@ -648,8 +662,8 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
     // Note casting the same type as we don't actually have the base class here and this will provide some intellisense support
     delegateFunc(target, baseFuncs as DPType);
 
-    // Don't allow setting instance functions for older IE instances or in SSR environments
-    let setInstanceFunc = !!_objGetPrototypeOf && !!perfOptions[strSetInstFuncs] && !_isServerSideRender();
+    // Don't allow setting instance functions in older browsers or restricted environments
+    let setInstanceFunc = !!_objGetPrototypeOf && !!perfOptions[strSetInstFuncs] && !_isRestrictedEnvironment();
     if (setInstanceFunc && options) {
         setInstanceFunc = !!options[strSetInstFuncs];
     }

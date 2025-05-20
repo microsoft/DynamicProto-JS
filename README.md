@@ -14,9 +14,9 @@ The version 2.x is maintained on the default [main branch](https://github.com/mi
 
 ## Server-Side Rendering Support
 
-As of version 2.0.4, DynamicProto-JS includes support for Server-Side Rendering (SSR) environments, including Cloudflare Workers. In SSR contexts, the library automatically detects the environment and provides simplified functionality that avoids operations that might cause issues in restricted environments.
+As of version 2.0.4, DynamicProto-JS includes support for restricted JavaScript environments, including Cloudflare Workers and some Angular SSR environments. In these contexts, the library automatically detects environments where property redefinition is restricted and provides simplified functionality that avoids operations that would cause issues.
 
-This ensures compatibility with Angular SSR and other server-side frameworks without requiring additional configuration.
+This ensures compatibility with Angular SSR, Cloudflare Workers, and other restricted environments without requiring additional configuration.
 
 ## Documentation
 
