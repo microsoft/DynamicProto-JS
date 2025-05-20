@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { getGlobal, objCreate, objHasOwnProperty, throwTypeError } from "@nevware21/ts-utils";
+import { getGlobal, objCreate, objHasOwnProperty, throwTypeError, hasWindow, hasDocument, hasNavigator, getNavigator } from "@nevware21/ts-utils";
 
 interface DynamicGlobalSettings {
     /**
@@ -24,15 +24,14 @@ const UNDEFINED = "undefined";
  * @ignore
  */
 function _isServerSideRender(): boolean {
-    const gbl = getGlobal();
     // Check for common server-side environments
     // 1. Missing window or document (Node.js, some SSR frameworks)
     // 2. Cloudflare Worker specific environment
-    return (typeof gbl.window === UNDEFINED || 
-        typeof gbl.document === UNDEFINED ||
-        (typeof gbl.navigator !== UNDEFINED && 
-         typeof gbl.navigator.userAgent !== UNDEFINED && 
-         gbl.navigator.userAgent.indexOf('Cloudflare-Workers') >= 0));
+    return (!hasWindow() || 
+        !hasDocument() || 
+        (hasNavigator() && 
+         getNavigator().userAgent && 
+         getNavigator().userAgent.indexOf('Cloudflare-Workers') >= 0));
 }
 
 /**
@@ -302,14 +301,8 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any, useBaseIns
         }
 
         return function() {
-            try {
-                // eslint-disable-next-line prefer-rest-params
-                return theFunc.apply(target, arguments);
-            } catch (e) {
-                // Provide protection in case we're in a restricted environment like Cloudflare Workers
-                // that doesn't allow property redefinition or other operations
-                return null;
-            }
+            // eslint-disable-next-line prefer-rest-params
+            return theFunc.apply(target, arguments);
         };
     }
 
