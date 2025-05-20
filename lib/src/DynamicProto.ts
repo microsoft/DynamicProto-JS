@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { getGlobal, objCreate, objHasOwnProperty, throwTypeError, hasWindow, hasDocument, hasNavigator, getNavigator } from "@nevware21/ts-utils";
+import { getGlobal, objCreate, objHasOwnProperty, throwTypeError, hasWindow, hasDocument, getNavigator } from "@nevware21/ts-utils";
 
 interface DynamicGlobalSettings {
     /**
@@ -29,7 +29,7 @@ function _isServerSideRender(): boolean {
     // 2. Cloudflare Worker specific environment
     return (!hasWindow() || 
         !hasDocument() || 
-        (hasNavigator() && 
+        (!!getNavigator() && 
          getNavigator().userAgent && 
          getNavigator().userAgent.indexOf('Cloudflare-Workers') >= 0));
 }
