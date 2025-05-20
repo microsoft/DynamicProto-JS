@@ -18,36 +18,7 @@ interface DynamicGlobalSettings {
 
 
 
-/**
- * Helper to check if we're running in a restricted environment that doesn't support
- * property redefinition, like Cloudflare Workers. This is primarily used to avoid
- * operations that would cause issues in these environments.
- * @ignore
- */
-function _isRestrictedEnvironment(): boolean {
-    try {
-        // Test if we can perform basic property operations that would be restricted
-        // in environments like Cloudflare Workers using operations similar to what the library does
-        let testObj = {};
-        let testFunc = function() { return "test"; };
-        let testProp = "_dynTestProp";
-        
-        // Try to set a property (similar to how we set dynamic properties)
-        testObj[testProp] = 1;
-        
-        // Try to set a property on a function (similar to tagging functions)
-        testFunc[testProp] = 1;
-        
-        // Try to delete the property (similar to removing instance methods)
-        delete testObj[testProp];
-        
-        // If all operations succeed, not a restricted environment
-        return false;
-    } catch (e) {
-        // If any operation fails, we're in a restricted environment
-        return true;
-    }
-}
+
 
 /**
  * Constant string defined to support minimization
@@ -664,7 +635,7 @@ export default function dynamicProto<DPType, DPCls>(theClass:DPCls, target:DPTyp
     delegateFunc(target, baseFuncs as DPType);
 
     // Don't allow setting instance functions in older browsers or restricted environments
-    let setInstanceFunc = !!_objGetPrototypeOf && !!perfOptions[strSetInstFuncs] && !_isRestrictedEnvironment();
+    let setInstanceFunc = !!_objGetPrototypeOf && !!perfOptions[strSetInstFuncs];
     if (setInstanceFunc && options) {
         setInstanceFunc = !!options[strSetInstFuncs];
     }
