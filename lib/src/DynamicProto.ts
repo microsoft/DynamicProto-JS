@@ -26,24 +26,25 @@ interface DynamicGlobalSettings {
  */
 function _isRestrictedEnvironment(): boolean {
     try {
-        // Test if we can perform property definition/redefinition
-        // This specifically targets restricted environments like Cloudflare Workers
-        // where property redefinition causes errors
+        // Test if we can perform basic property operations that would be restricted
+        // in environments like Cloudflare Workers using operations similar to what the library does
         let testObj = {};
-        let testProp = "testProperty";
-        Object.defineProperty(testObj, testProp, { 
-            configurable: true,
-            value: 1
-        });
-        Object.defineProperty(testObj, testProp, {
-            configurable: true,
-            value: 2
-        });
+        let testFunc = function() { return "test"; };
+        let testProp = "_dynTestProp";
         
-        // If we can redefine properties, not a restricted environment
+        // Try to set a property (similar to how we set dynamic properties)
+        testObj[testProp] = 1;
+        
+        // Try to set a property on a function (similar to tagging functions)
+        testFunc[testProp] = 1;
+        
+        // Try to delete the property (similar to removing instance methods)
+        delete testObj[testProp];
+        
+        // If all operations succeed, not a restricted environment
         return false;
     } catch (e) {
-        // If property redefinition fails, we're in a restricted environment
+        // If any operation fails, we're in a restricted environment
         return true;
     }
 }
