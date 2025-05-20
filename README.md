@@ -12,9 +12,9 @@ So whether creating a new class or extending some other class/code, your resulti
 
 The version 2.x is maintained on the default [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main)
 
-## Server-Side Rendering Support
+## Restricted Environment Support
 
-As of version 2.0.4, DynamicProto-JS includes support for restricted JavaScript environments, including Cloudflare Workers and some Angular SSR environments. In these contexts, the library automatically detects environments where property redefinition is restricted and provides simplified functionality that avoids operations that would cause issues.
+As of version 2.0.4, DynamicProto-JS includes support for restricted JavaScript environments, including Cloudflare Workers and some Angular SSR environments. In these contexts, the library handles potential property manipulation errors that might occur in environments with stricter JavaScript execution rules.
 
 This ensures compatibility with Angular SSR, Cloudflare Workers, and other restricted environments without requiring additional configuration.
 
