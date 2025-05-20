@@ -16,7 +16,7 @@ interface DynamicGlobalSettings {
     n: number
 };
 
-const UNDEFINED = "undefined";
+
 
 /**
  * Helper to check if we're running in a server-side rendering environment
