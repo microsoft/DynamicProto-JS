@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { getGlobal, objCreate, objHasOwnProperty, throwTypeError, hasWindow, hasDocument, getNavigator } from "@nevware21/ts-utils";
+import { getGlobal, objCreate, objHasOwnProperty, throwTypeError, getWindow, getDocument, getNavigator } from "@nevware21/ts-utils";
 
 interface DynamicGlobalSettings {
     /**
@@ -27,8 +27,8 @@ function _isServerSideRender(): boolean {
     // Check for common server-side environments
     // 1. Missing window or document (Node.js, some SSR frameworks)
     // 2. Cloudflare Worker specific environment
-    return (!hasWindow() || 
-        !hasDocument() || 
+    return (!getWindow() || 
+        !getDocument() || 
         (!!getNavigator() && 
          getNavigator().userAgent && 
          getNavigator().userAgent.indexOf('Cloudflare-Workers') >= 0));

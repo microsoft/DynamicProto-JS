@@ -14,6 +14,7 @@
       "declarationDir": "./types",
       "outDir": "./dist-es5",
       "rootDir": "./src",
+      "suppressImplicitAnyIndexErrors": true,
       "allowSyntheticDefaultImports": true,
       "removeComments": false
     },
