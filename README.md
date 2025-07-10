@@ -12,6 +12,7 @@ So whether creating a new class or extending some other class/code, your resulti
 
 The version 2.x is maintained on the default [main branch](https://github.com/microsoft/DynamicProto-JS/tree/main)
 
+
 ## Documentation
 
 [Github Documentation](https://microsoft.github.io/DynamicProto-JS/) includes [typedoc API references](https://microsoft.github.io/DynamicProto-JS/typedoc/index.html).
