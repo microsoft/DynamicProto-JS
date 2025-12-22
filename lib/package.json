@@ -53,6 +53,7 @@
     "@nevware21/grunt-eslint-ts": "^0.1.0",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
+    "@types/node": "18.19.121",
     "eslint": "^7.29.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.23.4",

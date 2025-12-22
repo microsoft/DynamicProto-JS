@@ -54,6 +54,7 @@ rollup/types/
 
 # Rush files
 common/temp/**
+**/.rush/temp/**
 package-deps.json
 package-lock.json
 
