@@ -48,8 +48,8 @@ function isNullOrWhitespace(value:string) {
  * functions from the production code.
  */
 export default function dynamicRemove(options:IDynamicProtoRollupOptions = {}) {
-  var token = (options || {}).tagname || "@DynamicProtoStub";
-  var replaceValue = (options || {}).comment || "// Removed Stub for %function%.";
+  let token = (options || {}).tagname || "@DynamicProtoStub";
+  let replaceValue = (options || {}).comment || "// Removed Stub for %function%.";
   let tokenGroups:Array<number> = [4, 10, 13];
   let funcNameGroup:number = 6;
 
@@ -73,7 +73,7 @@ export default function dynamicRemove(options:IDynamicProtoRollupOptions = {}) {
       column = pos + 1;
     }
   
-    var message = "Invalid (Unremoved) token [" + token + "] found on line [" + lineNumber + "], column [" + column + "], position [" + pos + "] - " + (id||"") + "\n";
+    let message = "Invalid (Unremoved) token [" + token + "] found on line [" + lineNumber + "], column [" + column + "], position [" + pos + "] - " + (id||"") + "\n";
   
     let marker = padEnd("", token.length, "^");
     let line = lineNumber - 6;
