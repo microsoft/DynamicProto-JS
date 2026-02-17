@@ -16,7 +16,8 @@
     "outDir": "../lib/tools/rollup/dist-es5",
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
-    "removeComments": false
+    "removeComments": false,
+    "skipLibCheck": true
   },
   "include": [
     "./src/**/*.ts"

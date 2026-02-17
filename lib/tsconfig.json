@@ -16,7 +16,8 @@
       "rootDir": "./src",
       "suppressImplicitAnyIndexErrors": true,
       "allowSyntheticDefaultImports": true,
-      "removeComments": false
+      "removeComments": false,
+      "skipLibCheck": true
     },
     "include": [
       "./src/**/*.ts"

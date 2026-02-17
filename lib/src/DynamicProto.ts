@@ -14,7 +14,7 @@ interface DynamicGlobalSettings {
      * @ignore
      */ 
     n: number
-};
+}
 
 
 
@@ -238,7 +238,7 @@ function _throwTypeError(message:string) {
  */
 function _getInstanceFuncs(thisTarget:any): any {
     // Get the base proto
-    var instFuncs = objCreate(null);
+    let instFuncs = objCreate(null);
 
     // Save any existing instance functions
     _forEachProp(thisTarget, (name) => {
@@ -291,14 +291,14 @@ function _getBaseFuncs(classProto:any, thisTarget:any, instFuncs:any, useBaseIns
     }
 
     // Start creating a new baseFuncs by creating proxies for the instance functions (as they may get replaced)
-    var baseFuncs = objCreate(null);
+    let baseFuncs = objCreate(null);
     _forEachProp(instFuncs, (name) => {
         // Create an instance callback for passing the base function to the caller
         baseFuncs[name] = _instFuncProxy(thisTarget, instFuncs, name);
     });
     
     // Get the base prototype functions
-    var baseProto = _getObjProto(classProto);
+    let baseProto = _getObjProto(classProto);
     let visited:any[] = [];
 
     // Don't include base object functions for Object, Array or Function
