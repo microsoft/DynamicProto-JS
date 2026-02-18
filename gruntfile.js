@@ -50,14 +50,15 @@ module.exports = function (grunt) {
             dynamicproto: {
                 options: {
                     urls: [
-                        './lib/test/Selenium/Tests.html'
+                        'http://localhost:9005/lib/test/Selenium/Tests.html'
                     ],
                     timeout: 300 * 1000, // 5 min
                     console: true,
                     summaryOnly: false,
                     httpBase: ".",
                     puppeteer: {
-                        headless: true,
+                        debug: true,
+                        headless: "new",
                         timeout: 30000,
                         ignoreHTTPErrors: true,
                         args: [
@@ -71,14 +72,15 @@ module.exports = function (grunt) {
             rollup: {
                 options: {
                     urls: [
-                        './rollup/test/Selenium/Tests.html'
+                        'http://localhost:9005/rollup/test/Selenium/Tests.html'
                     ],
                     timeout: 300 * 1000, // 5 min
                     console: true,
                     summaryOnly: false,
                     httpBase: ".",
                     puppeteer: {
-                        headless: true,
+                        debug: true,
+                        headless: "new",
                         timeout: 30000,
                         ignoreHTTPErrors: true,
                         args: [
@@ -113,8 +115,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-run');
     grunt.registerTask("default", ["ts:rollup", "ts:rolluptest", "ts:dynamicproto", "ts:dynamicprototest", "qunit:rollup", "qunit:dynamicproto"]);
     grunt.registerTask("dynamicproto", ["eslint-ts:dynamicproto-fix", "ts:dynamicproto"]);
-    grunt.registerTask("dynamicprototest", ["ts:dynamicproto", "ts:dynamicprototest", "qunit:dynamicproto"]);
-    grunt.registerTask("rollup", ["ts:rollup", "ts:rolluptest", "qunit:rollup"]);
+    grunt.registerTask("dynamicprototest", ["ts:dynamicproto", "ts:dynamicprototest", "connect:server", "qunit:dynamicproto"]);
+    grunt.registerTask("rollup", ["ts:rollup", "ts:rolluptest", "connect:server", "qunit:rollup"]);
     grunt.registerTask("lint", ["eslint-ts:dynamicproto"]);
     grunt.registerTask("lint-fix", ["eslint-ts:dynamicproto-fix"]);
     grunt.registerTask("serve", ["connect:server:keepalive"]);
