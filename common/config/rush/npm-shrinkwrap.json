@@ -9,9 +9,9 @@
       "version": "0.0.0",
       "dependencies": {
         "@microsoft/applicationinsights-rollup-es3": "^1.0.1",
-        "@nevware21/grunt-eslint-ts": "^0.5.1",
-        "@nevware21/grunt-ts-plugin": "^0.5.1",
-        "@nevware21/ts-utils": ">= 0.11.6 < 2.x",
+        "@nevware21/grunt-eslint-ts": "^0.5.2",
+        "@nevware21/grunt-ts-plugin": "^0.5.2",
+        "@nevware21/ts-utils": ">= 0.13.0 < 2.x",
         "@rollup/plugin-commonjs": "^24.0.0",
         "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-replace": "^5.0.2",
@@ -512,12 +512,12 @@
     "node_modules/@rush-temp/dynamicproto-js": {
       "version": "0.0.0",
       "resolved": "file:projects/dynamicproto-js.tgz",
-      "integrity": "sha512-qqR9bCxSITc37I4U23Wc2IVQnE4jw7yPfp+6s4cpshs6WhrTPqPwKeB/WgHDisOMkEV7aHRbpDPh2iGFUfv7oA==",
+      "integrity": "sha512-hZNkYWNtUxAzhWuPV9dqMdIMtfo/YUH9sp4uLShq2g5Ex+OzPqvOAzc1exIXL+CtglY77lHPNgZu/ESoq6MCfg==",
       "dependencies": {
         "@microsoft/applicationinsights-rollup-es3": "^1.0.1",
-        "@nevware21/grunt-eslint-ts": "^0.5.1",
-        "@nevware21/grunt-ts-plugin": "^0.5.1",
-        "@nevware21/ts-utils": ">= 0.11.6 < 2.x",
+        "@nevware21/grunt-eslint-ts": "^0.5.2",
+        "@nevware21/grunt-ts-plugin": "^0.5.2",
+        "@nevware21/ts-utils": ">= 0.13.0 < 2.x",
         "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-replace": "^5.0.2",
         "@types/node": "18.19.121",
@@ -546,10 +546,10 @@
     "node_modules/@rush-temp/dynamicproto-rollup": {
       "version": "0.0.0",
       "resolved": "file:projects/dynamicproto-rollup.tgz",
-      "integrity": "sha512-PGyQGfexEeltTLuSkwuPMPMlk8IJuc/MWaX3KGSW27m9D8bJISsr6p5JNHeuz0dGfLGFy/+Xwa7VQsJNYuzFeQ==",
+      "integrity": "sha512-5AWXpYHRWI3lEgfrJi7IeWIDO7Nj8r+TZ+IO+rgBT3pXdNNFb1rvYzTyTcEnGpU25p0MyoEQzcCMUDuon4J8pw==",
       "dependencies": {
-        "@nevware21/grunt-ts-plugin": "^0.5.1",
-        "@nevware21/ts-utils": ">= 0.11.6 < 2.x",
+        "@nevware21/grunt-ts-plugin": "^0.5.2",
+        "@nevware21/ts-utils": ">= 0.13.0 < 2.x",
         "@rollup/plugin-commonjs": "^24.0.0",
         "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-replace": "^5.0.2",
