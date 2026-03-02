@@ -113,9 +113,9 @@ module.exports = require("node:path");
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-/*!************************************************!*\
-  !*** ./lib-esnext/scripts/install-run-rush.js ***!
-  \************************************************/
+/*!**********************************************************!*\
+  !*** ./lib-intermediate-esm/scripts/install-run-rush.js ***!
+  \**********************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! node:path */ 176760);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_path__WEBPACK_IMPORTED_MODULE_0__);
