@@ -44,13 +44,16 @@
   "homepage": "https://github.com/microsoft/DynamicProto-JS#readme",
   "overrides": {
     "glob": "7.2.3",
-    "form-data": "^2.5.5"
+    "form-data": "^2.5.5",
+    "minimatch": ">=3.1.2",
+    "tar": ">=6.2.2",
+    "yaml": ">=2.8.3"
   },
   "dependencies": {
     "@nevware21/ts-utils": ">= 0.13.0 < 2.x"
   },
   "devDependencies": {
-    "@microsoft/rush": "5.172.1",
+    "@microsoft/rush": "5.175.1",
     "@nevware21/grunt-eslint-ts": "^0.5.2",
     "@nevware21/grunt-ts-plugin": "^0.5.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
