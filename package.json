@@ -18,7 +18,8 @@
     "doc": "lib/docs"
   },
   "scripts": {
-    "build": "grunt dynamicproto && npm run build:bundle && npm run docs",
+    "build": "npm run build:rollup-plugin && grunt dynamicproto && npm run build:bundle && npm run docs",
+    "build:rollup-plugin": "cd rollup && npx tsc -p tsconfig.json",
     "build:bundle": "cd lib && rollup -c rollup.config.js --bundleConfigAsCjs",
     "test": "grunt dynamicprototest",
     "rollup": "grunt rollup",
