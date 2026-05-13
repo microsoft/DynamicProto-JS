@@ -26,20 +26,16 @@ We strongly welcome and encourage contributions to this project. If making a lar
 
     ```sh
     npm install
-    npm install -g @microsoft/rush
     ```
 
-3. Navigate to the root folder and update rush dependencies
+3. Build and create docs
 
     ```sh
-    rush update --recheck --full
+    npm run build
     ```
 
-4. Build, lint, create docs and run tests
+4. Run tests
 
     ```sh
-    rush build
     npm run test
     ```
-
-If you are changing package versions or adding/removing any package dependencies, run<br>**```rush update --purge --recheck --full```**<br>before building. Please check-in any files that change under common\ folder.

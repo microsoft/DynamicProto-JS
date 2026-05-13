@@ -67,23 +67,19 @@ class ExampleClass extends BaseClass {
 
     ```sh
     npm install
-    npm install -g @microsoft/rush
     ```
 
-2. Navigate to the root folder and update rush dependencies
+2. Build and create docs
 
     ```sh
-    rush update
+    npm run build
     ```
 
-3. Build, lint, create docs and run tests
+3. Run tests
 
     ```sh
-    rush build
     npm run test
     ```
-
-If you are changing package versions or adding/removing any package dependencies, run<br>**```rush update --purge --recheck --full```**<br>before building. Please check-in any files that change under common\ folder.
 
 ## Performance
 
