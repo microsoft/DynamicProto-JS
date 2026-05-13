@@ -18,13 +18,13 @@
     "doc": "lib/docs"
   },
   "scripts": {
-    "ci-install": "node common/scripts/install-run-rush.js check && node common/scripts/install-run-rush.js update",
-    "build": "node common/scripts/install-run-rush.js rebuild && npm run docs",
+    "build": "grunt dynamicproto && npm run build:bundle && npm run docs",
+    "build:bundle": "cd lib && rollup -c rollup.config.js --bundleConfigAsCjs",
     "test": "grunt dynamicprototest",
     "rollup": "grunt rollup",
-    "rupdate": "node common/scripts/install-run-rush.js update --recheck --purge --full",
+    "lint": "grunt lint",
     "docs": "typedoc",
-    "fullClean": "git clean -xdf && npm install && rush update --recheck --purge --full",
+    "fullClean": "git clean -xdf && npm install",
     "fullCleanBuild": "npm run fullClean && npm run build",
     "npm_pack": "copyfiles README.md LICENSE lib && cd lib && npm pack",
     "npm_publish": "cd lib && node ../tools/release-tools/npm_publish.js .",
@@ -43,17 +43,12 @@
   },
   "homepage": "https://github.com/microsoft/DynamicProto-JS#readme",
   "overrides": {
-    "glob": "7.2.3",
-    "form-data": "^2.5.5",
-    "minimatch": ">=3.1.2",
-    "tar": ">=6.2.2",
-    "yaml": ">=2.8.3"
+    "minimatch": ">=3.1.2"
   },
   "dependencies": {
     "@nevware21/ts-utils": ">= 0.13.0 < 2.x"
   },
   "devDependencies": {
-    "@microsoft/rush": "5.175.1",
     "@nevware21/grunt-eslint-ts": "^0.5.2",
     "@nevware21/grunt-ts-plugin": "^0.5.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
@@ -76,6 +71,13 @@
     "rollup": "^3.20.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "typedoc": "^0.26.6",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "@microsoft/applicationinsights-rollup-es3": "^1.0.1",
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-minify-es": "^1.1.1",
+    "uglify-js": "^3.13.7",
+    "magic-string": "^0.25.5",
+    "@types/glob": "^7.1.3"
   }
 }
