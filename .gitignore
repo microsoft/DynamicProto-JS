@@ -51,12 +51,6 @@ rollup/types/
 # Output of 'npm pack'
 *.tgz
 
-
-# Rush files
-common/temp/**
-**/.rush/temp/**
-package-deps.json
 package-lock.json
 
 # test output
-**/.rush/temp/**

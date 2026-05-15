@@ -20,24 +20,23 @@
 <a id="md:build--test-this-repo" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Build &amp; Test this repo<a href="#md:build--test-this-repo" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
 <li>
 <p>Install all dependencies</p>
-<pre><code class="sh"><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">install</span><br/><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">install</span><span class="hl-1"> </span><span class="hl-4">-g</span><span class="hl-1"> </span><span class="hl-3">@microsoft/rush</span>
+<pre><code class="sh"><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">install</span>
 </code><button type="button">Copy</button></pre>
 
 </li>
 <li>
-<p>Navigate to the root folder and update rush dependencies</p>
-<pre><code class="sh"><span class="hl-6">rush</span><span class="hl-1"> </span><span class="hl-3">update</span>
+<p>Build and create docs</p>
+<pre><code class="sh"><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">run</span><span class="hl-1"> </span><span class="hl-3">build</span>
 </code><button type="button">Copy</button></pre>
 
 </li>
 <li>
-<p>Build, lint, create docs and run tests</p>
-<pre><code class="sh"><span class="hl-6">rush</span><span class="hl-1"> </span><span class="hl-3">build</span><br/><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">run</span><span class="hl-1"> </span><span class="hl-3">test</span>
+<p>Run tests</p>
+<pre><code class="sh"><span class="hl-6">npm</span><span class="hl-1"> </span><span class="hl-3">run</span><span class="hl-1"> </span><span class="hl-3">test</span>
 </code><button type="button">Copy</button></pre>
 
 </li>
 </ol>
-<p>If you are changing package versions or adding/removing any package dependencies, run<br><strong><code>rush update --purge --recheck --full</code></strong><br>before building. Please check-in any files that change under common\ folder.</p>
 <a id="md:performance" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Performance<a href="#md:performance" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The minified version of this adds a negligible amount of code and loadtime to your source code and by using this library, your generated code can be better minified as it removes most references of <a href="http://Classname.prototype.XXX" target="_blank" class="external">Classname.prototype.XXX</a> methods from the generated code.</p>
 <blockquote>
 <p>Summary:</p>
