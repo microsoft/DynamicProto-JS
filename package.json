@@ -1,7 +1,7 @@
 {
   "name": "@microsoft/dynamicproto-js",
   "description": "Microsoft Dynamic Proto Utility",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "keywords": [
     "javascript",
     "dynamic prototype",
@@ -18,9 +18,10 @@
     "doc": "lib/docs"
   },
   "scripts": {
-    "build": "npm run build:rollup-plugin && grunt dynamicproto && npm run build:bundle && npm run docs",
+    "build": "npm run build:rollup-plugin && grunt dynamicproto && npm run build:bundle && npm run build:rollup-bundle && npm run docs",
     "build:rollup-plugin": "cd rollup && npx tsc -p tsconfig.json",
     "build:bundle": "cd lib && rollup -c rollup.config.js --bundleConfigAsCjs",
+    "build:rollup-bundle": "cd rollup && rollup -c rollup.config.js --bundleConfigAsCjs && cd .. && node -e \"require('fs').cpSync('rollup/package.json','lib/tools/rollup/package.json')\"",
     "test": "grunt dynamicprototest",
     "rollup": "grunt rollup",
     "lint": "grunt lint",

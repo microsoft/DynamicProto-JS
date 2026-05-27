@@ -1,6 +1,15 @@
 # Releases
 
-## 2.0.4 (TBD)
+## 2.0.5 (May 27th, 2026)
+
+### Bug Fix
+
+- Fix `tools/rollup` directory missing from published npm package since 2.0.4
+  - Restore TypeScript output paths for rollup plugin to `lib/tools/rollup/`
+  - Add rollup bundle step to produce ESM/Node formats for the rollup plugin
+  - Ensures `@microsoft/dynamicproto-js/tools/rollup` is available to consumers
+
+## 2.0.4 (May 27th, 2026)
 
 ### Changes
 
