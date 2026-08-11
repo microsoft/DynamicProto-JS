@@ -1,4 +1,29 @@
 module.exports = function (grunt) {
+    // Resolve a Puppeteer executable to use for the QUnit browser tests.
+    // On locally managed Windows devices, Defender/WDAC may block the unsigned
+    // Chromium that Puppeteer downloads to $HOME/.cache/puppeteer ("blocked by
+    // IT admin"). Falling back to the installed Microsoft Edge avoids that.
+    // Gated so CI / official builds keep using the bundled Chromium.
+    function _getBrowserExecutablePath() {
+        if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+            return process.env.PUPPETEER_EXECUTABLE_PATH;
+        }
+        if (process.env.TF_BUILD || process.env.CI || process.env.BUILD_BUILDID) {
+            return undefined; // CI => use bundled Chromium
+        }
+        var candidates = [
+            process.env["ProgramFiles(x86)"] + "\\Microsoft\\Edge\\Application\\msedge.exe",
+            process.env["ProgramFiles"] + "\\Microsoft\\Edge\\Application\\msedge.exe"
+        ];
+        for (var i = 0; i < candidates.length; i++) {
+            if (candidates[i] && grunt.file.exists(candidates[i])) {
+                return candidates[i];
+            }
+        }
+        return undefined;
+    }
+    var browserExecutablePath = _getBrowserExecutablePath();
+
     grunt.initConfig({
         "eslint-ts": {
             default: {
@@ -61,6 +86,7 @@ module.exports = function (grunt) {
                         headless: "new",
                         timeout: 30000,
                         ignoreHTTPErrors: true,
+                        executablePath: browserExecutablePath,
                         args: [
                             "--enable-precise-memory-info",
                             "--expose-internals-for-testing",
@@ -83,6 +109,7 @@ module.exports = function (grunt) {
                         headless: "new",
                         timeout: 30000,
                         ignoreHTTPErrors: true,
+                        executablePath: browserExecutablePath,
                         args: [
                             "--enable-precise-memory-info",
                             "--expose-internals-for-testing",
