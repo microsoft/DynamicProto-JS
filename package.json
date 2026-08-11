@@ -45,7 +45,17 @@
   },
   "homepage": "https://github.com/microsoft/DynamicProto-JS#readme",
   "overrides": {
-    "minimatch": "~3.1.2"
+    "minimatch": "~3.1.2",
+    "brace-expansion": "^1.1.18",
+    "js-yaml": "^4.3.1",
+    "grunt": {
+      "js-yaml": "^3.15.1"
+    },
+    "linkify-it": "^5.0.2",
+    "markdown-it": "^14.3.0",
+    "morgan": "^1.11.0",
+    "ws": "^7.5.13",
+    "@types/node": "20.14.2"
   },
   "dependencies": {
     "@nevware21/ts-utils": ">= 0.14.0 < 2.x"
