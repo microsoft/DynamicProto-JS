@@ -22,19 +22,36 @@ We strongly welcome and encourage contributions to this project. If making a lar
 ## Clone, Setup, Build & Test this repo
 1. Clone the repository and create a new branch
 
-2. Install all dependencies
+2. Select a patched Node.js runtime before installing dependencies or running any
+   build, test, documentation, development-server, or packaging tools.
+   Check `node --version` and use the npm bundled with the selected runtime.
+
+   The minimum supported tooling versions are **22.23.4**, **24.22.1**, and
+   **26.12.1**, including later stable releases within each of those major lines.
+   CI covers Node.js 22.23.4 and 24.22.1. Older, odd-numbered, and prerelease Node.js
+   versions are not supported for repository tooling. npm's root `devEngines`
+   constraint rejects unsupported runtimes for installs and `npm run` commands;
+   older npm versions that do not implement `devEngines`, direct tool invocations,
+   and commands inside `lib` or `rollup` still require selecting the runtime first.
+   Do not bypass the check with `--force`.
+
+   These are development-tooling requirements, not new runtime requirements for
+   consumers of the published browser library or Rollup plugin. See
+   [Node.js tooling security](SECURITY.md#nodejs-tooling-security) for scope.
+
+3. Install all dependencies
 
     ```sh
     npm install
     ```
 
-3. Build and create docs
+4. Build and create docs
 
     ```sh
     npm run build
     ```
 
-4. Run tests
+5. Run tests
 
     ```sh
     npm run test
