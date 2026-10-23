@@ -45,7 +45,8 @@ Microsoft follows the principle of [Coordinated Vulnerability Disclosure](https:
 Repository development, CI, builds, tests, documentation, and packaging use the
 [October 21, 2026 Node.js security baseline](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases):
 Node.js 22.23.4, 24.22.1, or 26.12.1, or a later stable release within one of those
-major lines. CI pins 22.23.4 and 24.22.1, and CodeQL tooling pins 24.22.1 directly.
+major lines. Node.js CI pins 22.23.4 and 24.22.1; CodeQL uses managed default
+scanning without the repository's custom query configuration.
 The root `package.json` uses `devEngines` to check the runtime used by npm tooling
 without adding an `engines` requirement to the published packages. Keep this
 constraint and the workflow pins in sync when raising the baseline.
