@@ -23,9 +23,7 @@ We strongly welcome and encourage contributions to this project. If making a lar
 1. Clone the repository and create a new branch
 
 2. Select a patched Node.js runtime before installing dependencies or running any
-   build, test, documentation, development-server, or packaging tools. The default
-   is Node.js **24.22.1**, recorded in `.nvmrc`. With nvm, run `nvm install` and
-   `nvm use`; with nvm-windows, run `nvm install 24.22.1` and `nvm use 24.22.1`.
+   build, test, documentation, development-server, or packaging tools.
    Check `node --version` and use the npm bundled with the selected runtime.
 
    The minimum supported tooling versions are **22.23.4**, **24.22.1**, and
